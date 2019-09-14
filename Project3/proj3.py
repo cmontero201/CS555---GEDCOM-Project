@@ -183,22 +183,23 @@ for line in data:
 ############# CHECKER #############
 print("Number of Individuals: ", len(individuals))
 table = texttable.Texttable()
-headings = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death","Child", "Spouse"]
+headings = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
 table.header(headings)
 
 for i in enumerate(individuals):
-    row = [i[1].id, i[1].name, i[1].gender, i[1].birthday, i[1].age, i[1].alive, i[1].death, i[1].child, i[1].spouse]
+    row = [i[1].id, i[1].name, i[1].gender, i[1].birthday, i[1].age, i[1].alive, i[1].death,
+           str(i[1].child).replace('[', '').replace(']', ''), str(i[1].spouse).replace('[', '').replace(']', '')]
     table.add_row(row)
 tab = table.draw()
 print(tab)
 
-
 print("Number of Families: ", len(families))
 table2 = texttable.Texttable()
-headings2 = ["ID", "Married", "Divorced", "Husband ID","Husband Name", "Wife ID", "Wife Name", "Children"]
+headings2 = ["ID", "Married", "Divorced", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children"]
 table2.header(headings2)
 for i in enumerate(families):
-    row2 = [i[1].id, i[1].married, i[1].divorced, i[1].husband, i[1].husbandName, i[1].wife, i[1].wifeName, i[1].children]
+    row2 = [i[1].id, i[1].married, i[1].divorced, i[1].husband, i[1].husbandName, i[1].wife, i[1].wifeName,
+            str(i[1].children).replace('[', '').replace(']', '')]
     table2.add_row(row2)
 tab2 = table2.draw()
 print(tab2)
