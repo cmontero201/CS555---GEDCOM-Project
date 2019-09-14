@@ -8,6 +8,7 @@ information, and display that information in a table.
 
 """
 import datetime
+import texttable
 from datetime import date
 import math
 
@@ -32,8 +33,8 @@ class Individual():
         self.age = None
         self.alive = None
         self.death = None
-        self.child = []       # FAMC tag
-        self.spouse = []      # FAMS tag
+        self.child = []  # FAMC tag
+        self.spouse = []  # FAMS tag
 
 
 ## Family Information Object
@@ -96,10 +97,10 @@ for line in data:
             continue
     ## Add Name
     if inf[1] == "NAME":
-        currInd.name = inf[2] + space + inf[3]     
-    ## Add Gender 
+        currInd.name = inf[2] + space + inf[3]
+        ## Add Gender
     if inf[1] == "SEX":
-        currInd.gender = inf[2]                
+        currInd.gender = inf[2]
     if inf[1] == "BIRT":
         birthDate = True
     if inf[1] == "DEAT":
@@ -113,11 +114,11 @@ for line in data:
             currInd.alive = "True"
             birthDate = False
 
-            days_in_year = 365.2425    
+            days_in_year = 365.2425
             age = int((date.today() - date).days / days_in_year)  # GeeksForGeeks.org
             currInd.age = age
             currInd.death = "NA"
-            
+
         ## Adss DOD, ifAlive, and Age at Death
         elif deathDate == True:
             strDate = inf[2] + space + inf[3] + space + inf[4]
@@ -126,14 +127,14 @@ for line in data:
             currInd.alive = "False"
             deathDate = False
             currInd.age = date.year - currInd.birthday.year
-        
+
         ## Adds Marriage Date to Family
         elif marrDate == True:
             strDate = inf[2] + space + inf[3] + space + inf[4]
             date = datetime.datetime.strptime(strDate, "%d %b %Y").date()
             currFam.married = date
             currFam.divorced = "NA"
-        
+
         ## Adds Divorce Date to Famile
         elif divDate == True:
             strDate = inf[2] + space + inf[3] + space + inf[4]
@@ -179,36 +180,25 @@ for line in data:
         families.append(currFam)
         currFam = Family()
 
-
-
-
-    
 ############# CHECKER #############
 print("Number of Individuals: ", len(individuals))
+table = texttable.Texttable()
+headings = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death","Child", "Spouse"]
+table.header(headings)
+
 for i in enumerate(individuals):
-    print("-----------------------")
-    print(i[1].id)
-    print(i[1].name)
-    print(i[1].gender)
-    print(i[1].birthday)
-    print(i[1].age)
-    print(i[1].alive)
-    print(i[1].death)
-    print("-----------------------")
+    row = [i[1].id, i[1].name, i[1].gender, i[1].birthday, i[1].age, i[1].alive, i[1].death, i[1].child, i[1].spouse]
+    table.add_row(row)
+tab = table.draw()
+print(tab)
+
 
 print("Number of Families: ", len(families))
+table2 = texttable.Texttable()
+headings2 = ["ID", "Married", "Divorced", "Husband ID","Husband Name", "Wife ID", "Wife Name", "Children"]
+table2.header(headings2)
 for i in enumerate(families):
-    print("-----------------------")
-    print(i[1].id)
-    print(i[1].married)
-    print(i[1].divorced)
-    print(i[1].husband)
-    print(i[1].husbandName)
-    print(i[1].wife)
-    print(i[1].wifeName)
-    print(i[1].children)
-    print("-----------------------")
-####################################    
-  
-    
-
+    row2 = [i[1].id, i[1].married, i[1].divorced, i[1].husband, i[1].husbandName, i[1].wife, i[1].wifeName, i[1].children]
+    table2.add_row(row2)
+tab2 = table2.draw()
+print(tab2)
