@@ -275,4 +275,8 @@ def createTables():
     print("Families\n", famTable)
 
 
+<<<<<<< HEAD:gedcomParser.py
 createTables() 
+=======
+createTables()  
+>>>>>>> cd184bf3e4f44892ace87e98629061c0ba557c11:Project3/proj3.py
