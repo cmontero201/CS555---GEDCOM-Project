@@ -281,5 +281,3 @@ def createTables():
 
 createTables() 
 
-print("\n\n", individuals)
-print("\n\n", families)
