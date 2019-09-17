@@ -9,6 +9,7 @@ from prettytable import PrettyTable
 from datetime import date
 import datetime
 import math
+import checkErr
 
 ## File Name Input and File Open
 # file_name = input("Enter the GEDCOM file path... ")
@@ -275,8 +276,17 @@ def createTables():
     ## Populate Families Table
     for eachh in famHold:
         famTable.add_row(eachh)
-    print("Families\n", famTable)
+    print("Families\n", famTable, "\n\n")
 
 
 createTables() 
 
+## Check Errors
+errLog = []
+count = 0
+for ind in individuals:
+    count += 1
+    checkErr.checkAge(ind, count, errLog)
+    
+
+print("!!!!", errLog7)
