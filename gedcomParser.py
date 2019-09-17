@@ -155,12 +155,15 @@ for line in data:
             date = datetime.datetime.strptime(strDate, "%d %b %Y").date()
             currFam.married = date
             currFam.divorced = "NA"
+            marrDate = False
         
         ## Adds Divorce Date to Family
         elif divDate == True:
+            print(inf)
             strDate = inf[2] + space + inf[3] + space + inf[4]
             date = datetime.datetime.strptime(strDate, "%d %b %Y").date()
             currFam.divorced = date
+            divDate = False
     ## Adds Family Individual is Spouse In
     if inf[1] == "FAMS":
         currInd.spouse = inf[2]
@@ -254,6 +257,7 @@ def createTables():
             indHolder.append(each)
         indHold.append(indHolder)
 
+
     ## Populate Individuals Table
     for each in indHold:
         indTable.add_row(each)
@@ -276,3 +280,6 @@ def createTables():
 
 
 createTables() 
+
+print("\n\n", individuals)
+print("\n\n", families)
