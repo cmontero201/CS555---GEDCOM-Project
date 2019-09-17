@@ -81,7 +81,6 @@ def parseFile(data):
         inf = line.replace("@", "").strip().split()
         level = int(inf[0])
 
-
         ## Check Validity
         levCheck = level in valid
         if levCheck is False:
@@ -152,13 +151,13 @@ def parseFile(data):
                 date = datetime.datetime.strptime(strDate, "%d %b %Y").date()
                 currFam.divorced = date
                 divDate = False
+
         ## Adds Family Individual is Spouse In
         if inf[1] == "FAMS":
             currInd.spouse = inf[2]
         ## Adds Family Individual is Child In
         if inf[1] == "FAMC":
             currInd.child = inf[2]
-
         ## Non-Info Lines
         if (inf[1] == "NOTE") or (inf[1] == "HEAD"):
             continue
@@ -169,12 +168,14 @@ def parseFile(data):
                 currInd = Individual()
                 lastLine = inf
                 currFam.id = inf[1]
+
             else:
                 lastLine = inf
                 families.append(currFam)
                 currFam = Family()
                 currFam.id = inf[1]
                 continue
+
         if inf[1] == "MARR":
             marrDate = True
         if inf[1] == "DIV":
@@ -185,6 +186,7 @@ def parseFile(data):
             for each in enumerate(individuals):
                 if (each[1].id == inf[2]):
                     currFam.husbandName = each[1].name
+
         ## Add Wife ID
         if inf[1] == "WIFE":
             currFam.wife = inf[2]
@@ -273,18 +275,22 @@ def checkErrors(individuals, families):
     for ind in individuals:
         count += 1
         checkErr.checkAge(ind, count, errLog)
-    
+        
+## Run Program
+def run():
+    try:
+        ## File Name Input and File Open
+        # file_name = input("Enter the GEDCOM file path... ")
+        # print("Opening "+ file_name + "...\n ")
+        # data = open(file_name, 'r')
+        data = open("myFam.ged", 'r')
+        individuals, families = parseFile(data)
+        createTables(individuals, families)
+        checkErrors(individuals, families)
+    except:
+        print('Unable to open the file...')
+        exit()
 
 
-## File Name Input and File Open
-# file_name = input("Enter the GEDCOM file path... ")
-# print("Opening "+ file_name + "...\n ") 
-try:
-    # data = open(file_name, 'r')
-    data = open("myFam.ged", 'r')
-    individuals, families = parseFile(data)
-    createTables(individuals, families)
-    checkErrors(individuals, families)
-except:
-    print('Unable to open the file...')
-    exit()
+if __name__ == '__main__':
+    run()
