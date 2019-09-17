@@ -159,7 +159,6 @@ for line in data:
         
         ## Adds Divorce Date to Family
         elif divDate == True:
-            print(inf)
             strDate = inf[2] + space + inf[3] + space + inf[4]
             date = datetime.datetime.strptime(strDate, "%d %b %Y").date()
             currFam.divorced = date
