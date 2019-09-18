@@ -274,11 +274,13 @@ def checkErrors(individuals, families):
     count = 0
     for ind in individuals:
         count += 1
+        ## Check Age <150
         checkErr.checkAge(ind, count, errLog)
     
     
     for fam in families:
         count += 1
+        ## Check Birth Before Marriage
         checkErr.checkBirth_marriage(fam, count, errLog, individuals)
         
 ## Run Program
