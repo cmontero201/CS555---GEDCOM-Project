@@ -5,7 +5,7 @@ This file uses python3.6 to check errors within gedcom files
 """
 import unittest
 
-## US07 Checks for indivduals with age greater than 150
+## US07 Checks for indivduals with age greater than 150 (Christian)
 def checkAge(ind, count, errLog):
     error = False
     if (ind.alive) and ((ind.age) >= 150):
@@ -27,7 +27,7 @@ def checkAge(ind, count, errLog):
         error = True
         return error
 
-## US08 Checks Birth and Marriage Dates - Ensures Birth before Marriage
+## US08 Checks Birth and Marriage Dates - Ensures Birth before Marriage (Christian)
 def checkBirth_marriage(fam, count, errLog, individuals):
     error = False
     marrDate = fam.married
