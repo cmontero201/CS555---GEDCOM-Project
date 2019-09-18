@@ -11,9 +11,9 @@ def checkAge(ind, count, errLog):
     if (ind.alive) and ((ind.age) >= 150):
         indName = ind.name
         indID = ind.id
-        errLine = "ERROR US07: Age of %s (%s) is greater than or equal to 150 years (individuals line %d)"
+        errLine = "ERROR: INDIVIDUAL: US07: Age of %s (%s) is greater than or equal to 150 years *** individuals index %d"
         print(errLine % (indName, indID, count))
-        errLog.append("ERROR US07: Age of " + indName + "(" + indID + ") " + "is greater than or equal to 150 years (individuals index " + str(count) + ")")
+        errLog.append("ERROR: INDIVIDUAL: US07: Age of " + indName + "(" + indID + ") " + "is greater than or equal to 150 years *** individuals index " + str(count))
         error = True
         return error
 
@@ -21,9 +21,9 @@ def checkAge(ind, count, errLog):
         indName = ind.name
         indID = ind.id
         lineLoc = count
-        errLine = "ERROR US07: Age of %s (%s) was greater than or equal to 150 years at death (individuals line %d)"
+        errLine = "ERROR: INDIVIDUAL: US07: Age of %s (%s) was greater than or equal to 150 years at death *** individuals index %d"
         print(errLine % (indName, indID, lineLoc))
-        errLog.append("ERROR US07: Age of " + indName + "(" + indID + ") " + "was greater than or equal to 150 years at death (individuals index " + str(count) + ")")
+        errLog.append("ERROR: INDIVIDUAL: US07: Age of " + indName + "(" + indID + ") " + "was greater than or equal to 150 years at death *** individuals index " + str(count))
         error = True
         return error
 
@@ -34,6 +34,7 @@ def checkBirth_marriage(fam, count, errLog, individuals):
     husbID = fam.husband
     wifeID = fam.wife
 
+
     for ind in individuals:
         if (ind.id == husbID):
             husbName = ind.name
@@ -42,18 +43,19 @@ def checkBirth_marriage(fam, count, errLog, individuals):
         if (ind.id == wifeID):
             wifeName = ind.name
             wifeBday = ind.birthday
+    
 
     if husbBday > marrDate:
-        errLine = "ERROR US08: %s's (%s) birthday is after his marriage date (families line %d)"
-        print(errLine % (husbName, husbID, count))
-        errLog.append("ERROR US08: " + husbName + "(" + husbID + ") birthday is after his marriage date (families index " + str(count) + ")")
+        errLine = "ERROR: FAMILY: US08: %s's (%s) birthday (%s) is after his marriage date (%s) *** families index %d"
+        print(errLine % (husbName, husbID, husbBday, marrDate, count))
+        errLog.append("ERROR: FAMILY: US08: " + husbName + "(" + husbID + ") birthday (" + str(husbBday) + ") is after his marriage date (" + str(marrDate) + ") *** families index " + str(count))
         error = True
         return error
 
     if wifeBday > marrDate:
-        errLine = "ERROR US08: %s's (%s) birthday is after her marriage date (families line %d)"
-        print(errLine % (wifeName, wifeID, count))
-        errLog.append("ERROR US08: " + wifeName + "(" + wifeID + ") birthday is after his marriage date (families index " + str(count) + ")")
+        errLine = "ERROR: FAMILY: US08: %s's (%s) birthday (%s) is after her marriage date (%s) *** families index %d"
+        print(errLine % (wifeName, wifeID, wifeBday, marrDate, count))
+        errLog.append("ERROR: FAMILY: US08: " + wifeName + "(" + wifeID + ") birthday (" + str(wifeBday) + ") is after his marriage date (" + str(marrDate) + ") *** families index " + str(count))
         error = True
         return error
     
