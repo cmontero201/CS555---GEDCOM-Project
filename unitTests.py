@@ -5,26 +5,11 @@ from gedcomParser import parseFile, Individual, Family
 import checkErr
 
 
-# goodInd = Individual()
-goodInd = Individual()
-goodInd.id = "Test00"
-goodInd.name = "TEST /PERSON/"
-goodInd.gender = "M"
-goodInd.birthday = datetime.datetime.strptime("9 NOV 2007", "%d %b %Y").date()
-goodInd.age = 65
-goodInd.alive = True
-# goodFam = 
-badInd = Individual()
-badInd.id = "Test00"
-badInd.name = "TEST /PERSON/"
-badInd.gender = "M"
-badInd.birthday = datetime.datetime.strptime("9 NOV 2020", "%d %b %Y").date()
-badInd.age = 162
-badInd.alive = True
 
-
-
-
+dataGood = open("myFam.ged", 'r')
+dataBad = open("fail.ged", "r")
+goodInd, goodFam = parseFile(dataGood)
+badInd, badFam = parseFile(dataBad)
 
 
 ## Tests all Age Related User Stories
@@ -32,13 +17,23 @@ class TestAge(unittest.TestCase):
 
     ## US07 Test: Check Age Less Than 150
     def testAge150_Pass(self):
-        x = checkErr.checkAge(goodInd, 0, [])
-        self.assertFalse(checkErr.checkAge(goodInd, 0, []))
+        for ind1 in goodInd:
+            x = checkErr.checkAge(ind1, 0, [])
+            self.assertFalse(x)
     def testAge150_Fail(self):
-        x = checkErr.checkAge(badInd, 0, [])
-        self.assertTrue(checkErr.checkAge(badInd, 0, []))
+        for ind2 in badInd:
+            x = checkErr.checkAge(ind2, 0, [])
+            self.assertTrue(x)
 
     ## US08 Test: Ensure Birth Date is before Marriage Date
+    def testBirth_marriage_Pass(self):
+        for fam1 in goodFam:
+            x = checkErr.checkBirth_marriage(fam1, 0, [], goodInd)
+            self.assertFalse(x)
+    def testBirth_marriage_Fail(self):
+        for fam2 in badFam:
+            x = checkErr.checkBirth_marriage(fam2, 0, [], goodInd)
+            self.assertFalse(x)
 
 
 ## Run Unit Tests

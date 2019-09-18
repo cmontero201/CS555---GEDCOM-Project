@@ -275,6 +275,11 @@ def checkErrors(individuals, families):
     for ind in individuals:
         count += 1
         checkErr.checkAge(ind, count, errLog)
+    
+    
+    for fam in families:
+        count += 1
+        checkErr.checkBirth_marriage(fam, count, errLog, individuals)
         
 ## Run Program
 def run():
@@ -283,7 +288,10 @@ def run():
         # file_name = input("Enter the GEDCOM file path... ")
         # print("Opening "+ file_name + "...\n ")
         # data = open(file_name, 'r')
+
         data = open("myFam.ged", 'r')
+        # data = open("fail.ged", 'r')
+
         individuals, families = parseFile(data)
         createTables(individuals, families)
         checkErrors(individuals, families)
