@@ -272,7 +272,7 @@ def createTables(individuals, families):
 def checkErrors(individuals, families):
     errLog = []
     
-    ## Iterate individuals for errors
+    # Iterate individuals for errors
     count = 0
     for ind in individuals:
         count += 1
@@ -283,7 +283,7 @@ def checkErrors(individuals, families):
         except:
             print("checkAge failed")
         
-    ## Iterate families for errors
+    # Iterate families for errors
     count = 0
     for fam in families:
         count += 1
@@ -293,6 +293,11 @@ def checkErrors(individuals, families):
             checkErr.checkBirth_marriage(fam, count, errLog, individuals)
         except:
             print("checkBirth_marriage failed")
+        ## Check Birth After Parent's Marriage
+        try:
+            checkErr.checkBirth_parentMarriage(fam, count, errLog, individuals)
+        except:
+            print("checkBirth_parentMarriage failed")
         
 ## Run Program
 def run():

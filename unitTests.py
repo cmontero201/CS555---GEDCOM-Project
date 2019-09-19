@@ -15,17 +15,7 @@ badInd, badFam = parseFile(dataBad)
 ## Tests all Age Related User Stories
 class TestAge(unittest.TestCase):
 
-    ## US07 Test: Check Age Less Than 150
-    def testAge150_Pass(self):
-        for ind1 in goodInd:
-            x = checkErr.checkAge(ind1, 0, [])
-            self.assertFalse(x)
-    def testAge150_Fail(self):
-        for ind2 in badInd:
-            x = checkErr.checkAge(ind2, 0, [])
-            self.assertTrue(x)
-
-    ## US08 Test: Ensure Birth Date is before Marriage Date
+    ## US02 Test: Ensure Birth Date is before Marriage Date
     def testBirth_marriage_Pass(self):
         for fam1 in goodFam:
             x = checkErr.checkBirth_marriage(fam1, 0, [], goodInd)
@@ -34,6 +24,28 @@ class TestAge(unittest.TestCase):
         for fam2 in badFam:
             x = checkErr.checkBirth_marriage(fam2, 0, [], goodInd)
             self.assertFalse(x)
+
+    ## US07 Test: Check Age Less Than 150
+    def testAge150_Pass(self):
+        for ind1 in goodInd:
+            x = checkErr.checkAge(ind1, 0, [])
+            self.assertFalse(x)
+    def testAge150_Fail(self):
+        for ind2 in badInd:
+            x = checkErr.checkAge(ind2, 0, [])
+            self.assertFalse(x)
+    
+    ## US08 Test: Check Birth is after Parent Marriage
+    def testBirth_parentMarriage_Pass(self):
+        for fam1 in goodFam:
+            x = checkErr.checkBirth_parentMarriage(fam1, 0, [], goodInd)
+            self.assertFalse(x)
+    def testBirth_parentMarriage_Fail(self):
+        for fam2 in badFam:
+            x = checkErr.checkBirth_parentMarriage(fam2, 0, [], badInd)
+            self.assertFalse(x)
+
+    
 
 
 ## Run Unit Tests
