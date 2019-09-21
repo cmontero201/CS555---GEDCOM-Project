@@ -280,3 +280,21 @@ def createTables():
 
 createTables() 
 
+#Check if the individuals birth date is before their death date
+for i in enumerate(individuals):
+    if i[1].alive == "False":
+        if i[1].death < i[1].birthday:
+            print('ERROR: INDIVIDUAL: '+ i[1].id+' died ' + str(i[1].death) + ' before birth on ' + str(i[1].birthday))
+
+#Checks if the marriage date is before either of the spouses birthdays
+for j in enumerate(families):
+    for i in enumerate(individuals):
+        count = 0
+        if i[1].id == j[1].husband or i[1].id == j[1].wife:
+            count+=1
+            if j[1].married < i[1].birthday:
+                if i[1].gender =="M":
+                    print('ERROR: FAMILY: '+ j[1].id+' married ' + str(j[1].married) + ' before husband''s (' + i[1].id + ') birth on ' + str(i[1].birthday))
+                else:
+                    print('ERROR: FAMILY: '+ j[1].id+' married ' + str(j[1].married) + ' before wife''s (' + i[1].id + ') birth on ' + str(i[1].birthday))
+            if count >=2: break
