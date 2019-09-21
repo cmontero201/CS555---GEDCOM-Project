@@ -271,34 +271,19 @@ def createTables(individuals, families):
 ## Check Errors
 def checkErrors(individuals, families):
     errLog = []
-    
-    # Iterate individuals for errors
     count = 0
     for ind in individuals:
         count += 1
-
-        ## Check Age <150
-        try:
-            checkErr.checkAge(ind, count, errLog)
-        except:
-            print("checkAge failed")
-        
-    # Iterate families for errors
+        checkErr.checkAge(ind, count, errLog)
     count = 0
     for fam in families:
-        count += 1
-        
-        ## Check Birth Before Marriage
-        try:
-            checkErr.checkBirth_marriage(fam, count, errLog, individuals)
-        except:
-            print("checkBirth_marriage failed")
-        ## Check Birth After Parent's Marriage
-        try:
-            checkErr.checkBirth_parentMarriage(fam, count, errLog, individuals)
-        except:
-            print("checkBirth_parentMarriage failed")
-        
+        for ind in individuals:
+            count += 1
+            if fam.husband == ind.id or fam.wife == ind.id:
+                checkErr.checkMarriage(ind, fam, count, errLog)
+                checkErr.checkDivorce(ind, fam, count, errLog)
+
+
 ## Run Program
 def run():
     try:
@@ -313,8 +298,9 @@ def run():
         individuals, families = parseFile(data)
         createTables(individuals, families)
         checkErrors(individuals, families)
-    except:
+    except Exception as ex:
         print('Unable to open the file...')
+        print(ex)
         exit()
 
 

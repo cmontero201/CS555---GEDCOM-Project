@@ -18,11 +18,11 @@ def checkBirth_marriage(fam, count, errLog, individuals):
         if (ind.id == husbID):
             husbName = ind.name
             husbBday = ind.birthday
-        
+
         if (ind.id == wifeID):
             wifeName = ind.name
             wifeBday = ind.birthday
-    
+
 
     if husbBday > marrDate:
         errLine = "ERROR: FAMILY: US02: %s's (%s) birthday (%s) is after his marriage date (%s) *** families index %d"
@@ -36,15 +36,52 @@ def checkBirth_marriage(fam, count, errLog, individuals):
         print(errLine % (wifeName, wifeID, wifeBday, marrDate, count))
         errLog.append("ERROR: FAMILY: US02: " + wifeName + "(" + wifeID + ") birthday (" + str(wifeBday) + ") is after his marriage date (" + str(marrDate) + ") *** families index " + str(count))
         error = True
-        return error 
+        return error
 
 ## US03 Checks Birth and Death dates - Ensures Birth before Death (William)
 
 ## US04 Checks Marriage and Divorce dates - ENsures Marriage before Divorce (Tanmay)
 
 ## US05 Checks Marriage and Death dates - Ensures Marriage before Death (Shoaib)
-
+def checkMarriage(ind, fam, count, errLog):
+    error = False
+    err_line =""
+    married = fam.married
+    death = ind.death
+    if (ind.alive == 'False') and (married != 'NA'):
+        ind_name = ind.name
+        ind_id = ind.id
+        line_loc = count
+        if married >= death:
+            err_line = "ERROR US05: Marriage Date %s of %s (%s) was greater than or equal to date of death %s (gedcom line %d)"
+            print(err_line % (married, ind_name, ind_id, death, line_loc))
+            errLog.append(err_line)
+            error = True
+            print(error)
+        else:
+            error = False
+    else:
+        error = False
 ## US06 Checks Divorce and Death dates - Ensures Divorce before Death (Shoaib)
+def checkDivorce(ind, fam, count, errLog):
+    error = False
+    err_line =""
+    divorce = fam.divorced
+    death = ind.death
+    if ind.alive == 'False' and death != 'NA' and divorce != 'NA':
+        ind_name = ind.name
+        ind_id = ind.id
+        line_loc = count
+        if divorce >= death:
+            err_line = "ERROR US05: Marriage Date %s of %s (%s) was greater than or equal to date of death %s (gedcom line %d)"
+            print(err_line % (divorce, ind_name, ind_id, death, line_loc))
+            errLog.append(err_line)
+            error = True
+            print(error)
+        else:
+            error = False
+    else:
+        error = False
 
 ## US07 Checks for indivduals with age greater than 150 (Christian)
 def checkAge(ind, count, errLog):
@@ -82,4 +119,4 @@ def checkBirth_parentMarriage(fam, count, errLog, individuals):
                 errLog.append("ERROR: FAMILY: US08: " + ind.name + "(" + ind.id + ") birthday (" + str(ind.birthday) + ") is after their parents marriage date (" + str(marrDate) + ") *** families index " + str(count))
                 error = True
                 return error
-            
+
