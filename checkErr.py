@@ -43,45 +43,41 @@ def checkBirth_marriage(fam, count, errLog, individuals):
 ## US04 Checks Marriage and Divorce dates - ENsures Marriage before Divorce (Tanmay)
 
 ## US05 Checks Marriage and Death dates - Ensures Marriage before Death (Shoaib)
-def checkMarriage(ind, fam, count, errLog):
+def checkMarriage(fam, count, errLog, ind):
     error = False
     err_line =""
-    married = fam.married
-    death = ind.death
-    if (ind.alive == 'False') and (married != 'NA'):
-        ind_name = ind.name
-        ind_id = ind.id
-        line_loc = count
-        if married >= death:
-            err_line = "ERROR US05: Marriage Date %s of %s (%s) was greater than or equal to date of death %s (gedcom line %d)"
-            print(err_line % (married, ind_name, ind_id, death, line_loc))
-            errLog.append(err_line)
-            error = True
-            print(error)
-        else:
-            error = False
-    else:
-        error = False
+    for i in ind:
+        married = fam.married
+        death = i.death
+        if (i.alive) and (married):
+            ind_name = i.name
+            ind_id = i.id
+            line_loc = count
+            if married >= death:
+                err_line = "ERROR US05: Marriage Date %s of %s (%s) was greater than or equal to date of death %s (gedcom line %d)"
+                print(err_line % (married, ind_name, ind_id, death, line_loc))
+                errLog.append(err_line)
+                error = True
+                return error
+
+
 ## US06 Checks Divorce and Death dates - Ensures Divorce before Death (Shoaib)
-def checkDivorce(ind, fam, count, errLog):
+def checkDivorce(fam, count, errLog, ind):
     error = False
     err_line =""
-    divorce = fam.divorced
-    death = ind.death
-    if ind.alive == 'False' and death != 'NA' and divorce != 'NA':
-        ind_name = ind.name
-        ind_id = ind.id
-        line_loc = count
-        if divorce >= death:
-            err_line = "ERROR US05: Marriage Date %s of %s (%s) was greater than or equal to date of death %s (gedcom line %d)"
-            print(err_line % (divorce, ind_name, ind_id, death, line_loc))
-            errLog.append(err_line)
-            error = True
-            print(error)
-        else:
-            error = False
-    else:
-        error = False
+    for i in ind:
+        divorce = fam.divorced
+        death = i.death
+        if i.alive == 'False' and death != 'NA' and divorce != 'NA':
+            ind_name = i.name
+            ind_id = i.id
+            line_loc = count
+            if divorce >= death:
+                err_line = "ERROR US05: Marriage Date %s of %s (%s) was greater than or equal to date of death %s (gedcom line %d)"
+                print(err_line % (divorce, ind_name, ind_id, death, line_loc))
+                errLog.append(err_line)
+                error = True
+                return error
 
 ## US07 Checks for indivduals with age greater than 150 (Christian)
 def checkAge(ind, count, errLog):

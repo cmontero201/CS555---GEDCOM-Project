@@ -280,8 +280,8 @@ def checkErrors(individuals, families):
         for ind in individuals:
             count += 1
             if fam.husband == ind.id or fam.wife == ind.id:
-                checkErr.checkMarriage(ind, fam, count, errLog)
-                checkErr.checkDivorce(ind, fam, count, errLog)
+                checkErr.checkMarriage(fam, count, errLog, ind)
+                checkErr.checkDivorce(fam, count, errLog, ind)
 
 
 ## Run Program

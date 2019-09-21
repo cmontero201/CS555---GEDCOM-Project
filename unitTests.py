@@ -25,6 +25,28 @@ class TestAge(unittest.TestCase):
             x = checkErr.checkBirth_marriage(fam2, 0, [], goodInd)
             self.assertFalse(x)
 
+    ## US05 Test: Marriage before death
+    def testMarriage_death_Pass(self):
+        for fam2 in goodFam:
+            x = checkErr.checkMarriage(fam2, 0, [], goodInd)
+            self.assertFalse(x)
+
+    def testMarriage_death_Fail(self):
+        for fam2 in badFam:
+            x = checkErr.checkMarriage(fam2, 0, [], goodInd)
+            self.assertFalse(x)
+
+    ## US06 Test: Divorce before death
+    def testDivorce_death_Pass(self):
+        for fam2 in goodFam:
+            x = checkErr.checkDivorce(fam2, 0, [], goodInd)
+            self.assertFalse(x)
+
+    def testDivorce_death_Fail(self):
+        for fam2 in badFam:
+            x = checkErr.checkDivorce(fam2, 0, [], goodInd)
+            self.assertFalse(x)
+            
     ## US07 Test: Check Age Less Than 150
     def testAge150_Pass(self):
         for ind1 in goodInd:
