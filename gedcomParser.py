@@ -240,7 +240,7 @@ def createTables(individuals, families):
         famTable.add_row(eachh)
     print("Families\n", famTable, "\n\n")
 
-## Check Errors
+## Check Errors - Acceptance Tests
 def checkErrors(individuals, families):
     errLog = []
     
@@ -327,8 +327,6 @@ def run():
         for each in log:
             f.write('%s\n' % each)
         f.close()
-            
-           
         
     except:
         print('Unable to open the file...')
