@@ -129,7 +129,6 @@ def checkMarriage(fam, count, errLog, ind):
                     errLog.append(err_line)
                     error = True
                     return error
-    
     return error
 
 ## US06 Checks Divorce and Death dates - Ensures Divorce before Death (Shoaib)
