@@ -20,6 +20,7 @@ def checkCurrDate(fam, count, errLog, individuals):
             errLog.append(err_line)
             error = True    
             return error
+            
         if ind.alive == 'False' and ind.death > current:
             err_line = "ERROR: INDIVIDUAL: US01: Death Date (%s) of %s (%s) is after the current date *** individuals index %d"
             print(err_line % (ind.death, ind.name, ind.id, count))
@@ -27,20 +28,20 @@ def checkCurrDate(fam, count, errLog, individuals):
             error = True
             return error 
 
-    if marrDate > current:
-        err_line = "ERROR: FAMILY: US01: Marriage Date (%s) of %s (%s) is after the current date *** families index %d"
-        print(err_line % (marrDate, fam.husbandName, fam.husband, count))
-        errLog.append(err_line)
-        error = True
-        return error
-
-    if divDate != 'NA':
-        if divDate > current:
-            err_line = "ERROR: FAMILY: US01: Divorce Date (%s) of %s (%s) is after the current date (gedcom line %d)"
-            print(err_line % (divDate, fam.husbandName, fam.husband, count))
+        if marrDate > current:
+            err_line = "ERROR: FAMILY: US01: Marriage Date (%s) of %s (%s) is after the current date *** families index %d"
+            print(err_line % (marrDate, fam.husbandName, fam.husband, count))
             errLog.append(err_line)
             error = True
             return error
+
+        if divDate != 'NA':
+            if divDate > current:
+                err_line = "ERROR: FAMILY: US01: Divorce Date (%s) of %s (%s) is after the current date (gedcom line %d)"
+                print(err_line % (divDate, fam.husbandName, fam.husband, count))
+                errLog.append(err_line)
+                error = True
+                return error
 
 ## US02 Checks Birth and Marriage Dates - Ensures Birth before Marriage (William)
 def checkBirth_marriage(fam, count, errLog, individuals):
