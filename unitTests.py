@@ -14,6 +14,18 @@ badInd, badFam = parseFile(dataBad)
 
 ## Tests all Age Related User Stories
 class TestAge(unittest.TestCase):
+    
+     ## US01 Test: Dates before Current Date
+    def testCurrDate_Pass(self):
+        for fam1 in goodFam:
+            x = checkErr.checkCurrDate(fam1, 0, [], [])
+            self.assertFalse(x)
+    def testCurrDate_Fail(self):
+        res = []
+        for fam2 in badFam:
+            x = checkErr.checkCurrDate(fam2, 0, [], [])
+            res.append(x)
+        self.assertIn(True, res)
 
     ## US02 Test: Ensure Birth Date is before Marriage Date
     def testBirth_marriage_Pass(self):
@@ -33,12 +45,23 @@ class TestAge(unittest.TestCase):
             x = checkErr.checkBirth_death(ind1, 0, [])
             if x != None:
                 self.assertFalse(x)
- 
     def testCheckBirth_death_Fail(self):
         for ind1 in badInd:
             x = checkErr.checkBirth_death(ind1, 0, [])
             if x != None:
                 self.assertTrue(x)
+                
+    ## US04 Test: Marriage before Divorce
+    def testMarriage_Divorce_Pass(self):
+        for fam1 in goodFam:
+            x = checkErr.checkMarrBeforeDiv(fam1, 0, [])
+            self.assertFalse(x)
+    def testMarriage_Divorce_Fail(self):
+        res = []
+        for fam2 in badFam:
+            x = checkErr.checkMarrBeforeDiv(fam2, 0, [])
+            res.append(x)
+        self.assertIn(True, res)
 
     ## US05 Test: Marriage before death
     def testMarriage_death_Pass(self):
@@ -58,14 +81,13 @@ class TestAge(unittest.TestCase):
         for fam2 in goodFam:
             x = checkErr.checkDivorce(fam2, 0, [], goodInd)
             self.assertFalse(x)
-
     def testDivorce_death_Fail(self):
         res = []
         for fam2 in badFam:
             x = checkErr.checkDivorce(fam2, 0, [], goodInd)
             res.append(x)
         self.assertIn(True, res)
-            
+
     ## US07 Test: Check Age Less Than 150
     def testAge150_Pass(self):
         for ind1 in goodInd:
