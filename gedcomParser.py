@@ -200,34 +200,6 @@ def parseFile(data):
             families.append(currFam)
             currFam = Family()
 
-        ############# CHECKER #############
-        # print("Number of Individuals: ", len(individuals))
-        # for i in enumerate(individuals):
-        #     print("-----------------------")
-        #     print(i[1].id)
-        #     print(i[1].name)
-        #     print(i[1].gender)
-        #     print(i[1].birthday)
-        #     print(i[1].age)
-        #     print(i[1].alive)
-        #     print(i[1].death)
-        #     print(i[1].child)
-        #     print(i[1].spouse)
-        #     print("-----------------------")
-
-        # print("Number of Families: ", len(families))
-        # for i in enumerate(families):
-        #     print("-----------------------")
-        #     print(i[1].id)
-        #     print(i[1].married)
-        #     print(i[1].divorced)
-        #     print(i[1].husband)
-        #     print(i[1].husbandName)
-        #     print(i[1].wife)
-        #     print(i[1].wifeName)
-        #     print(i[1].children)
-        #     print("-----------------------")
-        ####################################  
     return [individuals, families]
 
 ## Populates then Prints Indivduals & Families Tables
@@ -334,6 +306,8 @@ def checkErrors(individuals, families):
         except:
             print("checkBirth_parentMarriage failed")
 
+    return errLog
+
 ## Run Program
 def run():
     try:
@@ -347,7 +321,14 @@ def run():
 
         individuals, families = parseFile(data)
         createTables(individuals, families)
-        checkErrors(individuals, families)
+        log = checkErrors(individuals, families)
+
+        f = open('Test_Results.txt', 'w')
+        for each in log:
+            f.write('%s\n' % each)
+            
+           
+        
     except:
         print('Unable to open the file...')
         exit()
