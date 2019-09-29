@@ -326,6 +326,7 @@ def run():
         f = open('Test_Results.txt', 'w')
         for each in log:
             f.write('%s\n' % each)
+        f.close()
             
            
         
