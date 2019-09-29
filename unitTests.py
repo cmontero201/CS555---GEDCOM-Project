@@ -21,9 +21,11 @@ class TestAge(unittest.TestCase):
             x = checkErr.checkBirth_marriage(fam1, 0, [], goodInd)
             self.assertFalse(x)
     def testBirth_marriage_Fail(self):
+        res= []
         for fam2 in badFam:
             x = checkErr.checkBirth_marriage(fam2, 0, [], goodInd)
-            self.assertFalse(x)
+            res.append(x)
+        self.assertIn(True, res)
 
     ## US05 Test: Marriage before death
     def testMarriage_death_Pass(self):
@@ -32,9 +34,11 @@ class TestAge(unittest.TestCase):
             self.assertFalse(x)
 
     def testMarriage_death_Fail(self):
+        res = []
         for fam2 in badFam:
             x = checkErr.checkMarriage(fam2, 0, [], goodInd)
-            self.assertFalse(x)
+            res.append(x)
+        self.assertIn(True, res)
 
     ## US06 Test: Divorce before death
     def testDivorce_death_Pass(self):
@@ -43,9 +47,11 @@ class TestAge(unittest.TestCase):
             self.assertFalse(x)
 
     def testDivorce_death_Fail(self):
+        res = []
         for fam2 in badFam:
             x = checkErr.checkDivorce(fam2, 0, [], goodInd)
-            self.assertFalse(x)
+            res.append(x)
+        self.assertIn(True, res)
             
     ## US07 Test: Check Age Less Than 150
     def testAge150_Pass(self):
@@ -53,9 +59,12 @@ class TestAge(unittest.TestCase):
             x = checkErr.checkAge(ind1, 0, [])
             self.assertFalse(x)
     def testAge150_Fail(self):
+        res = []
         for ind2 in badInd:
             x = checkErr.checkAge(ind2, 0, [])
-            self.assertFalse(x)
+            res.append(x)
+        self.assertIn(True, res)
+    
     
     ## US08 Test: Check Birth is after Parent Marriage
     def testBirth_parentMarriage_Pass(self):
@@ -63,9 +72,11 @@ class TestAge(unittest.TestCase):
             x = checkErr.checkBirth_parentMarriage(fam1, 0, [], goodInd)
             self.assertFalse(x)
     def testBirth_parentMarriage_Fail(self):
+        res = []
         for fam2 in badFam:
             x = checkErr.checkBirth_parentMarriage(fam2, 0, [], badInd)
-            self.assertFalse(x)
+            res.append(x)
+        self.assertIn(True, res)
 
     
 
