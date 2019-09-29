@@ -81,6 +81,17 @@ def checkBirth_marriage(fam, count, errLog, individuals):
     return error
 
 ## US03 Checks Birth and Death dates - Ensures Birth before Death (William)
+def checkBirth_death(ind, count, errLog):
+    error = False
+    err_line = ""
+    if ((ind.alive == "False") and (ind.death < ind.birthday)):
+        indName = ind.name
+        indID = ind.id
+        errLine = "ERROR: INDIVIDUAL: US07: %s's (%s) death (%s) is prior their birth (%s) *** individuals index %d"
+        print(errLine % (indName, indID, ind.death, ind.birthday, count))
+        errLog.append("ERROR: INDIVIDUAL: US07: " + indName + "(" + indID + ") death (" + str(ind.death) + "is prior to their birth (" + str(ind.birthday) + ") *** individuals index " + str(count))
+        error = True
+        return error
 
 ## US04 Checks Marriage and Divorce dates - Ensures Marriage before Divorce (Tanmay)
 def checkMarrBeforeDiv(fam, count, errLog):
