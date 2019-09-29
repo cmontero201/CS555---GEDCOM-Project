@@ -7,26 +7,14 @@ import unittest
 from datetime import datetime, date
 
 ## US01 Checks for dates in the future (Tanmay)
-def checkCurrDate(fam, count, errLog, individuals):
+def checkCurrDate(fam, count, errLog, ind):
     current = datetime.now().date()
     error = False
     err_line =""
-    marrDate = fam.married
-    divDate = fam.divorced
-    for ind in individuals:
-        if ind.birthday > current:
-            err_line = "ERROR: INDIVIDUAL: US01: Birth Date (%s) of %s (%s) is after the current date *** individuals index %d"
-            print(err_line % (ind.birthday, ind.name, ind.id, count))
-            errLog.append(err_line)
-            error = True    
-            return error
-            
-        if ind.alive == 'False' and ind.death > current:
-            err_line = "ERROR: INDIVIDUAL: US01: Death Date (%s) of %s (%s) is after the current date *** individuals index %d"
-            print(err_line % (ind.death, ind.name, ind.id, count))
-            errLog.append(err_line)
-            error = True
-            return error 
+  
+    if fam != []:
+        marrDate = fam.married
+        divDate = fam.divorced
 
         if marrDate > current:
             err_line = "ERROR: FAMILY: US01: Marriage Date (%s) of %s (%s) is after the current date *** families index %d"
@@ -42,6 +30,21 @@ def checkCurrDate(fam, count, errLog, individuals):
                 errLog.append(err_line)
                 error = True
                 return error
+    
+    if ind != []:
+        if ind.birthday > current:
+            err_line = "ERROR: INDIVIDUAL: US01: Birth Date (%s) of %s (%s) is after the current date *** individuals index %d"
+            print(err_line % (ind.birthday, ind.name, ind.id, count))
+            errLog.append(err_line)
+            error = True    
+            return error
+
+        if ind.alive == 'False' and ind.death > current:
+            err_line = "ERROR: INDIVIDUAL: US01: Death Date (%s) of %s (%s) is after the current date *** individuals index %d"
+            print(err_line % (ind.death, ind.name, ind.id, count))
+            errLog.append(err_line)
+            error = True
+            return error 
 
 ## US02 Checks Birth and Marriage Dates - Ensures Birth before Marriage (William)
 def checkBirth_marriage(fam, count, errLog, individuals):
