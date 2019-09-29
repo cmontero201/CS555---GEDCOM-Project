@@ -277,17 +277,16 @@ def checkErrors(individuals, families):
     for ind in individuals:
         count += 1
 
+         ## US01 - Check All Individuals Dates Before Current Date
+        try:
+            checkErr.checkCurrDate([], count, errLog, ind)
+        except:
+            print("checkCurrDate failed1")
         ## US07 - Check Age <150
         try:
             checkErr.checkAge(ind, count, errLog)
         except:
             print("checkAge failed")
-
-        ## US01 - Check All Individuals Dates Before Current Date
-        try:
-            checkErr.checkCurrDate([], count, errLog, ind)
-        except:
-            print("checkCurrDate failed1")
         
     # Iterate families for errors
     count = 0
