@@ -277,13 +277,13 @@ def checkErrors(individuals, families):
     for ind in individuals:
         count += 1
 
-        ## Check Age <150
+        ## US07 - Check Age <150
         try:
             checkErr.checkAge(ind, count, errLog)
         except:
             print("checkAge failed")
 
-        ## Check All Dates Before Current Date
+        ## US01 - Check All Individuals Dates Before Current Date
         try:
             checkErr.checkCurrDate([], count, errLog, ind)
         except:
@@ -294,39 +294,40 @@ def checkErrors(individuals, families):
     for fam in families:
         count += 1
         
-        ## Check Dates before Current Date
+        ## US01 - Check All Families Dates Before Current Date
         try:
             checkErr.checkCurrDate(fam, count, errLog, [])
         except:
             print("checkCurrDate failed2")
         
-        ## Check Birth Before Marriage
+        ## US02 - Check Birth Before Marriage
         try:
             checkErr.checkBirth_marriage(fam, count, errLog, individuals)
         except:
             print("checkBirth_marriage failed")
 
-        ## Check Marriage before Divorce
+        ## US04 - Check Marriage before Divorce
         try:
             checkErr.checkMarrBeforeDiv(fam, count, errLog)
         except:
             print("checkMarrBeforeDiv failed")
   
-        ## Check Birth After Parent's Marriage
-        try:
-            checkErr.checkBirth_parentMarriage(fam, count, errLog, individuals)
-        except:
-            print("checkBirth_parentMarriage failed")
-        ## Check Marriage 
+        ## US05 - Check Marriage 
         try:
             checkErr.checkMarriage(fam, count, errLog, individuals)
         except:
             print("checkMarriage Failed")
        
+        ## US06 - Check Divorce
         try:
             checkErr.checkDivorce(fam, count, errLog, individuals)
         except:
             print("checkDivorce Failed")
+        ## US08 - Check Birth After Parent's Marriage
+        try:
+            checkErr.checkBirth_parentMarriage(fam, count, errLog, individuals)
+        except:
+            print("checkBirth_parentMarriage failed")
 
 ## Run Program
 def run():
