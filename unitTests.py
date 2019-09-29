@@ -33,7 +33,7 @@ class TestAge(unittest.TestCase):
             x = checkErr.checkBirth_death(ind1, 0, [])
             if x != None:
                 self.assertFalse(x)
-        
+ 
     def testCheckBirth_death_Fail(self):
         for ind1 in badInd:
             x = checkErr.checkBirth_death(ind1, 0, [])
@@ -42,9 +42,13 @@ class TestAge(unittest.TestCase):
 
     ## US05 Test: Marriage before death
     def testMarriage_death_Pass(self):
+        res = []
         for fam2 in goodFam:
             x = checkErr.checkMarriage(fam2, 0, [], goodInd)
-            self.assertFalse(x)
+            res.append(x)
+        print(res)
+        print(goodFam[0].id)
+        # self.assertNotIn(True,x)
 
     def testMarriage_death_Fail(self):
         res = []
@@ -77,7 +81,6 @@ class TestAge(unittest.TestCase):
             x = checkErr.checkAge(ind2, 0, [])
             res.append(x)
         self.assertIn(True, res)
-    
     
     ## US08 Test: Check Birth is after Parent Marriage
     def testBirth_parentMarriage_Pass(self):

@@ -342,8 +342,8 @@ def run():
         # print("Opening "+ file_name + "...\n ")
         # data = open(file_name, 'r')
 
-        # data = open("myFam.ged", 'r')
-        data = open("fail.ged", 'r')
+        data = open("myFam.ged", 'r')
+        # data = open("fail.ged", 'r')
 
         individuals, families = parseFile(data)
         createTables(individuals, families)
