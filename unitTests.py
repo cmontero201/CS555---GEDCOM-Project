@@ -26,6 +26,19 @@ class TestAge(unittest.TestCase):
             x = checkErr.checkBirth_marriage(fam2, 0, [], goodInd)
             res.append(x)
         self.assertIn(True, res)
+        
+    ## US03 Test: Ensure Birth Date is before Death Date
+    def testCheckBirth_death_Pass(self):
+        for ind1 in goodInd:
+            x = checkErr.checkBirth_death(ind1, 0, [])
+            if x != None:
+                self.assertFalse(x)
+        
+    def testCheckBirth_death_Fail(self):
+        for ind1 in badInd:
+            x = checkErr.checkBirth_death(ind1, 0, [])
+            if x != None:
+                self.assertTrue(x)
 
     ## US05 Test: Marriage before death
     def testMarriage_death_Pass(self):
