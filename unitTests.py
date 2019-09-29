@@ -20,10 +20,13 @@ class TestAge(unittest.TestCase):
         for fam1 in goodFam:
             x = checkErr.checkCurrDate(fam1, 0, [], [])
             self.assertFalse(x)
+
     def testCurrDate_Fail(self):
+        res = []
         for fam2 in badFam:
             x = checkErr.checkCurrDate(fam2, 0, [], [])
-            self.assertFalse(x)
+            res.append(x)
+        self.assertIn(True, res)
 
     ## US02 Test: Ensure Birth Date is before Marriage Date
     def testBirth_marriage_Pass(self):
@@ -57,9 +60,11 @@ class TestAge(unittest.TestCase):
             self.assertFalse(x)
 
     def testMarriage_Divorce_Fail(self):
+        res = []
         for fam2 in badFam:
             x = checkErr.checkMarrBeforeDiv(fam2, 0, [])
-            self.assertFalse(x)
+            res.append(x)
+        self.assertIn(True, res)
 
     ## US05 Test: Marriage before death
     def testMarriage_death_Pass(self):
