@@ -288,11 +288,24 @@ def checkErrors(individuals, families):
     for fam in families:
         count += 1
         
+        ## Check Dates before Current Date
+        try:
+            checkErr.checkCurrDate(fam, count, errLog, individuals)
+        except:
+            print("checkCurrDate failed")
+        
         ## Check Birth Before Marriage
         try:
             checkErr.checkBirth_marriage(fam, count, errLog, individuals)
         except:
             print("checkBirth_marriage failed")
+
+        ## Check Marriage before Divorce
+        try:
+            checkErr.checkMarrBeforeDiv(fam, count, errLog)
+        except:
+            print("checkMarrBeforeDiv failed")
+  
         ## Check Birth After Parent's Marriage
         try:
             checkErr.checkBirth_parentMarriage(fam, count, errLog, individuals)
@@ -306,7 +319,7 @@ def checkErrors(individuals, families):
             checkErr.checkDivorce(fam, count, errLog, individuals)
         except:
             print("checkDivorce Failed")
-        
+
 ## Run Program
 def run():
     try:

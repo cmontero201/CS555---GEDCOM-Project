@@ -4,8 +4,43 @@ September 16, 2019
 This file uses python3.6 to check errors within gedcom files
 """
 import unittest
+from datetime import datetime, date
 
 ## US01 Checks for dates in the future (Tanmay)
+def checkCurrDate(fam, count, errLog, individuals):
+    current = datetime.now().date()
+    error = False
+    err_line =""
+    marrDate = fam.married
+    divDate = fam.divorced
+    for ind in individuals:
+        if ind.birthday > current:
+            err_line = "ERROR: INDIVIDUAL: US01: Birth Date (%s) of %s (%s) is after the current date *** individuals index %d"
+            print(err_line % (ind.birthday, ind.name, ind.id, count))
+            errLog.append(err_line)
+            error = True    
+            return error
+        if ind.alive == 'False' and ind.death > current:
+            err_line = "ERROR: INDIVIDUAL: US01: Death Date (%s) of %s (%s) is after the current date *** individuals index %d"
+            print(err_line % (ind.death, ind.name, ind.id, count))
+            errLog.append(err_line)
+            error = True
+            return error 
+
+    if marrDate > current:
+        err_line = "ERROR: FAMILY: US01: Marriage Date (%s) of %s (%s) is after the current date *** families index %d"
+        print(err_line % (marrDate, fam.husbandName, fam.husband, count))
+        errLog.append(err_line)
+        error = True
+        return error
+
+    if divDate != 'NA':
+        if divDate > current:
+            err_line = "ERROR: FAMILY: US01: Divorce Date (%s) of %s (%s) is after the current date (gedcom line %d)"
+            print(err_line % (divDate, fam.husbandName, fam.husband, count))
+            errLog.append(err_line)
+            error = True
+            return error
 
 ## US02 Checks Birth and Marriage Dates - Ensures Birth before Marriage (William)
 def checkBirth_marriage(fam, count, errLog, individuals):
@@ -40,7 +75,22 @@ def checkBirth_marriage(fam, count, errLog, individuals):
 
 ## US03 Checks Birth and Death dates - Ensures Birth before Death (William)
 
-## US04 Checks Marriage and Divorce dates - ENsures Marriage before Divorce (Tanmay)
+## US04 Checks Marriage and Divorce dates - Ensures Marriage before Divorce (Tanmay)
+def checkMarrBeforeDiv(fam, count, errLog):
+    error = False
+    err_line =""
+    husbID = fam.husband
+    husbName = fam.husbandName
+    married = fam.married
+    divorced = fam.divorced
+    if divorced != 'NA':
+        if married > divorced:
+            err_line = "ERROR: FAMILY: US04: Divorce Date (%s) of %s (%s) was before his date of marriage (%s) *** families index %d"
+            print(err_line % (divorced, husbName, husbID, married, count))
+            errLog.append(err_line)
+            error = True
+            return error
+
 
 ## US05 Checks Marriage and Death dates - Ensures Marriage before Death (Shoaib)
 def checkMarriage(fam, count, errLog, ind):
@@ -55,7 +105,7 @@ def checkMarriage(fam, count, errLog, ind):
                 ind_id = i.id
                 line_loc = count
                 if married >= death:
-                    err_line = "ERROR US05: Marriage Date %s of %s (%s) was greater than or equal to date of death %s (gedcom line %d)"
+                    err_line = "ERROR: FAMILY: US05: Marriage Date (%s) of %s (%s) was greater than or equal to date of death (%s) *** families index %d"
                     print(err_line % (married, ind_name, ind_id, death, line_loc))
                     errLog.append(err_line)
                     error = True
@@ -74,7 +124,7 @@ def checkDivorce(fam, count, errLog, ind):
             ind_id = i.id
             line_loc = count
             if divorce >= death:
-                err_line = "ERROR US05: Marriage Date %s of %s (%s) was greater than or equal to date of death %s (gedcom line %d)"
+                err_line = "ERROR: FAMILY: US06: Divorce Date (%s) of %s (%s) was greater than or equal to date of death (%s) *** families index %d"
                 print(err_line % (divorce, ind_name, ind_id, death, line_loc))
                 errLog.append(err_line)
                 error = True
