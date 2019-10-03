@@ -254,6 +254,11 @@ def checkErrors(individuals, families):
             checkErr.checkCurrDate([], count, errLog, ind)
         except:
             print("checkCurrDate failed1")
+        ## US03 - Check Birth before Death
+        try:
+            checkErr.checkBirth_death(ind, count, errLog)
+        except:
+            print("checkBirth_death failed")
         ## US07 - Check Age <150
         try:
             checkErr.checkAge(ind, count, errLog)
@@ -276,12 +281,6 @@ def checkErrors(individuals, families):
             checkErr.checkBirth_marriage(fam, count, errLog, individuals)
         except:
             print("checkBirth_marriage failed")
-            
-        ## US03 - Check Birth before Death
-        try:
-            checkErr.checkBirth_death(ind, count, errLog)
-        except:
-            print("checkBirth_death failed")
 
         ## US04 - Check Marriage before Divorce
         try:

@@ -87,9 +87,9 @@ def checkBirth_death(ind, count, errLog):
     if ((ind.alive == "False") and (ind.death < ind.birthday)):
         indName = ind.name
         indID = ind.id
-        errLine = "ERROR: INDIVIDUAL: US07: %s's (%s) death (%s) is prior their birth (%s) *** individuals index %d"
+        errLine = "ERROR: INDIVIDUAL: US03: %s's (%s) death (%s) is prior their birth (%s) *** individuals index %d"
         print(errLine % (indName, indID, ind.death, ind.birthday, count))
-        errLog.append("ERROR: INDIVIDUAL: US07: " + indName + "(" + indID + ") death (" + str(ind.death) + "is prior to their birth (" + str(ind.birthday) + ") *** individuals index " + str(count))
+        errLog.append("ERROR: INDIVIDUAL: US03: " + indName + "(" + indID + ") death (" + str(ind.death) + "is prior to their birth (" + str(ind.birthday) + ") *** individuals index " + str(count))
         error = True
         return error
 
