@@ -304,6 +304,11 @@ def checkErrors(individuals, families):
             checkErr.checkBirth_parentMarriage(fam, count, errLog, individuals)
         except:
             print("checkBirth_parentMarriage failed")
+        ## US14 - Multiple Births Less Than 6
+        try:
+            checkErr.checkMultipleBirths(fam, count, errLog, individuals)
+        except:
+            print("checkMultipleBirths failed")
         ## US15 - Check Family Has Less Than 16 Children
         try:
             checkErr.checkSiblingCount(fam, count, errLog)

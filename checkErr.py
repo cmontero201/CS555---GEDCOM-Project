@@ -203,8 +203,26 @@ def checkBirth_parentMarriage(fam, count, errLog, individuals):
 ## US13 Checks Sibling Birth Dates are More Than 8 Months or Less Than 2 Days Apart
 
 ## US14 Checks Less Than or Equal to 5 Siblings with Same Birth Date
-def checkMultipleBirths(fam, count, errLog, indivduals):
-    x=0
+def checkMultipleBirths(fam, count, errLog, individuals):
+    error = False
+    children = fam.children
+    birthdays = {}
+
+    for child in children:
+        for ind in individuals:
+            if child == ind.id:
+                bday = ind.birthday
+                if bday not in birthdays:
+                    birthdays[bday] = 1
+                else:
+                    birthdays[bday] += 1 
+
+                    if birthdays[bday] > 5:
+                        errLine = "ERROR: FAMILY: US14: %s and %s have more than 5 children with the same birth date of %s (%d children) *** families index %d"
+                        print(errLine % (fam.husbandName, fam.wifeName, bday, birthdays[bday], count))
+                        errLog.append("ERROR: FAMILY: US14: " + fam.husbandName + " and " + fam.wifeName + " have more than 5 children with the same birth date of " + str(bday) + "(" + str(birthdays[bday]) + " children) *** families index " + str(count))
+                        error = True
+                        return error
 
 ## US15 Checks There Are Less Than 15 Siblings In One Family
 def checkSiblingCount(fam, count, errLog):

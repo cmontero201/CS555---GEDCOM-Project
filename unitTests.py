@@ -112,6 +112,18 @@ class TestAge(unittest.TestCase):
             res.append(x)
         self.assertIn(True, res)
 
+    ## US14 Test: Check Multiple Births Less Than 6
+    def testMultipleBirths_Pass(self):
+        for fam1 in goodFam:
+            x = checkErr.checkMultipleBirths(fam1, 0, [], goodInd)
+            self.assertFalse(x)
+    def testMultipleBirths_Fail(self):
+        res = []
+        for fam2 in badFam:
+            x = checkErr.checkMultipleBirths(fam2, 0, [], badInd)
+            res.append(x)
+        self.assertIn(True, res)
+
     ## US15 Test: Check Family Has Less Than 16 Children
     def testSiblingCount_Pass(self):
         for fam1 in goodFam:

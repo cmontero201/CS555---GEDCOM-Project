@@ -4,6 +4,7 @@ ERROR: INDIVIDUAL: US01: Birth Date (%s) of %s (%s) is after the current date **
 ERROR: INDIVIDUAL: US03: Jeremy /Costa/(I8) death (1930-07-06is prior to their birth (2001-09-03) *** individuals index 8
 ERROR: FAMILY: US04: Divorce Date (%s) of %s (%s) was before his date of marriage (%s) *** families index %d
 ERROR: FAMILY: US06: Divorce Date (%s) of %s (%s) was greater than or equal to date of death (%s) *** families index %d
+ERROR: FAMILY: US14: Billy /Knox/ and Carry /Brown/ have more than 5 children with the same birth date of 2002-07-06(6 children) *** families index 2
 ERROR: FAMILY: US15: Billy /Knox/ and Carry /Brown/ have more than 15 children (17 children) *** families index 2
 ERROR: FAMILY: US02: Jason /Baker/(I2) birthday (1963-11-12) is after his marriage date (1950-05-06) *** families index 3
 ERROR: FAMILY: US08: Sam /Baker/(I1) birthday (1948-05-05) is after their parents marriage date (1950-05-06) *** families index 3
