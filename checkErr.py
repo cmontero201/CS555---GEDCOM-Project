@@ -175,7 +175,7 @@ def checkAge(ind, count, errLog):
     
     return error
 
-## US08 Checks Birth Dates of Individual and Marriage Dates of Parents - Ensures Parent Marriage before Child Birth
+## US08 Checks Birth Dates of Individual and Marriage Dates of Parents - Ensures Parent Marriage before Child Birth (Christian)
 def checkBirth_parentMarriage(fam, count, errLog, individuals):
     error = False
     marrDate = fam.married
@@ -202,7 +202,7 @@ def checkBirth_parentMarriage(fam, count, errLog, individuals):
 
 ## US13 Checks Sibling Birth Dates are More Than 8 Months or Less Than 2 Days Apart
 
-## US14 Checks Less Than or Equal to 5 Siblings with Same Birth Date
+## US14 Checks Less Than or Equal to 5 Siblings with Same Birth Date (Christian)
 def checkMultipleBirths(fam, count, errLog, individuals):
     error = False
     children = fam.children
@@ -224,7 +224,7 @@ def checkMultipleBirths(fam, count, errLog, individuals):
                         error = True
                         return error
 
-## US15 Checks There Are Less Than 15 Siblings In One Family
+## US15 Checks There Are Less Than 15 Siblings In One Family (Christian)
 def checkSiblingCount(fam, count, errLog):
     error = False
     children = fam.children
