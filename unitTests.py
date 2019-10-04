@@ -112,6 +112,17 @@ class TestAge(unittest.TestCase):
             res.append(x)
         self.assertIn(True, res)
 
+    ## US15 Test: Check Family Has Less Than 16 Children
+    def testSiblingCount_Pass(self):
+        for fam1 in goodFam:
+            x = checkErr.checkSiblingCount(fam1, 0, [])
+            self.assertFalse(x)
+    def testSiblingCount_Fail(self):
+        res = []
+        for fam2 in badFam:
+            x = checkErr.checkSiblingCount(fam2, 0, [])
+            res.append(x)
+        self.assertIn(True, res)
     
 
 

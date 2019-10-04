@@ -191,3 +191,31 @@ def checkBirth_parentMarriage(fam, count, errLog, individuals):
                 return error
     
     return error
+
+## US09 Checks Child Birth Before Parent Death
+
+## US10 Checks Parents Are at Least 14 Years Old
+
+## US11 Checks Divorce Before Re-Marriage
+
+## US12 Checks Mother is Less Than 60 Years and Father is Less Than 80 Years Old
+
+## US13 Checks Sibling Birth Dates are More Than 8 Months or Less Than 2 Days Apart
+
+## US14 Checks Less Than or Equal to 5 Siblings with Same Birth Date
+def checkMultipleBirths(fam, count, errLog, indivduals):
+    x=0
+
+## US15 Checks There Are Less Than 15 Siblings In One Family
+def checkSiblingCount(fam, count, errLog):
+    error = False
+    children = fam.children
+    if (len(children) > 15):
+        errLine = "ERROR: FAMILY: US15: %s and %s have more than 15 children (%d children) *** families index %d"
+        print(errLine % (fam.husbandName, fam.wifeName, len(children), count))
+        errLog.append("ERROR: FAMILY: US15: " + fam.husbandName + " and " + fam.wifeName + " have more than 15 children (" + str(len(children)) + " children) *** families index " + str(count))
+        error = True
+        return error
+
+
+## US16 Checks All Males in Same Family Share Same Surname
