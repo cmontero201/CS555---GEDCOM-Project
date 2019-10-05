@@ -112,6 +112,19 @@ class TestAge(unittest.TestCase):
             res.append(x)
         self.assertIn(True, res)
 
+    ## US13 Test: Check Sibling Spaces
+    def testSiblingSpaces_Pass(self):
+        for fam1 in goodFam:
+            x = checkErr.siblingspaces(fam1, 0, [], goodInd)
+            self.assertFalse(x)
+
+    def testSiblingSpaces_Fail(self):
+        res = []
+        for fam2 in badFam:
+            x = checkErr.siblingspaces(fam2, 0, [], badInd)
+            res.append(x)
+        self.assertIn(True, res)
+
     ## US14 Test: Check Multiple Births Less Than 6
     def testMultipleBirths_Pass(self):
         for fam1 in goodFam:
@@ -133,6 +146,19 @@ class TestAge(unittest.TestCase):
         res = []
         for fam2 in badFam:
             x = checkErr.checkSiblingCount(fam2, 0, [])
+            res.append(x)
+        self.assertIn(True, res)
+
+    ## US16 Male Last Names Checks
+    def testSiblingCount_Pass(self):
+        for fam1 in goodFam:
+            x=checkErr.male_last_name(fam1, 0, [], goodInd)
+            self.assertFalse(x)
+
+    def testSiblingCount_Fail(self):
+        res=[]
+        for fam2 in badFam:
+            x=checkErr.male_last_name(fam2, 0, [], badInd)
             res.append(x)
         self.assertIn(True, res)
     

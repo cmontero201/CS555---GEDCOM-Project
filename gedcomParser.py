@@ -314,6 +314,11 @@ def checkErrors(individuals, families):
             checkErr.checkDivorcebeforeRemarriage(fam, count, errLog, families)
         except:
             print ("checkDivorcebeforeRemarriage failed")
+        ## US13 - Sibling Spaces
+        try:
+            checkErr.siblingspaces(fam, count, errLog, individuals)
+        except Exception as ex:
+            print("Sibling Spaces failed")
         ## US14 - Multiple Births Less Than 6
         try:
             checkErr.checkMultipleBirths(fam, count, errLog, individuals)
@@ -324,6 +329,11 @@ def checkErrors(individuals, families):
             checkErr.checkSiblingCount(fam, count, errLog)
         except:
             print("checkSiblingCount failed")
+        ## US16 - Male last names
+        try:
+            checkErr.male_last_name(fam, count, errLog, individuals)
+        except Exception as ex:
+            print("Sibling Spaces failed")
 
     return errLog
 
