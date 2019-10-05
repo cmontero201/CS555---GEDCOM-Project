@@ -192,7 +192,42 @@ def checkBirth_parentMarriage(fam, count, errLog, individuals):
     
     return error
 
-## US09 Checks Child Birth Before Parent Death
+## US09 Checks Child Birth Before Parent Death (Willy D)
+def checkBirthBeforeParentDeath(fam, count, errLog, individuals):
+    error = False
+    dadID = fam.husband
+    momID = fam.wife
+    children = fam.children
+
+    dadDead = False
+    momDead = False
+
+    for ind in individuals:
+            if ind.id == dadID:
+                if ind.alive == "False":
+                    dadDead = True
+                    dadDeathDate = ind.death
+            if ind.id == momID:
+                if ind.alive == "False":
+                    momDead = True
+                    momDeathDate = ind.death
+
+    for ind in individuals:
+        if ind.id in children:
+            if dadDead:
+                if ind.birthday < dadDeathDate:
+                    errLine = "ERROR: FAMILY: US09: %s's (%s) birthday (%s) is before their father's death date (%s) *** families index %d"
+                    print(errLine % (ind.name, ind.id, str(ind.birthday), str(dadDeathDate), count))
+                    errLog.append("ERROR: FAMILY: US09: " + ind.name + "(" + ind.id + ") birthday (" + str(ind.birthday) + ") is before their father's death date (" + str(dadDeathDate) + ") *** families index " + str(count))
+                    error = True
+            if momDead:
+                if ind.birthday < momDeathDate:
+                    errLine = "ERROR: FAMILY: US09: %s's (%s) birthday (%s) is before their mother's death date (%s) *** families index %d"
+                    print(errLine % (ind.name, ind.id, str(ind.birthday), str(momDeathDate), count))
+                    errLog.append("ERROR: FAMILY: US09: " + ind.name + "(" + ind.id + ") birthday (" + str(ind.birthday) + ") is before their mother's death date (" + str(momDeathDate) + ") *** families index " + str(count))
+                    error = True
+    
+    return error
 
 ## US10 Checks Parents Are at Least 14 Years Old
 
