@@ -231,7 +231,30 @@ def checkBirthBeforeParentDeath(fam, count, errLog, individuals):
 
 ## US10 Checks Parents Are at Least 14 Years Old
 
-## US11 Checks Divorce Before Re-Marriage
+## US11 Checks Divorce Before Re-Marriage (Willy D)
+def checkDivorcebeforeRemarriage(fam, count, errLog, families):
+    error = False
+    
+    if fam.divorced != "NA":
+        divorceDate = fam.divorced
+        husbandID = fam.husband
+        wifeID = fam.wife
+        for f in families:
+            if fam.id != f.id:
+                if f.husband == husbandID:
+                    if f.married < divorceDate:
+                        errLine = "ERROR: FAMILY: US11: %s's (%s) re-marriage (%s) is before his divorce date (%s) *** families index %d"
+                        print(errLine % (f.husbandName, husbandID, str(f.married), str(divorceDate), count))
+                        errLog.append("ERROR: FAMILY: US11: " + f.husbandName + "(" + husbandID + ") re-marriage (" + str(f.married) + ") is before his divorce date (" + str(divorceDate) + ") *** families index " + str(count))
+                        error = True
+                        
+                if f.wife == wifeID:
+                    if f.married < divorceDate:
+                        errLine = "ERROR: FAMILY: US11: %s's (%s) re-marriage (%s) is before her divorce date (%s) *** families index %d"
+                        print(errLine % (f.wifeName, wifeID, str(f.married), str(divorceDate), count))
+                        errLog.append("ERROR: FAMILY: US11: " + f.wifeName + "(" + wifeID + ") re-marriage (" + str(f.married) + ") is before her divorce date (" + str(divorceDate) + ") *** families index " + str(count))
+                        error = True
+    return error
 
 ## US12 Checks Mother is Less Than 60 Years and Father is Less Than 80 Years Old
 

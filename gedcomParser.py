@@ -309,6 +309,11 @@ def checkErrors(individuals, families):
             checkErr.checkBirthBeforeParentDeath(fam, count, errLog, individuals)
         except:
             print("checkBirthBeforeParentDeath failed")
+        ## US11 - Check Divorce occurs before re-marriage
+        try:
+            checkErr.checkDivorcebeforeRemarriage(fam, count, errLog, families)
+        except:
+            print ("checkDivorcebeforeRemarriage failed")
         ## US14 - Multiple Births Less Than 6
         try:
             checkErr.checkMultipleBirths(fam, count, errLog, individuals)
