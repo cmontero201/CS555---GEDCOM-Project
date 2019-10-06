@@ -183,6 +183,18 @@ class TestAge(unittest.TestCase):
         testFam2.married = testFam1.divorced
         self.assertFalse(checkErr.checkDivorcebeforeRemarriage(testFam1, 0, [], [testFam1, testFam2]))
 
+    ## US12 Test: Check Marriage Age
+    def testSiblingSpaces_Pass(self):
+        for fam1 in goodFam:
+            x=checkErr.marriage_age(fam1, 0, [], goodInd)
+            self.assertFalse(x)
+
+    def testSiblingSpaces_Fail(self):
+        res=[]
+        for fam2 in badFam:
+            x=checkErr.marriage_age(fam2, 0, [], badInd)
+            res.append(x)
+        self.assertIn(True, res)
 
     ## US13 Test: Check Sibling Spaces
     def testSiblingSpaces_Pass(self):

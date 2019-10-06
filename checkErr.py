@@ -258,7 +258,54 @@ def checkDivorcebeforeRemarriage(fam, count, errLog, families):
                         error = True
     return error
 
-## US12 Checks Mother is Less Than 60 Years and Father is Less Than 80 Years Old
+## US12 Mother should be less than 60 years older than her children and father should be
+# less than 80 years older than his children
+def marriage_age(fam, count, errLog, individuals):
+    error = False
+    children=fam.children
+    husband=fam.husband
+    father_bday=None
+    mother_bday=None
+    wife=fam.wife
+    for ind in individuals:
+        if ind.id == husband and ind.birthday is not None and ind.gender == 'M':
+            father_bday=ind.birthday
+        elif ind.id == wife and ind.birthday is not None and ind.gender == 'F':
+            mother_bday=ind.birthday
+        elif father_bday is not None and mother_bday is not None:
+            break
+    if len(children) > 0:
+        for child in children:
+            for ind in individuals:
+                if ind.id == child and ind.birthday is not None:
+                    diff_mother=rdelta.relativedelta(ind.birthday, mother_bday)
+                    diff_father=rdelta.relativedelta(ind.birthday, father_bday)
+                    if diff_mother.years > 60:
+                        errLine = "ERROR: FAMILY: US12: %s and %s Mother was birth date %s " \
+                                "and child birth date %s has difference %s more than 60 year difference " \
+                                "*** families index %d"
+                        print(errLine % (fam.husbandName, fam.wifeName, mother_bday, ind.birthday, diff_mother.years,
+                                         count))
+                        errLog.append(
+                            "ERROR: FAMILY: US12: " + fam.husbandName + " and " + fam.wifeName +
+                            "Mother was birth date " + str(mother_bday) + "and child birth date" + str(ind.birthday) +
+                            " has difference"+ str(diff_mother.year) + "more than 60 year difference *** families index"
+                            + str(count))
+                        error = True
+                    elif diff_father.years > 80:
+                        errLine = "ERROR: FAMILY: US12: %s and %s Father was birth date %s " \
+                                "and child birth date %s has difference %d more than 80 year difference " \
+                                "*** families index %d"
+                        print(errLine % (fam.husbandName, fam.wifeName, father_bday, ind.birthday, diff_mother.years,
+                                         count))
+                        errLog.append(
+                            "ERROR: FAMILY: US12: " + fam.husbandName + " and " + fam.wifeName +
+                            "Father was birth date " + str(father_bday) + "and child birth date" + str(ind.birthday) +
+                            " has difference" + str(
+                                diff_mother.year) + "more than 80 year difference *** families index"
+                            + str(count))
+                        error = True
+        return error
 
 ## US13 Checks Sibling Birth Dates are More Than 8 Months or Less Than 2 Days Apart
 def siblingspaces(fam, count, errLog, individuals):

@@ -1,17 +1,21 @@
 ERROR: INDIVIDUAL: US07: Age of Erin /Carter/(I5) is greater than or equal to 150 years *** individuals index 5
 ERROR: INDIVIDUAL: US07: Age of Bill /Baker/(I6) is greater than or equal to 150 years *** individuals index 6
-ERROR: INDIVIDUAL: US01: Birth Date (%s) of %s (%s) is after the current date *** individuals index %d
 ERROR: INDIVIDUAL: US03: Jeremy /Costa/(I8) death (1930-07-06is prior to their birth (2001-09-03) *** individuals index 8
 ERROR: FAMILY: US04: Divorce Date (%s) of %s (%s) was before his date of marriage (%s) *** families index %d
 ERROR: FAMILY: US06: Divorce Date (%s) of %s (%s) was greater than or equal to date of death (%s) *** families index %d
 ERROR: FAMILY: US14: Billy /Knox/ and Carry /Brown/ have more than 5 children with the same birth date of 2002-07-06(6 children) *** families index 2
 ERROR: FAMILY: US15: Billy /Knox/ and Carry /Brown/ have more than 15 children (17 children) *** families index 2
+ERROR: FAMILY: US16: Billy /Knox/ and Carry /Brown/have 1 Male in their family with different last names Fifteen /Tnox/and F *** families index 2
 ERROR: FAMILY: US02: Jason /Baker/(I2) birthday (1963-11-12) is after his marriage date (1950-05-06) *** families index 3
 ERROR: FAMILY: US08: Sam /Baker/(I1) birthday (1948-05-05) is after their parents marriage date (1950-05-06) *** families index 3
+ERROR: FAMILY: US13: Jason /Baker/ and Janice /McCarthy/ have 2 children with birthdates less than 2 days apart (twins) birth date of1994-04-03(1993-08-04 children) *** families index 3
 ERROR: FAMILY: US01: Divorce Date (%s) of %s (%s) is after the current date (gedcom line %d)
 ERROR: FAMILY: US05: Marriage Date (%s) of %s (%s) was greater than or equal to date of death (%s) *** families index %d
 ERROR: FAMILY: US06: Divorce Date (%s) of %s (%s) was greater than or equal to date of death (%s) *** families index %d
 ERROR: FAMILY: US08: Jason /Baker/(I2) birthday (1963-11-12) is after their parents marriage date (2000-05-07) *** families index 4
+ERROR: FAMILY: US09: Manny /Baker/(I10) birthday (2002-06-06) is before their father's death date (1998-09-05) *** families index 4
+ERROR: FAMILY: US12: Bill /Baker/ and Erin /Carter/Mother was birth date 1814-11-06and child birth date1963-11-12 has differenceNonemore than 60 year difference *** families index4
+ERROR: FAMILY: US12: Bill /Baker/ and Erin /Carter/Mother was birth date 1814-11-06and child birth date2002-06-06 has differenceNonemore than 60 year difference *** families index4
 ERROR: FAMILY: US02: Jeremy /Costa/(I8) birthday (2001-09-03) is after his marriage date (1997-09-05) *** families index 5
 ERROR: FAMILY: US05: Marriage Date (%s) of %s (%s) was greater than or equal to date of death (%s) *** families index %d
 ERROR: FAMILY: US02: Manny /Baker/(I10) birthday (2002-06-06) is after his marriage date (1996-09-23) *** families index 6

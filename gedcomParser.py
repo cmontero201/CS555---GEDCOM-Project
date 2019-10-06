@@ -314,6 +314,11 @@ def checkErrors(individuals, families):
             checkErr.checkDivorcebeforeRemarriage(fam, count, errLog, families)
         except:
             print ("checkDivorcebeforeRemarriage failed")
+        ## US12 - Marriage Age
+        try:
+            checkErr.marriage_age(fam, count, errLog, individuals)
+        except Exception as ex:
+            print("Marriage Age failed")
         ## US13 - Sibling Spaces
         try:
             checkErr.siblingspaces(fam, count, errLog, individuals)
