@@ -232,6 +232,18 @@ def checkBirthBeforeParentDeath(fam, count, errLog, individuals):
     return error
 
 ## US10 Checks Parents Are at Least 14 Years Old
+def checkMarrAfter14(individuals, fam, count, errLog):
+    error = False
+    if fam != []:
+        for ind in individuals:
+            if ind.id in fam.husband or ind.id in fam.wife:
+                if ind.age < 14:
+                    errLine = "ERROR: FAMILY: US10: %s (%s) is married on (%s) and his age (%d) is less than 14 years*** families index %d"
+                    print(errLine % (ind.name, ind.id, fam.married, ind.age, count))
+                    errLog.append(errLine)
+                    error = True
+        
+        return error
 
 ## US11 Checks Divorce Before Re-Marriage (Willy D)
 def checkDivorcebeforeRemarriage(fam, count, errLog, families):

@@ -309,6 +309,11 @@ def checkErrors(individuals, families):
             checkErr.checkBirthBeforeParentDeath(fam, count, errLog, individuals)
         except:
             print("checkBirthBeforeParentDeath failed")
+        ## US10 - Check parents are atleast 14 years old 
+        try:
+            checkErr.checkMarrAfter14(individuals, fam, count, errLog)
+        except:
+            print("checkMarrAfter14 failed")
         ## US11 - Check Divorce occurs before re-marriage
         try:
             checkErr.checkDivorcebeforeRemarriage(fam, count, errLog, families)
