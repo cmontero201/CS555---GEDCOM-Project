@@ -155,6 +155,19 @@ class TestAge(unittest.TestCase):
         wife.death = child.birthday
         self.assertFalse(checkErr.checkBirthBeforeParentDeath(testFam, 0, [], [husband, wife, child]))
 
+    ## US10 Test: Marriage before 14
+    def testMarrBefore14_Pass(self):
+        for fam1 in goodFam:
+            x=checkErr.checkMarrAfter14(goodInd, fam1, 0, [])
+            self.assertFalse(x)
+
+    def testMarrBefore14_Fail(self):
+        res=[]
+        for fam2 in badFam:
+            x=checkErr.checkMarrAfter14(badInd, fam2, 0, [])
+            res.append(x)
+        self.assertIn(True, res)
+        
     ## US11 Test: Checks Divorce Before Re-Marriage (Willy D)
     def testDivorceBeforeRemarriage(self):
         testFam1 = Family()
