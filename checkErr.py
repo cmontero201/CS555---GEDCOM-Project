@@ -343,6 +343,7 @@ def siblingspaces(fam, count, errLog, individuals):
                 error = True
             i += 1
         return error
+
 ## US14 Checks Less Than or Equal to 5 Siblings with Same Birth Date (Christian)
 def checkMultipleBirths(fam, count, errLog, individuals):
     error = False
@@ -375,7 +376,6 @@ def checkSiblingCount(fam, count, errLog):
         errLog.append("ERROR: FAMILY: US15: " + fam.husbandName + " and " + fam.wifeName + " have more than 15 children (" + str(len(children)) + " children) *** families index " + str(count))
         error = True
         return error
-
 
 ## US16 Checks All Males in Same Family Share Same Surname
 def male_last_name(fam, count, errLog, individuals):
