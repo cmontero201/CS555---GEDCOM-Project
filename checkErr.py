@@ -21,7 +21,7 @@ def checkCurrDate(fam, count, errLog, ind):
         if marrDate > current:
             err_line = "ERROR: FAMILY: US01: Marriage Date (%s) of %s (%s) is after the current date *** families index %d"
             print(err_line % (marrDate, fam.husbandName, fam.husband, count))
-            errLog.append(err_line)
+            errLog.append("ERROR: FAMILY: US01: Marriage Date (" + str(marrDate) + ") of " + fam.husbandName + " (" + fam.husband + ") is after the current date *** families index " + str(count))
             error = True
             return error
 
@@ -29,7 +29,7 @@ def checkCurrDate(fam, count, errLog, ind):
             if divDate > current:
                 err_line = "ERROR: FAMILY: US01: Divorce Date (%s) of %s (%s) is after the current date (gedcom line %d)"
                 print(err_line % (divDate, fam.husbandName, fam.husband, count))
-                errLog.append(err_line)
+                errLog.append("ERROR: FAMILY: US01: Divorce Date (" + str(divDate) + " ) of" + fam.husbandName + " (" + fam.husband + ") is after the current date *** families index " + str(count))
                 error = True
                 return error
     
@@ -37,14 +37,14 @@ def checkCurrDate(fam, count, errLog, ind):
         if ind.birthday > current:
             err_line = "ERROR: INDIVIDUAL: US01: Birth Date (%s) of %s (%s) is after the current date *** individuals index %d"
             print(err_line % (ind.birthday, ind.name, ind.id, count))
-            errLog.append(err_line)
+            errLog.append("ERROR: INDIVIDUAL: US01: Birth Date (" + ind.birthday + ") of " + ind.name + " (" + str(ind.id) + ") is after the current date *** individuals index " + str(count))
             error = True    
             return error
 
         if ind.alive == 'False' and ind.death > current:
             err_line = "ERROR: INDIVIDUAL: US01: Death Date (%s) of %s (%s) is after the current date *** individuals index %d"
             print(err_line % (ind.death, ind.name, ind.id, count))
-            errLog.append(err_line)
+            errLog.append("ERROR: INDIVIDUAL: US01: Death Date (" + str(ind.death) + ") of " + ind.name + " (" + str(ind.id) + ") is after the current date *** individuals index " + str(count))
             error = True
             return error 
     
@@ -107,7 +107,7 @@ def checkMarrBeforeDiv(fam, count, errLog):
         if married > divorced:
             err_line = "ERROR: FAMILY: US04: Divorce Date (%s) of %s (%s) was before his date of marriage (%s) *** families index %d"
             print(err_line % (divorced, husbName, husbID, married, count))
-            errLog.append(err_line)
+            errLog.append("ERROR: FAMILY: US04: Divorce Date (" + str(divorced) + ") of " + str(husbName) + " (" + str(husbID) + ") was before his date of marriage (" + str(married) + ") *** families index" + str(count) + ")")
             error = True
             return error
     
@@ -128,7 +128,7 @@ def checkMarriage(fam, count, errLog, ind):
                 if married >= death:
                     err_line = "ERROR: FAMILY: US05: Marriage Date (%s) of %s (%s) was greater than or equal to date of death (%s) *** families index %d"
                     print(err_line % (married, ind_name, ind_id, death, line_loc))
-                    errLog.append(err_line)
+                    errLog.append("ERROR: FAMILY: US05: Marriage Date (" + str(married) + ") of " + ind_name + " (" + str(ind_id) + ") was greater than or equal to date of death (" + str(death) + ") *** families index " + str(count))
                     error = True
                     return error
     return error
@@ -147,7 +147,7 @@ def checkDivorce(fam, count, errLog, ind):
             if divorce >= death:
                 err_line = "ERROR: FAMILY: US06: Divorce Date (%s) of %s (%s) was greater than or equal to date of death (%s) *** families index %d"
                 print(err_line % (divorce, ind_name, ind_id, death, line_loc))
-                errLog.append(err_line)
+                errLog.append("ERROR: FAMILY: US06: Divorce Date (" + str(divorce) + ") of " + ind_name + " (" + str(ind_id) + ") was greater than or equal to date of death (" + str(death) + ") *** families index " + str(line_loc))
                 error = True
                 return error
    
@@ -240,7 +240,7 @@ def checkMarrAfter14(individuals, fam, count, errLog):
                 if ind.age < 14:
                     errLine = "ERROR: FAMILY: US10: %s (%s) is married on (%s) and his age (%d) is less than 14 years*** families index %d"
                     print(errLine % (ind.name, ind.id, fam.married, ind.age, count))
-                    errLog.append(errLine)
+                    errLog.append("ERROR: FAMILY: US10: " + ind.name  + " (" + str(ind.id) + ") is married on (" + str(fam.married) + ") and his age (" + str(ind.age) + ") is less than 14 years *** families index " + str(count))
                     error = True
         
         return error

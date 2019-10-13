@@ -240,6 +240,8 @@ def createTables(individuals, families):
         famTable.add_row(eachh)
     print("Families\n", famTable, "\n\n")
 
+    return (indTable, famTable)
+
 ## Check Errors - Acceptance Tests
 def checkErrors(individuals, families):
     errLog = []
@@ -359,10 +361,14 @@ def run():
         data = open("fail.ged", 'r')
 
         individuals, families = parseFile(data)
-        createTables(individuals, families)
+        ind_table, fam_table = createTables(individuals, families)
         log = checkErrors(individuals, families)
 
         f = open('Test_Results.txt', 'w')
+        f.write(ind_table.get_string())
+        f.write("\n\n")
+        f.write(fam_table.get_string())
+        f.write("\n\n")
         for each in log:
             f.write('%s\n' % each)
         f.close()
