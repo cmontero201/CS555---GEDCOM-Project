@@ -160,7 +160,6 @@ class TestAge(unittest.TestCase):
         for fam1 in goodFam:
             x=checkErr.checkMarrAfter14(goodInd, fam1, 0, [])
             self.assertFalse(x)
-
     def testMarrBefore14_Fail(self):
         res=[]
         for fam2 in badFam:
@@ -251,7 +250,6 @@ class TestAge(unittest.TestCase):
         for fam1 in goodFam:
             x=checkErr.male_last_name(fam1, 0, [], goodInd)
             self.assertFalse(x)
-
     def testLastNames_Fail(self):
         res=[]
         for fam2 in badFam:
