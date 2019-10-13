@@ -247,12 +247,12 @@ class TestAge(unittest.TestCase):
         self.assertIn(True, res)
 
     ## US16 Male Last Names Checks
-    def testSiblingCount_Pass(self):
+    def testLastNames_Pass(self):
         for fam1 in goodFam:
             x=checkErr.male_last_name(fam1, 0, [], goodInd)
             self.assertFalse(x)
 
-    def testSiblingCount_Fail(self):
+    def testLastNames_Fail(self):
         res=[]
         for fam2 in badFam:
             x=checkErr.male_last_name(fam2, 0, [], badInd)
