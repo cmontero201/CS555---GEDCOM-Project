@@ -2,8 +2,8 @@ language: python
 python:
   - "3.5"
 install:
-  - pip3.6 install requests
-  - pip3.6 install prettytable
+  - pip3.5 install requests
+  - pip3.5 install prettytable
 # command to run tests
 script:
   - python -m unittest unitTests.py
