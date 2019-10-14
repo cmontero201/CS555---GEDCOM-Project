@@ -5,4 +5,4 @@ install:
   - pip3.5 install requests
 # command to run tests
 script:
-  - python -m unittest TestGetRepo
+  - python -m unittest unitTests.py
