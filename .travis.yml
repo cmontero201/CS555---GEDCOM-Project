@@ -4,7 +4,7 @@ python:
 install:
   - pip3.5 install requests
   - pip3.5 install prettytable
-  - pip3.5 install dateutil
+  - pip3.5 install python-dateutil
 # command to run tests
 script:
   - python -m unittest unitTests.py
