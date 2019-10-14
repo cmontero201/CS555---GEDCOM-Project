@@ -1,17 +1,73 @@
++-----+----------------------+--------+------------+-----+-------+------------+-------+--------+
+|  ID |         NAME         | GENDER |  BIRTHDAY  | AGE | ALIVE |   DEATH    | CHILD | SPOUSE |
++-----+----------------------+--------+------------+-----+-------+------------+-------+--------+
+|  I1 |     Sam /Baker/      |   M    | 1948-05-05 |  71 |  True |     NA     |   F2  |   F1   |
+|  I2 |    Jason /Baker/     |   M    | 1963-11-12 |  55 |  True |     NA     |   F3  |   F2   |
+|  I3 |  Janice /McCarthy/   |   F    | 1963-05-07 |  56 |  True |     NA     |   NA  |   F2   |
+|  I4 |     Amy /Baker/      |   F    | 1993-08-04 |  26 |  True |     NA     |   F2  |   F4   |
+|  I5 |    Erin /Carter/     |   F    | 1814-11-06 | 204 |  True |     NA     |   NA  |   F3   |
+|  I6 |     Bill /Baker/     |   M    | 1823-08-04 | 175 | False | 1998-09-05 |   NA  |   F3   |
+|  I7 |    Future /Baker/    |   M    | 1994-04-03 |  25 |  True |     NA     |   F2  |  NA    |
+|  I8 |    Jeremy /Costa/    |   M    | 2001-09-03 | -71 | False | 1930-07-06 |   NA  |   F4   |
+|  I9 |    Carry /Brown/     |   F    | 1983-07-05 |  36 |  True |     NA     |   NA  |   F5   |
+| I10 |    Manny /Baker/     |   M    | 2002-06-06 |  17 |  True |     NA     |   F3  |   F7   |
+| I11 | Charlotte /Stanford/ |   F    | 1990-09-06 |  29 |  True |     NA     |   NA  |   F6   |
+| I12 |     Lisa /Carr/      |   F    | 2009-08-04 |  10 |  True |     NA     |   NA  |   F7   |
+| I13 |     Billy /Knox/     |   M    | 1989-08-06 |  30 |  True |     NA     |   NA  |   F5   |
+| I14 |      One /Knox/      |   M    | 2002-07-06 |  17 |  True |     NA     |   F5  |  NA    |
+| I15 |      Two /Knox/      |   M    | 2002-07-06 |  17 |  True |     NA     |   F5  |  NA    |
+| I16 |     Three /Knox/     |   M    | 2002-07-06 |  17 |  True |     NA     |   F5  |  NA    |
+| I17 |     Four /Knox/      |   M    | 2002-07-06 |  17 |  True |     NA     |   F5  |  NA    |
+| I18 |     Five /Knox/      |   M    | 2002-07-06 |  17 |  True |     NA     |   F5  |  NA    |
+| I19 |      Six /Knox/      |   M    | 2002-07-06 |  17 |  True |     NA     |   F5  |  NA    |
+| I20 |     Seven /Knox/     |   M    | 2003-07-06 |  16 |  True |     NA     |   F5  |  NA    |
+| I21 |     Eight /Knox/     |   M    | 2004-08-05 |  15 |  True |     NA     |   F5  |  NA    |
+| I22 |     Nine /Knox/      |   M    | 2003-10-09 |  16 |  True |     NA     |   F5  |  NA    |
+| I23 |     Nine /Knox/      |   M    | 2003-09-09 |  16 |  True |     NA     |   F5  |  NA    |
+| I24 |      Ten /Knox/      |   M    | 2004-10-08 |  15 |  True |     NA     |   F5  |  NA    |
+| I25 |    Eleven /Knox/     |   F    | 2006-11-12 |  12 |  True |     NA     |   F5  |  NA    |
+| I26 |    Twelve /Knox/     |   M    | 2005-09-10 |  14 |  True |     NA     |   F5  |  NA    |
+| I27 |   Thirteen /Knox/    |   M    | 2006-09-12 |  13 |  True |     NA     |   F5  |  NA    |
+| I28 |   Fourteen /Knox/    |   F    | 2007-11-09 |  11 |  True |     NA     |   F5  |  NA    |
+| I29 |    Fifteen /Tnox/    |   M    | 2007-09-09 |  12 |  True |     NA     |   F5  |  NA    |
+| I30 |    Sixteen /Knox/    |   F    | 2009-08-09 |  10 |  True |     NA     |   F5  |  NA    |
++-----+----------------------+--------+------------+-----+-------+------------+-------+--------+
+
++----+------------+------------+------------+----------------+---------+----------------------+-------------------------------------------------------------------------------------------------------------------------+
+| ID |  MARRIED   |  DIVORCED  | HUSBAND ID |  HUSBAND NAME  | WIFE ID |      WIFE NAME       |                                                         CHILDREN                                                        |
++----+------------+------------+------------+----------------+---------+----------------------+-------------------------------------------------------------------------------------------------------------------------+
+| F1 | 1999-05-06 | 2002-08-08 |     I1     |  Sam /Baker/   |    I9   |    Carry /Brown/     |                                                            NA                                                           |
+| F5 | 2001-05-06 |     NA     |    I13     |  Billy /Knox/  |    I9   |    Carry /Brown/     | ['I14', 'I15', 'I16', 'I17', 'I18', 'I19', 'I20', 'I21', 'I22', 'I23', 'I24', 'I25', 'I26', 'I27', 'I28', 'I29', 'I30'] |
+| F2 | 1950-05-06 |     NA     |     I2     | Jason /Baker/  |    I3   |  Janice /McCarthy/   |                                                    ['I1', 'I4', 'I7']                                                   |
+| F3 | 2000-05-07 | 2030-04-06 |     I6     |  Bill /Baker/  |    I5   |    Erin /Carter/     |                                                      ['I2', 'I10']                                                      |
+| F4 | 1997-09-05 | 1996-02-09 |     I8     | Jeremy /Costa/ |    I4   |     Amy /Baker/      |                                                            NA                                                           |
+| F6 | 1996-09-23 |     NA     |    I10     | Manny /Baker/  |   I11   | Charlotte /Stanford/ |                                                            NA                                                           |
+| F7 | 2030-09-05 |     NA     |    I10     | Manny /Baker/  |   I12   |     Lisa /Carr/      |                                                            NA                                                           |
++----+------------+------------+------------+----------------+---------+----------------------+-------------------------------------------------------------------------------------------------------------------------+
+
 ERROR: INDIVIDUAL: US07: Age of Erin /Carter/(I5) is greater than or equal to 150 years *** individuals index 5
 ERROR: INDIVIDUAL: US07: Age of Bill /Baker/(I6) is greater than or equal to 150 years *** individuals index 6
-ERROR: INDIVIDUAL: US01: Birth Date (%s) of %s (%s) is after the current date *** individuals index %d
 ERROR: INDIVIDUAL: US03: Jeremy /Costa/(I8) death (1930-07-06is prior to their birth (2001-09-03) *** individuals index 8
-ERROR: FAMILY: US04: Divorce Date (%s) of %s (%s) was before his date of marriage (%s) *** families index %d
-ERROR: FAMILY: US06: Divorce Date (%s) of %s (%s) was greater than or equal to date of death (%s) *** families index %d
+ERROR: FAMILY: US06: Divorce Date (2002-08-08) of Bill /Baker/ (I6) was greater than or equal to date of death (1998-09-05) *** families index 1
+ERROR: FAMILY: US11: Carry /Brown/(I9) re-marriage (2001-05-06) is before her divorce date (2002-08-08) *** families index 1
+ERROR: FAMILY: US14: Billy /Knox/ and Carry /Brown/ have more than 5 children with the same birth date of 2002-07-06(6 children) *** families index 2
 ERROR: FAMILY: US15: Billy /Knox/ and Carry /Brown/ have more than 15 children (17 children) *** families index 2
+ERROR: FAMILY: US16: Billy /Knox/ and Carry /Brown/have 1 Male in their family with different last names Fifteen /Tnox/and F *** families index 2
 ERROR: FAMILY: US02: Jason /Baker/(I2) birthday (1963-11-12) is after his marriage date (1950-05-06) *** families index 3
 ERROR: FAMILY: US08: Sam /Baker/(I1) birthday (1948-05-05) is after their parents marriage date (1950-05-06) *** families index 3
-ERROR: FAMILY: US01: Divorce Date (%s) of %s (%s) is after the current date (gedcom line %d)
-ERROR: FAMILY: US05: Marriage Date (%s) of %s (%s) was greater than or equal to date of death (%s) *** families index %d
-ERROR: FAMILY: US06: Divorce Date (%s) of %s (%s) was greater than or equal to date of death (%s) *** families index %d
+ERROR: FAMILY: US13: Jason /Baker/ and Janice /McCarthy/ have 2 children with birthdates less than 2 days apart (twins) birth date of1994-04-03(1993-08-04 children) *** families index 3
+ERROR: FAMILY: US01: Divorce Date (2030-04-06 ) ofBill /Baker/ (I6) is after the current date *** families index 4
+ERROR: FAMILY: US05: Marriage Date (2000-05-07) of Bill /Baker/ (I6) was greater than or equal to date of death (1998-09-05) *** families index 4
+ERROR: FAMILY: US06: Divorce Date (2030-04-06) of Bill /Baker/ (I6) was greater than or equal to date of death (1998-09-05) *** families index 4
 ERROR: FAMILY: US08: Jason /Baker/(I2) birthday (1963-11-12) is after their parents marriage date (2000-05-07) *** families index 4
+ERROR: FAMILY: US09: Manny /Baker/(I10) birthday (2002-06-06) is before their father's death date (1998-09-05) *** families index 4
+ERROR: FAMILY: US12: Bill /Baker/ and Erin /Carter/Mother was birth date 1814-11-06and child birth date1963-11-12 has differenceNonemore than 60 year difference *** families index4
+ERROR: FAMILY: US12: Bill /Baker/ and Erin /Carter/Mother was birth date 1814-11-06and child birth date2002-06-06 has differenceNonemore than 60 year difference *** families index4
 ERROR: FAMILY: US02: Jeremy /Costa/(I8) birthday (2001-09-03) is after his marriage date (1997-09-05) *** families index 5
-ERROR: FAMILY: US05: Marriage Date (%s) of %s (%s) was greater than or equal to date of death (%s) *** families index %d
+ERROR: FAMILY: US04: Divorce Date (1996-02-09) of Jeremy /Costa/ (I8) was before his date of marriage (1997-09-05) *** families index5)
+ERROR: FAMILY: US05: Marriage Date (1997-09-05) of Jeremy /Costa/ (I8) was greater than or equal to date of death (1930-07-06) *** families index 5
+ERROR: FAMILY: US06: Divorce Date (1996-02-09) of Jeremy /Costa/ (I8) was greater than or equal to date of death (1930-07-06) *** families index 5
+ERROR: FAMILY: US10: Jeremy /Costa/ (I8) is married on (1997-09-05) and his age (-71) is less than 14 years *** families index 5
 ERROR: FAMILY: US02: Manny /Baker/(I10) birthday (2002-06-06) is after his marriage date (1996-09-23) *** families index 6
-ERROR: FAMILY: US01: Marriage Date (%s) of %s (%s) is after the current date *** families index %d
+ERROR: FAMILY: US01: Marriage Date (2030-09-05) of Manny /Baker/ (I10) is after the current date *** families index 7
+ERROR: FAMILY: US10: Lisa /Carr/ (I12) is married on (2030-09-05) and his age (10) is less than 14 years *** families index 7

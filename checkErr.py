@@ -4,7 +4,9 @@ September 16, 2019
 This file uses python3.6 to check errors within gedcom files
 """
 import unittest
-from datetime import datetime, date
+import re
+from datetime import datetime, timedelta
+from dateutil import relativedelta as rdelta
 
 ## US01 Checks for dates in the future (Tanmay)
 def checkCurrDate(fam, count, errLog, ind):
@@ -19,7 +21,7 @@ def checkCurrDate(fam, count, errLog, ind):
         if marrDate > current:
             err_line = "ERROR: FAMILY: US01: Marriage Date (%s) of %s (%s) is after the current date *** families index %d"
             print(err_line % (marrDate, fam.husbandName, fam.husband, count))
-            errLog.append(err_line)
+            errLog.append("ERROR: FAMILY: US01: Marriage Date (" + str(marrDate) + ") of " + fam.husbandName + " (" + fam.husband + ") is after the current date *** families index " + str(count))
             error = True
             return error
 
@@ -27,7 +29,7 @@ def checkCurrDate(fam, count, errLog, ind):
             if divDate > current:
                 err_line = "ERROR: FAMILY: US01: Divorce Date (%s) of %s (%s) is after the current date (gedcom line %d)"
                 print(err_line % (divDate, fam.husbandName, fam.husband, count))
-                errLog.append(err_line)
+                errLog.append("ERROR: FAMILY: US01: Divorce Date (" + str(divDate) + " ) of" + fam.husbandName + " (" + fam.husband + ") is after the current date *** families index " + str(count))
                 error = True
                 return error
     
@@ -35,14 +37,14 @@ def checkCurrDate(fam, count, errLog, ind):
         if ind.birthday > current:
             err_line = "ERROR: INDIVIDUAL: US01: Birth Date (%s) of %s (%s) is after the current date *** individuals index %d"
             print(err_line % (ind.birthday, ind.name, ind.id, count))
-            errLog.append(err_line)
+            errLog.append("ERROR: INDIVIDUAL: US01: Birth Date (" + ind.birthday + ") of " + ind.name + " (" + str(ind.id) + ") is after the current date *** individuals index " + str(count))
             error = True    
             return error
 
         if ind.alive == 'False' and ind.death > current:
             err_line = "ERROR: INDIVIDUAL: US01: Death Date (%s) of %s (%s) is after the current date *** individuals index %d"
             print(err_line % (ind.death, ind.name, ind.id, count))
-            errLog.append(err_line)
+            errLog.append("ERROR: INDIVIDUAL: US01: Death Date (" + str(ind.death) + ") of " + ind.name + " (" + str(ind.id) + ") is after the current date *** individuals index " + str(count))
             error = True
             return error 
     
@@ -105,7 +107,7 @@ def checkMarrBeforeDiv(fam, count, errLog):
         if married > divorced:
             err_line = "ERROR: FAMILY: US04: Divorce Date (%s) of %s (%s) was before his date of marriage (%s) *** families index %d"
             print(err_line % (divorced, husbName, husbID, married, count))
-            errLog.append(err_line)
+            errLog.append("ERROR: FAMILY: US04: Divorce Date (" + str(divorced) + ") of " + str(husbName) + " (" + str(husbID) + ") was before his date of marriage (" + str(married) + ") *** families index" + str(count) + ")")
             error = True
             return error
     
@@ -126,7 +128,7 @@ def checkMarriage(fam, count, errLog, ind):
                 if married >= death:
                     err_line = "ERROR: FAMILY: US05: Marriage Date (%s) of %s (%s) was greater than or equal to date of death (%s) *** families index %d"
                     print(err_line % (married, ind_name, ind_id, death, line_loc))
-                    errLog.append(err_line)
+                    errLog.append("ERROR: FAMILY: US05: Marriage Date (" + str(married) + ") of " + ind_name + " (" + str(ind_id) + ") was greater than or equal to date of death (" + str(death) + ") *** families index " + str(count))
                     error = True
                     return error
     return error
@@ -145,7 +147,7 @@ def checkDivorce(fam, count, errLog, ind):
             if divorce >= death:
                 err_line = "ERROR: FAMILY: US06: Divorce Date (%s) of %s (%s) was greater than or equal to date of death (%s) *** families index %d"
                 print(err_line % (divorce, ind_name, ind_id, death, line_loc))
-                errLog.append(err_line)
+                errLog.append("ERROR: FAMILY: US06: Divorce Date (" + str(divorce) + ") of " + ind_name + " (" + str(ind_id) + ") was greater than or equal to date of death (" + str(death) + ") *** families index " + str(line_loc))
                 error = True
                 return error
    
@@ -175,7 +177,7 @@ def checkAge(ind, count, errLog):
     
     return error
 
-## US08 Checks Birth Dates of Individual and Marriage Dates of Parents - Ensures Parent Marriage before Child Birth
+## US08 Checks Birth Dates of Individual and Marriage Dates of Parents - Ensures Parent Marriage before Child Birth (Christian)
 def checkBirth_parentMarriage(fam, count, errLog, individuals):
     error = False
     marrDate = fam.married
@@ -192,21 +194,179 @@ def checkBirth_parentMarriage(fam, count, errLog, individuals):
     
     return error
 
-## US09 Checks Child Birth Before Parent Death
+## US09 Checks Child Birth Before Parent Death (Willy D)
+def checkBirthBeforeParentDeath(fam, count, errLog, individuals):
+    error = False
+    dadID = fam.husband
+    momID = fam.wife
+    children = fam.children
+
+    dadDead = False
+    momDead = False
+
+    for ind in individuals:
+            if ind.id == dadID:
+                if ind.alive == "False":
+                    dadDead = True
+                    dadDeathDate = ind.death
+            if ind.id == momID:
+                if ind.alive == "False":
+                    momDead = True
+                    momDeathDate = ind.death
+
+    for ind in individuals:
+        if ind.id in children:
+            if dadDead:
+                if ind.birthday > dadDeathDate:
+                    errLine = "ERROR: FAMILY: US09: %s's (%s) birthday (%s) is after their father's death date (%s) *** families index %d"
+                    print(errLine % (ind.name, ind.id, str(ind.birthday), str(dadDeathDate), count))
+                    errLog.append("ERROR: FAMILY: US09: " + ind.name + "(" + ind.id + ") birthday (" + str(ind.birthday) + ") is before their father's death date (" + str(dadDeathDate) + ") *** families index " + str(count))
+                    error = True
+            if momDead:
+                if ind.birthday > momDeathDate:
+                    errLine = "ERROR: FAMILY: US09: %s's (%s) birthday (%s) is after their mother's death date (%s) *** families index %d"
+                    print(errLine % (ind.name, ind.id, str(ind.birthday), str(momDeathDate), count))
+                    errLog.append("ERROR: FAMILY: US09: " + ind.name + "(" + ind.id + ") birthday (" + str(ind.birthday) + ") is before their mother's death date (" + str(momDeathDate) + ") *** families index " + str(count))
+                    error = True
+    
+    return error
 
 ## US10 Checks Parents Are at Least 14 Years Old
+def checkMarrAfter14(individuals, fam, count, errLog):
+    error = False
+    if fam != []:
+        for ind in individuals:
+            if ind.id in fam.husband or ind.id in fam.wife:
+                if ind.age < 14:
+                    errLine = "ERROR: FAMILY: US10: %s (%s) is married on (%s) and his age (%d) is less than 14 years*** families index %d"
+                    print(errLine % (ind.name, ind.id, fam.married, ind.age, count))
+                    errLog.append("ERROR: FAMILY: US10: " + ind.name  + " (" + str(ind.id) + ") is married on (" + str(fam.married) + ") and his age (" + str(ind.age) + ") is less than 14 years *** families index " + str(count))
+                    error = True
+        
+        return error
 
-## US11 Checks Divorce Before Re-Marriage
+## US11 Checks Divorce Before Re-Marriage (Willy D)
+def checkDivorcebeforeRemarriage(fam, count, errLog, families):
+    error = False
+    
+    if fam.divorced != "NA":
+        divorceDate = fam.divorced
+        husbandID = fam.husband
+        wifeID = fam.wife
+        for f in families:
+            if fam.id != f.id:
+                if f.husband == husbandID:
+                    if f.married < divorceDate:
+                        errLine = "ERROR: FAMILY: US11: %s's (%s) re-marriage (%s) is before his divorce date (%s) *** families index %d"
+                        print(errLine % (f.husbandName, husbandID, str(f.married), str(divorceDate), count))
+                        errLog.append("ERROR: FAMILY: US11: " + f.husbandName + "(" + husbandID + ") re-marriage (" + str(f.married) + ") is before his divorce date (" + str(divorceDate) + ") *** families index " + str(count))
+                        error = True
+                        
+                if f.wife == wifeID:
+                    if f.married < divorceDate:
+                        errLine = "ERROR: FAMILY: US11: %s's (%s) re-marriage (%s) is before her divorce date (%s) *** families index %d"
+                        print(errLine % (f.wifeName, wifeID, str(f.married), str(divorceDate), count))
+                        errLog.append("ERROR: FAMILY: US11: " + f.wifeName + "(" + wifeID + ") re-marriage (" + str(f.married) + ") is before her divorce date (" + str(divorceDate) + ") *** families index " + str(count))
+                        error = True
+    return error
 
-## US12 Checks Mother is Less Than 60 Years and Father is Less Than 80 Years Old
+## US12 Mother should be less than 60 years older than her children and father should be
+# less than 80 years older than his children
+def marriage_age(fam, count, errLog, individuals):
+    error = False
+    children=fam.children
+    husband=fam.husband
+    father_bday=None
+    mother_bday=None
+    wife=fam.wife
+    for ind in individuals:
+        if ind.id == husband and ind.birthday is not None and ind.gender == 'M':
+            father_bday=ind.birthday
+        elif ind.id == wife and ind.birthday is not None and ind.gender == 'F':
+            mother_bday=ind.birthday
+        elif father_bday is not None and mother_bday is not None:
+            break
+    if len(children) > 0:
+        for child in children:
+            for ind in individuals:
+                if ind.id == child and ind.birthday is not None:
+                    diff_mother=rdelta.relativedelta(ind.birthday, mother_bday)
+                    diff_father=rdelta.relativedelta(ind.birthday, father_bday)
+                    if diff_mother.years > 60:
+                        errLine = "ERROR: FAMILY: US12: %s and %s Mother was birth date %s " \
+                                "and child birth date %s has difference %s more than 60 year difference " \
+                                "*** families index %d"
+                        print(errLine % (fam.husbandName, fam.wifeName, mother_bday, ind.birthday, diff_mother.years,
+                                         count))
+                        errLog.append(
+                            "ERROR: FAMILY: US12: " + fam.husbandName + " and " + fam.wifeName +
+                            "Mother was birth date " + str(mother_bday) + "and child birth date" + str(ind.birthday) +
+                            " has difference"+ str(diff_mother.year) + "more than 60 year difference *** families index"
+                            + str(count))
+                        error = True
+                    elif diff_father.years > 80:
+                        errLine = "ERROR: FAMILY: US12: %s and %s Father was birth date %s " \
+                                "and child birth date %s has difference %d more than 80 year difference " \
+                                "*** families index %d"
+                        print(errLine % (fam.husbandName, fam.wifeName, father_bday, ind.birthday, diff_mother.years,
+                                         count))
+                        errLog.append(
+                            "ERROR: FAMILY: US12: " + fam.husbandName + " and " + fam.wifeName +
+                            "Father was birth date " + str(father_bday) + "and child birth date" + str(ind.birthday) +
+                            " has difference" + str(
+                                diff_mother.year) + "more than 80 year difference *** families index"
+                            + str(count))
+                        error = True
+        return error
 
 ## US13 Checks Sibling Birth Dates are More Than 8 Months or Less Than 2 Days Apart
+def siblingspaces(fam, count, errLog, individuals):
+    error = False
+    children = fam.children
+    sib_birthdays = []
+    i = 0
+    if len(children) > 1:
+        for child in children:
+            for ind in individuals:
+                if ind.birthday is not None and ind.id == child:
+                    sib_birthdays.append(ind.birthday)
+        count1 = len(sib_birthdays)
+        while i < count1 - 1:
+            diff = rdelta.relativedelta(sib_birthdays[i + 1], sib_birthdays[i])
+            if diff.days > 2 and diff.years < 1 and (diff.days < 243 or diff.months < 8):
+                errLine = "ERROR: FAMILY: US13: %s and %s have 2 children with birthdates less than 2 days apart (twins) birth or are more than more than 8 months apart of %s and %s *** families index %d"
+                print(errLine % (fam.husbandName, fam.wifeName, sib_birthdays[i + 1], sib_birthdays[i], count))
+                errLog.append(
+                    "ERROR: FAMILY: US13: " + fam.husbandName + " and " + fam.wifeName + " have 2 children with birthdates less than 2 days apart (twins) birth date of" + str(
+                        sib_birthdays[i + 1]) + "(" + str(sib_birthdays[i]) + " children) *** families index " + str(
+                        count))
+                error = True
+            i += 1
+        return error
 
-## US14 Checks Less Than or Equal to 5 Siblings with Same Birth Date
-def checkMultipleBirths(fam, count, errLog, indivduals):
-    x=0
+## US14 Checks Less Than or Equal to 5 Siblings with Same Birth Date (Christian)
+def checkMultipleBirths(fam, count, errLog, individuals):
+    error = False
+    children = fam.children
+    birthdays = {}
 
-## US15 Checks There Are Less Than 15 Siblings In One Family
+    for child in children:
+        for ind in individuals:
+            if child == ind.id:
+                bday = ind.birthday
+                if bday not in birthdays:
+                    birthdays[bday] = 1
+                else:
+                    birthdays[bday] += 1 
+
+                    if birthdays[bday] > 5:
+                        errLine = "ERROR: FAMILY: US14: %s and %s have more than 5 children with the same birth date of %s (%d children) *** families index %d"
+                        print(errLine % (fam.husbandName, fam.wifeName, bday, birthdays[bday], count))
+                        errLog.append("ERROR: FAMILY: US14: " + fam.husbandName + " and " + fam.wifeName + " have more than 5 children with the same birth date of " + str(bday) + "(" + str(birthdays[bday]) + " children) *** families index " + str(count))
+                        error = True
+                        return error
+
+## US15 Checks There Are Less Than 15 Siblings In One Family (Christian)
 def checkSiblingCount(fam, count, errLog):
     error = False
     children = fam.children
@@ -217,5 +377,26 @@ def checkSiblingCount(fam, count, errLog):
         error = True
         return error
 
-
 ## US16 Checks All Males in Same Family Share Same Surname
+def male_last_name(fam, count, errLog, individuals):
+    error = False
+    name_l = []
+    children = fam.children
+    for child in children:
+        for ind in individuals:
+            if ind.gender == "M" and ind.id == child:
+                name_l.append(str(ind.name))
+    for name in name_l[1:]:
+        match_last_name1 = re.search(r"/(.*)/", (" ".join(name)))
+        match_last_name2 = re.search(r"/(.*)/", (" ".join(name_l[0])))
+        if match_last_name1 and match_last_name2 and match_last_name1.group(1) != match_last_name2.group(1):
+            errLine="ERROR: FAMILY: US16: %s and %s have 1 Male in their family with different last names %s and %s " \
+                    "*** families index %d "
+            print(errLine % (fam.husbandName, fam.wifeName, name, name[0], count))
+            errLog.append(
+                "ERROR: FAMILY: US16: " + fam.husbandName + " and " + fam.wifeName + 'have 1 Male in their family '
+                                                                                     'with different last names ' +
+                name + "and " + name[0] + " *** families index " + str(
+                    count))
+            error = True
+    return error

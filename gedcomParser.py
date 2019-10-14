@@ -240,6 +240,8 @@ def createTables(individuals, families):
         famTable.add_row(eachh)
     print("Families\n", famTable, "\n\n")
 
+    return (indTable, famTable)
+
 ## Check Errors - Acceptance Tests
 def checkErrors(individuals, families):
     errLog = []
@@ -304,11 +306,46 @@ def checkErrors(individuals, families):
             checkErr.checkBirth_parentMarriage(fam, count, errLog, individuals)
         except:
             print("checkBirth_parentMarriage failed")
+        ## US09 - Check Birth Before Paren't Death
+        try:
+            checkErr.checkBirthBeforeParentDeath(fam, count, errLog, individuals)
+        except:
+            print("checkBirthBeforeParentDeath failed")
+        ## US10 - Check parents are atleast 14 years old 
+        try:
+            checkErr.checkMarrAfter14(individuals, fam, count, errLog)
+        except:
+            print("checkMarrAfter14 failed")
+        ## US11 - Check Divorce occurs before re-marriage
+        try:
+            checkErr.checkDivorcebeforeRemarriage(fam, count, errLog, families)
+        except:
+            print ("checkDivorcebeforeRemarriage failed")
+        ## US12 - Marriage Age
+        try:
+            checkErr.marriage_age(fam, count, errLog, individuals)
+        except Exception as ex:
+            print("Marriage Age failed")
+        ## US13 - Sibling Spaces
+        try:
+            checkErr.siblingspaces(fam, count, errLog, individuals)
+        except Exception as ex:
+            print("Sibling Spaces failed")
+        ## US14 - Multiple Births Less Than 6
+        try:
+            checkErr.checkMultipleBirths(fam, count, errLog, individuals)
+        except:
+            print("checkMultipleBirths failed")
         ## US15 - Check Family Has Less Than 16 Children
         try:
             checkErr.checkSiblingCount(fam, count, errLog)
         except:
             print("checkSiblingCount failed")
+        ## US16 - Male last names
+        try:
+            checkErr.male_last_name(fam, count, errLog, individuals)
+        except Exception as ex:
+            print("Sibling Spaces failed")
 
     return errLog
 
@@ -324,10 +361,14 @@ def run():
         data = open("fail.ged", 'r')
 
         individuals, families = parseFile(data)
-        createTables(individuals, families)
+        ind_table, fam_table = createTables(individuals, families)
         log = checkErrors(individuals, families)
 
         f = open('Test_Results.txt', 'w')
+        f.write(ind_table.get_string())
+        f.write("\n\n")
+        f.write(fam_table.get_string())
+        f.write("\n\n")
         for each in log:
             f.write('%s\n' % each)
         f.close()
