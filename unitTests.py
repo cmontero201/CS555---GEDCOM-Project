@@ -257,6 +257,17 @@ class TestAge(unittest.TestCase):
             res.append(x)
         self.assertIn(True, res)
     
+    ## US23 Duplicate Names and Birthdays
+    def testDuplicate_names_birthdays_Pass(self):
+        for ind1 in goodInd:
+            x = checkErr.check_duplicate_names_birthdays(ind1, goodInd, 0, [])
+            self.assertFalse(x)
+    def testDuplicate_names_birthdays_Fail(self):
+        res = []
+        for ind2 in badInd:
+            x = checkErr.check_duplicate_names_birthdays(ind2, badInd, 0, [])
+            res.append(x)
+        self.assertIn(True, res)
 
 
 ## Run Unit Tests

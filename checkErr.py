@@ -231,7 +231,7 @@ def checkBirthBeforeParentDeath(fam, count, errLog, individuals):
     
     return error
 
-## US10 Checks Parents Are at Least 14 Years Old
+## US10 Checks Parents Are at Least 14 Years Old (Tanmay)
 def checkMarrAfter14(individuals, fam, count, errLog):
     error = False
     if fam != []:
@@ -271,7 +271,7 @@ def checkDivorcebeforeRemarriage(fam, count, errLog, families):
     return error
 
 ## US12 Mother should be less than 60 years older than her children and father should be
-# less than 80 years older than his children
+# less than 80 years older than his children (Shoaib)
 def marriage_age(fam, count, errLog, individuals):
     error = False
     children=fam.children
@@ -319,7 +319,7 @@ def marriage_age(fam, count, errLog, individuals):
                         error = True
         return error
 
-## US13 Checks Sibling Birth Dates are More Than 8 Months or Less Than 2 Days Apart
+## US13 Checks Sibling Birth Dates are More Than 8 Months or Less Than 2 Days Apart (Shoaib)
 def siblingspaces(fam, count, errLog, individuals):
     error = False
     children = fam.children
@@ -377,7 +377,7 @@ def checkSiblingCount(fam, count, errLog):
         error = True
         return error
 
-## US16 Checks All Males in Same Family Share Same Surname
+## US16 Checks All Males in Same Family Share Same Surname (Tanmay)
 def male_last_name(fam, count, errLog, individuals):
     error = False
     name_l = []
@@ -400,3 +400,34 @@ def male_last_name(fam, count, errLog, individuals):
                     count))
             error = True
     return error
+
+## US17 Parents should not marry any of their children (Tanmay)
+
+## US18 Siblings should not marry one another (Tanmay)
+
+## US19 First cousins should not marry one another (Willy D)
+
+## US20 Aunts and uncles should not marry their nieces or nephews (Willy D)
+
+## US21 Husband in family should be male and wife in family should be female (Shoaib)
+
+## US22 All individual IDs should be unique and all family IDs should be unique (Shoaib)
+
+## US23 No more than one individual with the same name and birth date should appear in a GEDCOM file (Christian)
+def check_duplicate_names_birthdays(ind, individuals, count, errLog):
+    error = False
+    inst = 0
+    name = ind.name
+    birth = ind.birthday
+
+    for i in individuals:
+        if i.name == name and i.birthday == birth:
+            inst += 1
+            if inst > 1:
+                errLine = "ERROR: FAMILY: US23: There are more than one individuals with name %s and birthdate %s *** individuals index %d"
+                print(errLine % (name, birth, count))
+                errLog.append("ERROR: FAMILY: US23: There are more than one individuals with name " + name + " and birthdate " + str(birth) +  " *** individuals index %d")
+                error = True
+                return error
+
+## US24 No more than one family with the same spouses by name and the same marriage date should appear in a GEDCOM file (Christian)

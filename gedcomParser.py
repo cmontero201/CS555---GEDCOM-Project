@@ -266,6 +266,11 @@ def checkErrors(individuals, families):
             checkErr.checkAge(ind, count, errLog)
         except:
             print("checkAge failed")
+        ## US23 - Check Unique Name & Birthday Combo
+        try:
+            checkErr.check_duplicate_names_birthdays(ind, individuals, count, errLog)
+        except:
+            print("check_duplicate_names_birthdays failed")
         
     # Iterate families for errors
     count = 0
