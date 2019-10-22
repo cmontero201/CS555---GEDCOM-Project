@@ -269,6 +269,19 @@ class TestAge(unittest.TestCase):
             res.append(x)
         self.assertIn(True, res)
 
+    ## US24 Multi-Family Parents
+    def testMulti_family_parent_Pass(self):
+        for fam1 in goodFam:
+            x = checkErr.check_multi_family_parent(fam1, 0, [], goodFam)
+            print(x)
+            self.assertFalse(x)
+    def testMulti_family_parent_Fail(self):
+        res = []
+        for fam2 in badFam:
+            x = checkErr.check_multi_family_parent(fam2, 0, [], badFam)
+            res.append(x)
+        self.assertIn(True, res)
+
 
 ## Run Unit Tests
 if __name__ == '__main__':

@@ -351,6 +351,11 @@ def checkErrors(individuals, families):
             checkErr.male_last_name(fam, count, errLog, individuals)
         except Exception as ex:
             print("Sibling Spaces failed")
+        ## US24 - Multi-Family Parents
+        try:
+            checkErr.check_multi_family_parent(fam, count, errLog, families)
+        except:
+            print("check_multi_family_parent failed")
 
     return errLog
 

@@ -426,8 +426,37 @@ def check_duplicate_names_birthdays(ind, individuals, count, errLog):
             if inst > 1:
                 errLine = "ERROR: FAMILY: US23: There are more than one individuals with name %s and birthdate %s *** individuals index %d"
                 print(errLine % (name, birth, count))
-                errLog.append("ERROR: FAMILY: US23: There are more than one individuals with name " + name + " and birthdate " + str(birth) +  " *** individuals index %d")
+                errLog.append("ERROR: FAMILY: US23: There are more than one individuals with name " + name + " and birthdate " + str(birth) +  " *** individuals index " + str(count))
                 error = True
                 return error
 
 ## US24 No more than one family with the same spouses by name and the same marriage date should appear in a GEDCOM file (Christian)
+def check_multi_family_parent(fam, count, errLog, families):
+    error = False
+    husband = fam.husbandName
+    husbandID = fam.husband
+    wife = fam.wifeName
+    wifeID = fam.wife
+    date = fam.married
+    refHus = 0
+    refWif = 0
+
+    for f in families:
+        if (wife == f.wifeName and date == f.married):
+            refWif += 1
+            if refWif > 1:
+                errLine = "ERROR: FAMILY: US24: %s (%s) is also in family %s with the same marriage date (%s) *** families index %d"
+                print(errLine % (wife, wifeID, f.id, date, count))
+                errLog.append("ERROR: FAMILY: US24: " + wife + " (" + wifeID + ") is also in family " + str(f.id) + " with the same marriage date (" + str(date) + " *** individuals index " + str(count))
+                error = True
+                return error
+
+        if (husband == f.husbandName and date == f.married):
+            refHus += 1
+            if refHus > 1:
+                errLine = "ERROR: FAMILY: US24: %s (%s) is also in family %s with the same marriage date (%s) *** families index %d"
+                print(errLine % (husband, husbandID, f.id, date, count))
+                errLog.append("ERROR: FAMILY: US24: " + husband + " (" + husbandID + ") is also in family " + str(f.id) + " with the same marriage date (" + str(date) + " *** individuals index " + str(count))
+                error = True
+                return error
+
