@@ -406,69 +406,74 @@ def male_last_name(fam, count, errLog, individuals):
 ## US18 Siblings should not marry one another (Tanmay)
 
 ## US19 First cousins should not marry one another (Willy D)
+def checkCousinsMarried(fam, count, errLog, families):
+    error = False
+    if areCousins(fam.husband, fam.wife, families):
+        errLog.append(
+            "ERROR: FAMILY: US19: " + str(fam.husbandName) + " and " + str(fam.wifeName) + ' are cousins ' + " *** families index " + str(count))
+        error = True
+
+    return error
+
+def getParents(personID, families):
+    parents = []
+    for f in families:
+        if personID in f.children:
+            parents = [f.husband, f.wife]
+            return parents
+
+    return parents
+
+def areCousins(husbandID, wifeID, families):
+    husbandParents = getParents(husbandID, families)
+    husbandGrandparents = []
+    if husbandParents != []:
+        husbandGrandparents = getParents(husbandParents[0], families) + getParents(husbandParents[1], families)
+
+    wifeParents = getParents(wifeID, families)
+    wifeGrandparents = []
+    if wifeParents != []:
+        wifeGrandparents = getParents(wifeParents[0], families) + getParents(wifeParents[1], families)
+
+    for i in husbandGrandparents:
+        for j in wifeGrandparents:
+            if i == j:
+                return True
+
+    return False
+
 
 ## US20 Aunts and uncles should not marry their nieces or nephews (Willy D)
+def checkMarriedtoAuntUncle(fam, count, errLog, families):
+    error = False
+    if isAuntOrUncle(fam.husband, fam.wife, families):
+        errLog.append(
+            "ERROR: FAMILY: US20: " + str(fam.husbandName) + " is married to his aunt  " + str(fam.wifeName) + "*** families index " + str(count))
+        error = True
+    elif isAuntOrUncle(fam.wife, fam.husband, families):
+        errLog.append(
+            "ERROR: FAMILY: US20: " + str(fam.wifeName) + " is married to her uncle  " + str(fam.wifeName) + "*** families index " + str(count))
+        error = True
+
+    return error
+
+def isAuntOrUncle(person1ID, person2ID, families):
+    person1Parents = getParents(person1ID, families)
+    person1Grandparents = []
+    if person1Parents != []:
+        person1Grandparents = getParents(person1Parents[0], families) + getParents(person1Parents[1], families)
+
+    person2Parents = getParents(person2ID, families)
+
+    for i in person1Grandparents:
+        for j in person2Parents:
+            if i == j and (j not in person1Parents):
+                return True
+    return False
 
 ## US21 Husband in family should be male and wife in family should be female (Shoaib)
-def gender_role_check(fam, count, errLog, individuals):
-    error = False
-    husband = fam.husband
-    wife = fam.wife
-
-    for ind in individuals:
-        if wife == ind.id and ind.gender != 'F':
-            errLine="ERROR: FAMILY: US21: %s is wife marked Male %s as an individual " \
-                    "*** families index %d "
-            print(errLine % (fam.wifeName, ind.gender, count))
-            errLog.append(
-                "ERROR: FAMILY: US21: " + fam.wifeName + " is wife marked Male " + ind.gender + 'as an individual' +
-                "*** families index " + str(count))
-            error = True
-        elif husband == ind.id and ind.gender != 'M':
-            errLine="ERROR: FAMILY: US21: %s is husband marked Female %s as an individual " \
-                    "*** families index %d "
-            print(errLine % (fam.husbandName, ind.gender, count))
-            errLog.append(
-                "ERROR: FAMILY: US21: " + fam.wifeName + " is wife marked Male " + ind.gender + 'as an individual' +
-                "*** families index " + str(count))
-            error = True
-    return error
 
 ## US22 All individual IDs should be unique and all family IDs should be unique (Shoaib)
-def unique_id_check(families, errLog, individuals):
-
-    error = []
-    fid = collections.OrderedDict()
-    iid = collections.OrderedDict()
-    count = 0
-    for fam in families:
-        count+=1
-        if fam not in fid:
-            fid[fam] = enumerate(list(fam))
-            error.append(True)
-        else:
-            errLine= "ERROR: FAMILY: US22: Family ID %s is not unique " \
-                    "*** Family index %d"
-            print(errLine % (fam, count))
-            errLog.append(
-            "ERROR: FAMILY: US22: Family ID" + fam.id + "is not unique *** families index " + str(
-                count))
-            error.append(False)
-    count = 0
-    for ind in enumerate(list(individuals)):
-        count+=1
-        if ind not in iid:
-            iid[ind] = ind
-            error.append(True)
-        else:
-           errLine="ERROR: INDIVIDUAL: US22: Individual ID %s is not unique "\
-                   "*** individuals index %d"
-           print(errLine % (ind, count))
-           errLog.append(
-               "ERROR: INDIVIDUAL: US22: Individual ID" + ind + "is not unique *** Individual index " + str(
-                   count))
-           error.append(False)
-    return error
 
 ## US23 No more than one individual with the same name and birth date should appear in a GEDCOM file (Christian)
 def check_duplicate_names_birthdays(ind, individuals, count, errLog):
