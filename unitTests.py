@@ -256,6 +256,30 @@ class TestAge(unittest.TestCase):
             x=checkErr.male_last_name(fam2, 0, [], badInd)
             res.append(x)
         self.assertIn(True, res)
+
+    ## US21 Correct gender for role
+    def test_gender_role_Pass(self):
+        for fam1 in goodFam:
+            x=checkErr.gender_role_check(fam1, 0, [], goodInd)
+            self.assertFalse(x)
+
+    def test_gender_role_Fail(self):
+        res=[]
+        for fam2 in badFam:
+            x=checkErr.gender_role_check(fam2, 0, [], badInd)
+            res.append(x)
+        self.assertIn(True, res)
+
+    ## US22 Unique Family and Individual ID
+    def test_unique_id_Pass(self):
+        x=checkErr.unique_id_check(badFam, [], goodInd)
+        self.assertFalse(x)
+
+    def test_unique_id_Fail(self):
+         x=checkErr.unique_id_check(badFam, [], badInd)
+         self.assertIn(True, x)
+
+
     
 
 

@@ -3,6 +3,7 @@ Created by Christian Montero, Tanmay Bhoir, William DeRoberts, Shoaib Sherwani
 September 16, 2019
 This file uses python3.6 to check errors within gedcom files
 """
+import collections
 import unittest
 import re
 from datetime import datetime, timedelta
@@ -410,9 +411,65 @@ def male_last_name(fam, count, errLog, individuals):
 # US20 Aunts and uncles should not marry their nieces or nephews
 
 # US21 Husband in family should be male and wife in family should be female
+def gender_role_check(fam, count, errLog, individuals):
+    error = False
+    husband = fam.husband
+    wife = fam.wife
+
+    for ind in individuals:
+        if wife == ind.id and ind.gender != 'F':
+            errLine="ERROR: FAMILY: US21: %s is wife marked Male %s as an individual " \
+                    "*** families index %d "
+            print(errLine % (fam.wifeName, ind.gender, count))
+            errLog.append(
+                "ERROR: FAMILY: US21: " + fam.wifeName + " is wife marked Male " + ind.gender + 'as an individual' +
+                "*** families index " + str(count))
+            error = True
+        elif husband == ind.id and ind.gender != 'M':
+            errLine="ERROR: FAMILY: US21: %s is husband marked Female %s as an individual " \
+                    "*** families index %d "
+            print(errLine % (fam.husbandName, ind.gender, count))
+            errLog.append(
+                "ERROR: FAMILY: US21: " + fam.wifeName + " is wife marked Male " + ind.gender + 'as an individual' +
+                "*** families index " + str(count))
+            error = True
+    return error
 
 # US22 All individual IDs should be unique and all family IDs should be unique
+def unique_id_check(families, errLog, individuals):
 
+    error = []
+    fid = collections.OrderedDict()
+    iid = collections.OrderedDict()
+    count = 0
+    for fam in families:
+        count+=1
+        if fam not in fid:
+            fid[fam] = enumerate(list(fam))
+            error.append(True)
+        else:
+            errLine= "ERROR: FAMILY: US22: Family ID %s is not unique " \
+                    "*** Family index %d"
+            print(errLine % (fam, count))
+            errLog.append(
+            "ERROR: FAMILY: US22: Family ID" + fam.id + "is not unique *** families index " + str(
+                count))
+            error.append(False)
+    count = 0
+    for ind in enumerate(list(individuals)):
+        count+=1
+        if ind not in iid:
+            iid[ind] = ind
+            error.append(True)
+        else:
+           errLine="ERROR: INDIVIDUAL: US22: Individual ID %s is not unique "\
+                   "*** individuals index %d"
+           print(errLine % (ind, count))
+           errLog.append(
+               "ERROR: INDIVIDUAL: US22: Individual ID" + ind + "is not unique *** Individual index " + str(
+                   count))
+           error.append(False)
+    return error
 # US23 No more than one individual with the same name and birth date should appear in a GEDCOM file
 
 # US24 No more than one family with the same spouses by name and the same marriage date should appear in a GEDCOM file
