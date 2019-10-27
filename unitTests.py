@@ -211,7 +211,7 @@ class TestAge(unittest.TestCase):
     def testSiblingSpaces_Pass(self):
         for fam1 in goodFam:
             x = checkErr.siblingspaces(fam1, 0, [], goodInd)
-        self.assertFalse(x)
+            self.assertFalse(x)
     def testSiblingSpaces_Fail(self):
         res = []
         for fam2 in badFam:
@@ -252,6 +252,18 @@ class TestAge(unittest.TestCase):
         res=[]
         for fam2 in badFam:
             x=checkErr.male_last_name(fam2, 0, [], badInd)
+            res.append(x)
+        self.assertIn(True, res)
+         
+    ## US18 No Siblings marriage
+    def testNoSiblingsMarry_Pass(self):
+        for fam1 in goodFam:
+            x=checkErr.checkNoSiblingsMarry(fam1, 0, [], goodFam)
+            self.assertFalse(x)
+    def testNoSiblingsMarry_Fail(self):
+        res=[]
+        for fam2 in badFam:
+            x=checkErr.checkNoSiblingsMarry(fam2, 0, [], badFam)
             res.append(x)
         self.assertIn(True, res)
 
