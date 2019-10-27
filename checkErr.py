@@ -465,11 +465,9 @@ def checkMarriedtoAuntUncle(fam, count, errLog, families):
 
 def isAuntOrUncle(person1ID, person2ID, families):
     person1Parents = getParents(person1ID, families)
-    print(person1ID, person1Parents)
     person1Grandparents = []
     if person1Parents != []:
         person1Grandparents = getParents(person1Parents[0], families) + getParents(person1Parents[1], families)
-    print(person1ID, person1Parents[0], getParents(person1Parents[0], families), getParents(person1Parents[1], families))
 
     person2Parents = getParents(person2ID, families)
 
