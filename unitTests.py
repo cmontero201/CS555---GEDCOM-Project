@@ -211,7 +211,7 @@ class TestAge(unittest.TestCase):
     def testSiblingSpaces_Pass(self):
         for fam1 in goodFam:
             x = checkErr.siblingspaces(fam1, 0, [], goodInd)
-            self.assertFalse(x)
+        self.assertFalse(x)
     def testSiblingSpaces_Fail(self):
         res = []
         for fam2 in badFam:
