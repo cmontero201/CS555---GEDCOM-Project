@@ -415,6 +415,7 @@ def male_last_name(fam, count, errLog, individuals):
             error = True
     return error
 
+<<<<<<< HEAD
 
 ########################################################################
 ############################### SPRINT 3 ###############################
@@ -636,3 +637,20 @@ def check_multi_family_parent(fam, count, errLog, families):
                 return error
 
     return error
+=======
+# US17 Parents should not marry any of their children
+
+# US18 Siblings should not marry one another
+
+# US19 First cousins should not marry one another
+
+# US20 Aunts and uncles should not marry their nieces or nephews
+
+# US21 Husband in family should be male and wife in family should be female
+
+# US22 All individual IDs should be unique and all family IDs should be unique
+
+# US23 No more than one individual with the same name and birth date should appear in a GEDCOM file
+
+# US24 No more than one family with the same spouses by name and the same marriage date should appear in a GEDCOM file
+>>>>>>> origin/master
