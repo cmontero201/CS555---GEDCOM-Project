@@ -245,6 +245,12 @@ def createTables(individuals, families):
 ## Check Errors - Acceptance Tests
 def checkErrors(individuals, families):
     errLog = []
+
+    # US22 Unique ID
+    try:
+        checkErr.unique_id_check(families, errLog, individuals)
+    except:
+        print("Unique ID failed")
     
     # Iterate individuals for errors
     count = 0
@@ -351,7 +357,7 @@ def checkErrors(individuals, families):
             checkErr.male_last_name(fam, count, errLog, individuals)
         except Exception as ex:
             print("Sibling Spaces failed")
-        ## US17 - Parents should not marry their children
+         ## US17 - Parents should not marry their children
         try:
             checkErr.checkNoMarrChild(fam, count, errLog, families)
         except:
@@ -371,11 +377,14 @@ def checkErrors(individuals, families):
             checkErr.checkMarriedtoAuntUncle(fam, count, errLog, families)
         except:
             print("checkMarriedtoAuntUncle failed")
+        
+        
         ## US21 - Correct gender for role
         try:
             checkErr.gender_role_check(fam, count, errLog, individuals)
         except Exception as ex:
             print("Gender Role Check failed")
+
         ## US24 - Multi-Family Parents
         try:
             checkErr.check_multi_family_parent(fam, count, errLog, families)

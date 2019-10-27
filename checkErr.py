@@ -5,8 +5,14 @@ This file uses python3.6 to check errors within gedcom files
 """
 import unittest
 import re
+import collections
 from datetime import datetime, timedelta
 from dateutil import relativedelta as rdelta
+
+
+########################################################################
+############################### SPRINT 1 ###############################
+########################################################################
 
 ## US01 Checks for dates in the future (Tanmay)
 def checkCurrDate(fam, count, errLog, ind):
@@ -194,6 +200,12 @@ def checkBirth_parentMarriage(fam, count, errLog, individuals):
     
     return error
 
+
+
+########################################################################
+############################### SPRINT 2 ###############################
+########################################################################
+
 ## US09 Checks Child Birth Before Parent Death (Willy D)
 def checkBirthBeforeParentDeath(fam, count, errLog, individuals):
     error = False
@@ -325,6 +337,7 @@ def siblingspaces(fam, count, errLog, individuals):
     children = fam.children
     sib_birthdays = []
     i = 0
+
     if len(children) > 1:
         for child in children:
             for ind in individuals:
@@ -333,7 +346,7 @@ def siblingspaces(fam, count, errLog, individuals):
         count1 = len(sib_birthdays)
         while i < count1 - 1:
             diff = rdelta.relativedelta(sib_birthdays[i + 1], sib_birthdays[i])
-            if diff.days > 2 and diff.years < 1 and (diff.days < 243 or diff.months < 8):
+            if diff.days > 2  or diff.months < 8:
                 errLine = "ERROR: FAMILY: US13: %s and %s have 2 children with birthdates less than 2 days apart (twins) birth or are more than more than 8 months apart of %s and %s *** families index %d"
                 print(errLine % (fam.husbandName, fam.wifeName, sib_birthdays[i + 1], sib_birthdays[i], count))
                 errLog.append(
@@ -343,6 +356,7 @@ def siblingspaces(fam, count, errLog, individuals):
                 error = True
             i += 1
         return error
+    return error
 
 ## US14 Checks Less Than or Equal to 5 Siblings with Same Birth Date (Christian)
 def checkMultipleBirths(fam, count, errLog, individuals):
@@ -400,6 +414,11 @@ def male_last_name(fam, count, errLog, individuals):
                     count))
             error = True
     return error
+
+
+########################################################################
+############################### SPRINT 3 ###############################
+########################################################################
 
 ## US17 Parents should not marry any of their children (Tanmay)
 def checkNoMarrChild(fam, count, errLog, families):
@@ -464,7 +483,6 @@ def checkCousinsMarried(fam, count, errLog, families):
         error = True
 
     return error
-
 def getParents(personID, families):
     parents = []
     for f in families:
@@ -473,7 +491,6 @@ def getParents(personID, families):
             return parents
 
     return parents
-
 def areCousins(husbandID, wifeID, families):
     husbandParents = getParents(husbandID, families)
     husbandGrandparents = []
@@ -491,7 +508,6 @@ def areCousins(husbandID, wifeID, families):
                 return True
 
     return False
-
 
 ## US20 Aunts and uncles should not marry their nieces or nephews (Willy D)
 def checkMarriedtoAuntUncle(fam, count, errLog, families):
@@ -525,7 +541,7 @@ def isAuntOrUncle(person1ID, person2ID, families):
                 return True
     return False
 
-### US21 Husband in family should be male and wife in family should be female (Shoaib)
+## US21 Husband in family should be male and wife in family should be female (Shoaib)
 def gender_role_check(fam, count, errLog, individuals):
     error = False
     husband = fam.husband
@@ -630,3 +646,4 @@ def check_multi_family_parent(fam, count, errLog, families):
                 error = True
                 return error
 
+    return error
