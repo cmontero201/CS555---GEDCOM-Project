@@ -426,24 +426,14 @@ def checkNoMarrChild(fam, count, errLog, families):
     if fam.husband in fam.children:
         errLine = "ERROR: FAMILY: US17: %s (%s) and %s (%s) are married but have a parent-child relation *** families index %d"
         print(errLine % (fam.husbandName, fam.husband, fam.wifeName, fam.wife, count))
-        errLog.append(errLine)
+        errLog.append("ERROR: FAMILY: US17: " + fam.husbandName + " (" + fam.husband + ") and " + fam.wifeName + " (" + fam.wife + ") are married but have a parent-child relation *** families index " + str(count))
         error = True
     elif fam.wife in fam.children:
         errLine = "ERROR: FAMILY: US17: %s (%s) and %s (%s) are married but have a parent-child relation *** families index %d"
         print(errLine % (fam.husbandName, fam.husband, fam.wifeName, fam.wife, count))
-        errLog.append(errLine)
+        errLog.append("ERROR: FAMILY: US17: " + fam.husbandName + " (" + fam.husband + ") and " + fam.wifeName + " (" + fam.wife + ") are married but have a parent-child relation *** families index " + str(count))
         error = True
     return error
-
-def married(husbID, wifeID, families):
-     husband = (husbID, families)
-     wife = (wifeID, families)
-     for comm1 in husband:
-         for comm2 in wife:
-             if comm1 == comm2:
-                 return True
-     return False
-
 
 ## US18 Siblings should not marry one another (Tanmay)
 def checkNoSiblingsMarry(fam, count, errLog, families):
