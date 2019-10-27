@@ -200,7 +200,6 @@ class TestAge(unittest.TestCase):
         for fam1 in goodFam:
             x=checkErr.marriage_age(fam1, 0, [], goodInd)
             self.assertFalse(x)
-
     def testMarriageAge_Fail(self):
         res=[]
         for fam2 in badFam:
@@ -212,8 +211,7 @@ class TestAge(unittest.TestCase):
     def testSiblingSpaces_Pass(self):
         for fam1 in goodFam:
             x = checkErr.siblingspaces(fam1, 0, [], goodInd)
-            self.assertFalse(x)
-
+        self.assertFalse(x)
     def testSiblingSpaces_Fail(self):
         res = []
         for fam2 in badFam:
@@ -256,7 +254,181 @@ class TestAge(unittest.TestCase):
             x=checkErr.male_last_name(fam2, 0, [], badInd)
             res.append(x)
         self.assertIn(True, res)
-    
+
+    ## US17 Check No Marriage to child
+    def testNoMarrChild_Pass(self):
+        for fam1 in goodFam:
+            x=checkErr.checkNoMarrChild(fam1, 0, [], goodFam)
+            self.assertFalse(x)
+    def testNoMarrChild_Fail(self):
+        res=[]
+        for fam2 in badFam:
+            x=checkErr.checkNoMarrChild(fam2, 0, [], badFam)
+            res.append(x)
+        self.assertIn(True, res)
+
+         
+    ## US18 No Siblings marriage
+    def testNoSiblingsMarry_Pass(self):
+        for fam1 in goodFam:
+            x=checkErr.checkNoSiblingsMarry(fam1, 0, [], goodFam)
+            self.assertFalse(x)
+    def testNoSiblingsMarry_Fail(self):
+        res=[]
+        for fam2 in badFam:
+            x=checkErr.checkNoSiblingsMarry(fam2, 0, [], badFam)
+            res.append(x)
+        self.assertIn(True, res)
+
+    ## US19 Check is cousins are married (Will)
+    def testCousinsMarried(self):
+        testFamilies = []
+
+        testFam1 = Family()
+        testFam1.id = "F1"
+        testFam1.husband = "H1"
+        testFam1.wife = "W1"
+        testFam1.children = ["C1"]
+        testFamilies.append(testFam1)
+        self.assertEqual(checkErr.getParents(testFam1.children[0], testFamilies), ["H1","W1"])
+        self.assertNotEqual(checkErr.getParents(testFam1.children[0], testFamilies), ["T1","T1"])
+
+        testFam2 = Family()
+        testFam2.id = "F2"
+        testFam2.husband = "H2"
+        testFam2.wife = "W2"
+        testFam2.children = ["C2"]
+        testFamilies.append(testFam2)
+
+        testFam3 = Family()
+        testFam3.id = "F3"
+        testFam3.husband = "H3"
+        testFam3.wife = "W3"
+        testFam3.children = ["H1"]
+        testFamilies.append(testFam3)
+
+        self.assertFalse(checkErr.areCousins("C1", "C2", testFamilies))
+
+        testFam4 = Family()
+        testFam4.id = "F4"
+        testFam4.husband = "H4"
+        testFam4.wife = "W4"
+        testFam4.children = ["W1", "H2"]
+        testFamilies.append(testFam4)
+
+        self.assertTrue(checkErr.areCousins("C1", "C2", testFamilies))
+
+        testFam5 = Family()
+        testFam5.id = "F5"
+        testFam5.husband = "C1"
+        testFam5.wife = "C3"
+        testFamilies.append(testFam5)
+
+        self.assertFalse(checkErr.checkCousinsMarried(testFam5, 0, [], testFamilies))
+
+        testFam6 = Family()
+        testFam6.id = "F5"
+        testFam6.husband = "C1"
+        testFam6.wife = "C2"
+        testFamilies.append(testFam2)
+
+        self.assertTrue(checkErr.checkCousinsMarried(testFam6, 0, [], testFamilies))
+
+    ## US20 Aunts and uncles should not marry their nieces or nephews (Will)
+    def testMarriedToAuntOrUncle(self):
+        testFamilies = []
+
+        testFam1 = Family()
+        testFam1.id = "F1"
+        testFam1.husband = "H1"
+        testFam1.wife = "W1"
+        testFam1.children = ["C1"]
+        testFamilies.append(testFam1)
+
+        testFam2 = Family()
+        testFam2.id = "F2"
+        testFam2.husband = "H2"
+        testFam2.wife = "W2"
+        testFam2.children = ["W1", "H3"]
+        testFamilies.append(testFam2)
+
+        testFam3 = Family()
+        testFam3.id = "F3"
+        testFam3.husband = "H3"
+        testFam3.wife = "W3"
+        testFamilies.append(testFam3)
+
+        testFam4 = Family()
+        testFam4.id = "F4"
+        testFam4.husband = "H4"
+        testFam4.wife = "W4"
+        testFam4.children = ["W3"]
+        testFamilies.append(testFam4)
+
+        testFam5 = Family()
+        testFam5.id = "F5"
+        testFam5.husband = "H3"
+        testFam5.wife = "C1"
+        testFamilies.append(testFam5)
+
+        self.assertFalse(checkErr.isAuntOrUncle("C1", "W3", testFamilies))
+        self.assertTrue(checkErr.isAuntOrUncle("C1", "H3", testFamilies))
+
+        self.assertTrue(checkErr.checkMarriedtoAuntUncle(testFam5, 0, [], testFamilies))
+        self.assertFalse(checkErr.checkMarriedtoAuntUncle(testFam4, 0, [], testFamilies))
+
+    ## US21 Correct gender for role
+    def test_gender_role_Pass(self):
+        for fam1 in goodFam:
+            x=checkErr.gender_role_check(fam1, 0, [], goodInd)
+            self.assertFalse(x)
+    def test_gender_role_Fail(self):
+        res=[]
+        for fam2 in badFam:
+            x=checkErr.gender_role_check(fam2, 0, [], badInd)
+            res.append(x)
+        self.assertIn(True, res)
+
+    ## US22 Unique Family and Individual ID
+    def test_unique_id_ind_Pass(self):
+        [ind, fam] = checkErr.unique_id_check(goodFam, [], goodInd)
+        print(ind)
+        print(fam)
+        self.assertIn(False, ind)
+    def test_unique_id_fam_Pass(self):
+        [ind, fam] = checkErr.unique_id_check(goodFam, [], goodInd)
+        self.assertIn(False, fam)
+
+    def test_unique_id_ind_Fail(self):
+         [ind, fam] = checkErr.unique_id_check(badFam, [], badInd)
+         self.assertIn(True, ind)
+    def test_unique_id_fam_Fail(self):
+         [ind, fam] = checkErr.unique_id_check(badFam, [], badInd)
+         self.assertIn(True, fam)
+
+    ## US23 Duplicate Names and Birthdays
+    def testDuplicate_names_birthdays_Pass(self):
+        for ind1 in goodInd:
+            x = checkErr.check_duplicate_names_birthdays(ind1, goodInd, 0, [])
+            self.assertFalse(x)
+    def testDuplicate_names_birthdays_Fail(self):
+        res = []
+        for ind2 in badInd:
+            x = checkErr.check_duplicate_names_birthdays(ind2, badInd, 0, [])
+            res.append(x)
+        self.assertIn(True, res)
+
+    ## US24 Multi-Family Parents
+    def testMulti_family_parent_Pass(self):
+        for fam1 in goodFam:
+            x = checkErr.check_multi_family_parent(fam1, 0, [], goodFam)
+            self.assertFalse(x)
+    def testMulti_family_parent_Fail(self):
+        res = []
+        for fam2 in badFam:
+            x = checkErr.check_multi_family_parent(fam2, 0, [], badFam)
+            res.append(x)
+        self.assertIn(True, res)
 
 
 ## Run Unit Tests

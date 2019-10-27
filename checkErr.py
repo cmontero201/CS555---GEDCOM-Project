@@ -5,8 +5,14 @@ This file uses python3.6 to check errors within gedcom files
 """
 import unittest
 import re
+import collections
 from datetime import datetime, timedelta
 from dateutil import relativedelta as rdelta
+
+
+########################################################################
+############################### SPRINT 1 ###############################
+########################################################################
 
 ## US01 Checks for dates in the future (Tanmay)
 def checkCurrDate(fam, count, errLog, ind):
@@ -194,6 +200,12 @@ def checkBirth_parentMarriage(fam, count, errLog, individuals):
     
     return error
 
+
+
+########################################################################
+############################### SPRINT 2 ###############################
+########################################################################
+
 ## US09 Checks Child Birth Before Parent Death (Willy D)
 def checkBirthBeforeParentDeath(fam, count, errLog, individuals):
     error = False
@@ -231,7 +243,7 @@ def checkBirthBeforeParentDeath(fam, count, errLog, individuals):
     
     return error
 
-## US10 Checks Parents Are at Least 14 Years Old
+## US10 Checks Parents Are at Least 14 Years Old (Tanmay)
 def checkMarrAfter14(individuals, fam, count, errLog):
     error = False
     if fam != []:
@@ -271,7 +283,7 @@ def checkDivorcebeforeRemarriage(fam, count, errLog, families):
     return error
 
 ## US12 Mother should be less than 60 years older than her children and father should be
-# less than 80 years older than his children
+# less than 80 years older than his children (Shoaib)
 def marriage_age(fam, count, errLog, individuals):
     error = False
     children=fam.children
@@ -319,12 +331,13 @@ def marriage_age(fam, count, errLog, individuals):
                         error = True
         return error
 
-## US13 Checks Sibling Birth Dates are More Than 8 Months or Less Than 2 Days Apart
+## US13 Checks Sibling Birth Dates are More Than 8 Months or Less Than 2 Days Apart (Shoaib)
 def siblingspaces(fam, count, errLog, individuals):
     error = False
     children = fam.children
     sib_birthdays = []
     i = 0
+
     if len(children) > 1:
         for child in children:
             for ind in individuals:
@@ -333,7 +346,7 @@ def siblingspaces(fam, count, errLog, individuals):
         count1 = len(sib_birthdays)
         while i < count1 - 1:
             diff = rdelta.relativedelta(sib_birthdays[i + 1], sib_birthdays[i])
-            if diff.days > 2 and diff.years < 1 and (diff.days < 243 or diff.months < 8):
+            if diff.days > 2  or diff.months < 8:
                 errLine = "ERROR: FAMILY: US13: %s and %s have 2 children with birthdates less than 2 days apart (twins) birth or are more than more than 8 months apart of %s and %s *** families index %d"
                 print(errLine % (fam.husbandName, fam.wifeName, sib_birthdays[i + 1], sib_birthdays[i], count))
                 errLog.append(
@@ -343,6 +356,7 @@ def siblingspaces(fam, count, errLog, individuals):
                 error = True
             i += 1
         return error
+    return error
 
 ## US14 Checks Less Than or Equal to 5 Siblings with Same Birth Date (Christian)
 def checkMultipleBirths(fam, count, errLog, individuals):
@@ -377,7 +391,7 @@ def checkSiblingCount(fam, count, errLog):
         error = True
         return error
 
-## US16 Checks All Males in Same Family Share Same Surname
+## US16 Checks All Males in Same Family Share Same Surname (Tanmay)
 def male_last_name(fam, count, errLog, individuals):
     error = False
     name_l = []
@@ -401,6 +415,229 @@ def male_last_name(fam, count, errLog, individuals):
             error = True
     return error
 
+<<<<<<< HEAD
+
+########################################################################
+############################### SPRINT 3 ###############################
+########################################################################
+
+## US17 Parents should not marry any of their children (Tanmay)
+def checkNoMarrChild(fam, count, errLog, families):
+    error = False
+    if fam.husband in fam.children:
+        errLine = "ERROR: FAMILY: US17: %s (%s) and %s (%s) are married but have a parent-child relation *** families index %d"
+        print(errLine % (fam.husbandName, fam.husband, fam.wifeName, fam.wife, count))
+        errLog.append("ERROR: FAMILY: US17: " + fam.husbandName + " (" + fam.husband + ") and " + fam.wifeName + " (" + fam.wife + ") are married but have a parent-child relation *** families index " + str(count))
+        error = True
+    elif fam.wife in fam.children:
+        errLine = "ERROR: FAMILY: US17: %s (%s) and %s (%s) are married but have a parent-child relation *** families index %d"
+        print(errLine % (fam.husbandName, fam.husband, fam.wifeName, fam.wife, count))
+        errLog.append("ERROR: FAMILY: US17: " + fam.husbandName + " (" + fam.husband + ") and " + fam.wifeName + " (" + fam.wife + ") are married but have a parent-child relation *** families index " + str(count))
+        error = True
+    return error
+
+## US18 Siblings should not marry one another (Tanmay)
+def checkNoSiblingsMarry(fam, count, errLog, families):
+    error = False
+    if siblings(fam.husband, fam.wife, families):
+        errLine = "ERROR: FAMILY: US18: %s (%s) and %s (%s) are siblings and married to each other *** families index %d"
+        print(errLine % (fam.husbandName, fam.husband, fam.wifeName, fam.wife, count))
+        errLog.append("ERROR: FAMILY: US18: " + str(fam.husbandName) + " and " + str(fam.wifeName) + " are siblings and married *** families index " + str(count))
+        error = True
+    return error
+def parents(personID, families):
+    parents = []
+    for family in families:
+        if personID in family.children:
+            parents = [family.husband, family.wife]
+            return parents
+    return parents
+def siblings(husbID, wifeID, families):
+    paternal = parents(husbID, families)
+    maternal = parents(wifeID, families)
+    for comm1 in paternal:
+        for comm2 in maternal:
+            if comm1 == comm2:
+                return True
+    return False
+   
+
+## US19 First cousins should not marry one another (Willy D)
+def checkCousinsMarried(fam, count, errLog, families):
+    error = False
+    if areCousins(fam.husband, fam.wife, families):
+        errLine = "ERROR: FAMILY: US19: %s and %s are cousins and married *** families index %d"
+        print(errLine % (fam.husbandName, fam.wifeName, count))
+        errLog.append(
+            "ERROR: FAMILY: US19: " + str(fam.husbandName) + " and " + str(fam.wifeName) + " are cousins and married *** families index " + str(count))
+        error = True
+
+    return error
+def getParents(personID, families):
+    parents = []
+    for f in families:
+        if personID in f.children:
+            parents = [f.husband, f.wife]
+            return parents
+
+    return parents
+def areCousins(husbandID, wifeID, families):
+    husbandParents = getParents(husbandID, families)
+    husbandGrandparents = []
+    if husbandParents != []:
+        husbandGrandparents = getParents(husbandParents[0], families) + getParents(husbandParents[1], families)
+
+    wifeParents = getParents(wifeID, families)
+    wifeGrandparents = []
+    if wifeParents != []:
+        wifeGrandparents = getParents(wifeParents[0], families) + getParents(wifeParents[1], families)
+
+    for i in husbandGrandparents:
+        for j in wifeGrandparents:
+            if i == j:
+                return True
+
+    return False
+
+## US20 Aunts and uncles should not marry their nieces or nephews (Willy D)
+def checkMarriedtoAuntUncle(fam, count, errLog, families):
+    error = False
+    if isAuntOrUncle(fam.husband, fam.wife, families):
+        errLine = "ERROR: FAMILY: US20: %s is married to his aunt %s *** families index %d"
+        print(errLine % (fam.husbandName, fam.wifeName, count))
+        errLog.append(
+            "ERROR: FAMILY: US20: " + str(fam.husbandName) + " is married to his aunt " + str(fam.wifeName) + "*** families index " + str(count))
+        error = True
+    elif isAuntOrUncle(fam.wife, fam.husband, families):
+        errLine = "ERROR: FAMILY: US20: %s is married to her uncle %s *** families index %d"
+        print(errLine % (fam.wifeName, fam.husbandName, count))
+        errLog.append(
+            "ERROR: FAMILY: US20: " + str(fam.wifeName) + " is married to her uncle  " + str(fam.husbandName) + "*** families index " + str(count))
+        error = True
+
+    return error
+
+def isAuntOrUncle(person1ID, person2ID, families):
+    person1Parents = getParents(person1ID, families)
+    person1Grandparents = []
+    if person1Parents != []:
+        person1Grandparents = getParents(person1Parents[0], families) + getParents(person1Parents[1], families)
+
+    person2Parents = getParents(person2ID, families)
+
+    for i in person1Grandparents:
+        for j in person2Parents:
+            if i == j and (j not in person1Parents):
+                return True
+    return False
+
+## US21 Husband in family should be male and wife in family should be female (Shoaib)
+def gender_role_check(fam, count, errLog, individuals):
+    error = False
+    husband = fam.husband
+    wife = fam.wife
+
+    for ind in individuals:
+        if wife == ind.id and ind.gender != 'F':
+            errLine="ERROR: FAMILY: US21: %s is wife marked Male %s as an individual " \
+                    "*** families index %d "
+            print(errLine % (fam.wifeName, ind.gender, count))
+            errLog.append(
+                "ERROR: FAMILY: US21: " + fam.wifeName + " is wife marked Male " + ind.gender + 'as an individual' +
+                "*** families index " + str(count))
+            error = True
+        elif husband == ind.id and ind.gender != 'M':
+            errLine="ERROR: FAMILY: US21: %s is husband marked Female %s as an individual " \
+                    "*** families index %d "
+            print(errLine % (fam.husbandName, ind.gender, count))
+            errLog.append(
+                "ERROR: FAMILY: US21: " + fam.wifeName + " is wife marked Male " + ind.gender + 'as an individual' +
+                "*** families index " + str(count))
+            error = True
+    return error
+
+## US22 All individual IDs should be unique and all family IDs should be unique (Shoaib)
+def unique_id_check(families, errLog, individuals):
+
+    ind_error = []
+    fam_error = []
+    fid = {}
+    iid = {}
+    count = 0
+    for fam in families:
+        count+=1
+        if fam.id not in fid:
+            fid[fam.id] = 1
+            fam_error.append(False)
+        else:
+            errLine= "ERROR: FAMILY: US22: Family ID %s is not unique *** Family index %d"
+            print(errLine % (fam.id, count))
+            errLog.append("ERROR: FAMILY: US22: Family ID" + fam.id + "is not unique *** families index " + str(count))
+            fam_error.append(True)
+
+    count = 0
+    for ind in individuals:
+        count+=1
+        if ind.id not in iid:
+            iid[ind.id] = 1
+            ind_error.append(False)
+        else:
+           errLine="ERROR: INDIVIDUAL: US22: Individual ID %s is not unique *** individuals index %d"
+           print(errLine % (ind.id, count))
+           errLog.append("ERROR: INDIVIDUAL: US22: Individual ID" + ind.id + "is not unique *** Individual index " + str(count))
+           ind_error.append(True)
+    
+    return [ind_error, fam_error]
+
+## US23 No more than one individual with the same name and birth date should appear in a GEDCOM file (Christian)
+def check_duplicate_names_birthdays(ind, individuals, count, errLog):
+    error = False
+    inst = 0
+    name = ind.name
+    birth = ind.birthday
+
+    for i in individuals:
+        if i.name == name and i.birthday == birth:
+            inst += 1
+            if inst > 1:
+                errLine = "ERROR: FAMILY: US23: There are more than one individuals with name %s and birthdate %s *** individuals index %d"
+                print(errLine % (name, birth, count))
+                errLog.append("ERROR: FAMILY: US23: There are more than one individuals with name " + name + " and birthdate " + str(birth) +  " *** individuals index " + str(count))
+                error = True
+                return error
+
+## US24 No more than one family with the same spouses by name and the same marriage date should appear in a GEDCOM file (Christian)
+def check_multi_family_parent(fam, count, errLog, families):
+    error = False
+    husband = fam.husbandName
+    husbandID = fam.husband
+    wife = fam.wifeName
+    wifeID = fam.wife
+    date = fam.married
+    refHus = 0
+    refWif = 0
+
+    for f in families:
+        if (wife == f.wifeName and date == f.married):
+            refWif += 1
+            if refWif > 1:
+                errLine = "ERROR: FAMILY: US24: %s (%s) is also in family %s with the same marriage date (%s) *** families index %d"
+                print(errLine % (wife, wifeID, f.id, date, count))
+                errLog.append("ERROR: FAMILY: US24: " + wife + " (" + wifeID + ") is also in family " + str(f.id) + " with the same marriage date (" + str(date) + " *** individuals index " + str(count))
+                error = True
+                return error
+
+        if (husband == f.husbandName and date == f.married):
+            refHus += 1
+            if refHus > 1:
+                errLine = "ERROR: FAMILY: US24: %s (%s) is also in family %s with the same marriage date (%s) *** families index %d"
+                print(errLine % (husband, husbandID, f.id, date, count))
+                errLog.append("ERROR: FAMILY: US24: " + husband + " (" + husbandID + ") is also in family " + str(f.id) + " with the same marriage date (" + str(date) + " *** individuals index " + str(count))
+                error = True
+                return error
+
+    return error
+=======
 # US17 Parents should not marry any of their children
 
 # US18 Siblings should not marry one another
@@ -416,3 +653,4 @@ def male_last_name(fam, count, errLog, individuals):
 # US23 No more than one individual with the same name and birth date should appear in a GEDCOM file
 
 # US24 No more than one family with the same spouses by name and the same marriage date should appear in a GEDCOM file
+>>>>>>> origin/master
