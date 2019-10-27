@@ -653,4 +653,3 @@ def check_multi_family_parent(fam, count, errLog, families):
 # US23 No more than one individual with the same name and birth date should appear in a GEDCOM file
 
 # US24 No more than one family with the same spouses by name and the same marriage date should appear in a GEDCOM file
->>>>>>> origin/master
