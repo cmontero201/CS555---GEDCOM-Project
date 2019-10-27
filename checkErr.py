@@ -5,8 +5,14 @@ This file uses python3.6 to check errors within gedcom files
 """
 import unittest
 import re
+import collections
 from datetime import datetime, timedelta
 from dateutil import relativedelta as rdelta
+
+
+########################################################################
+############################### SPRINT 1 ###############################
+########################################################################
 
 ## US01 Checks for dates in the future (Tanmay)
 def checkCurrDate(fam, count, errLog, ind):
@@ -193,6 +199,12 @@ def checkBirth_parentMarriage(fam, count, errLog, individuals):
                 return error
     
     return error
+
+
+
+########################################################################
+############################### SPRINT 2 ###############################
+########################################################################
 
 ## US09 Checks Child Birth Before Parent Death (Willy D)
 def checkBirthBeforeParentDeath(fam, count, errLog, individuals):
@@ -401,6 +413,11 @@ def male_last_name(fam, count, errLog, individuals):
             error = True
     return error
 
+
+########################################################################
+############################### SPRINT 3 ###############################
+########################################################################
+
 ## US17 Parents should not marry any of their children (Tanmay)
 
 ## US18 Siblings should not marry one another (Tanmay)
@@ -478,8 +495,62 @@ def isAuntOrUncle(person1ID, person2ID, families):
     return False
 
 ## US21 Husband in family should be male and wife in family should be female (Shoaib)
+def gender_role_check(fam, count, errLog, individuals):
+    error = False
+    husband = fam.husband
+    wife = fam.wife
+
+    for ind in individuals:
+        if wife == ind.id and ind.gender != 'F':
+            errLine="ERROR: FAMILY: US21: %s is wife marked Male %s as an individual " \
+                    "*** families index %d "
+            print(errLine % (fam.wifeName, ind.gender, count))
+            errLog.append(
+                "ERROR: FAMILY: US21: " + fam.wifeName + " is wife marked Male " + ind.gender + 'as an individual' +
+                "*** families index " + str(count))
+            error = True
+        elif husband == ind.id and ind.gender != 'M':
+            errLine="ERROR: FAMILY: US21: %s is husband marked Female %s as an individual " \
+                    "*** families index %d "
+            print(errLine % (fam.husbandName, ind.gender, count))
+            errLog.append(
+                "ERROR: FAMILY: US21: " + fam.wifeName + " is wife marked Male " + ind.gender + 'as an individual' +
+                "*** families index " + str(count))
+            error = True
+    return error
 
 ## US22 All individual IDs should be unique and all family IDs should be unique (Shoaib)
+def unique_id_check(families, errLog, individuals):
+
+    ind_error = []
+    fam_error = []
+    fid = {}
+    iid = {}
+    count = 0
+    for fam in families:
+        count+=1
+        if fam.id not in fid:
+            fid[fam.id] = 1
+            fam_error.append(False)
+        else:
+            errLine= "ERROR: FAMILY: US22: Family ID %s is not unique *** Family index %d"
+            print(errLine % (fam.id, count))
+            errLog.append("ERROR: FAMILY: US22: Family ID" + fam.id + "is not unique *** families index " + str(count))
+            fam_error.append(True)
+
+    count = 0
+    for ind in individuals:
+        count+=1
+        if ind.id not in iid:
+            iid[ind.id] = 1
+            ind_error.append(False)
+        else:
+           errLine="ERROR: INDIVIDUAL: US22: Individual ID %s is not unique *** individuals index %d"
+           print(errLine % (ind.id, count))
+           errLog.append("ERROR: INDIVIDUAL: US22: Individual ID" + ind.id + "is not unique *** Individual index " + str(count))
+           ind_error.append(True)
+    
+    return [ind_error, fam_error]
 
 ## US23 No more than one individual with the same name and birth date should appear in a GEDCOM file (Christian)
 def check_duplicate_names_birthdays(ind, individuals, count, errLog):
