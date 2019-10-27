@@ -435,7 +435,6 @@ def checkCousinsMarried(fam, count, errLog, families):
         error = True
 
     return error
-
 def getParents(personID, families):
     parents = []
     for f in families:
@@ -444,7 +443,6 @@ def getParents(personID, families):
             return parents
 
     return parents
-
 def areCousins(husbandID, wifeID, families):
     husbandParents = getParents(husbandID, families)
     husbandGrandparents = []
@@ -462,7 +460,6 @@ def areCousins(husbandID, wifeID, families):
                 return True
 
     return False
-
 
 ## US20 Aunts and uncles should not marry their nieces or nephews (Willy D)
 def checkMarriedtoAuntUncle(fam, count, errLog, families):
