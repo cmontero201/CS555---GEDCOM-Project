@@ -200,7 +200,6 @@ class TestAge(unittest.TestCase):
         for fam1 in goodFam:
             x=checkErr.marriage_age(fam1, 0, [], goodInd)
             self.assertFalse(x)
-
     def testMarriageAge_Fail(self):
         res=[]
         for fam2 in badFam:
@@ -213,7 +212,6 @@ class TestAge(unittest.TestCase):
         for fam1 in goodFam:
             x = checkErr.siblingspaces(fam1, 0, [], goodInd)
             self.assertFalse(x)
-
     def testSiblingSpaces_Fail(self):
         res = []
         for fam2 in badFam:
@@ -359,7 +357,6 @@ class TestAge(unittest.TestCase):
         for fam1 in goodFam:
             x=checkErr.gender_role_check(fam1, 0, [], goodInd)
             self.assertFalse(x)
-
     def test_gender_role_Fail(self):
         res=[]
         for fam2 in badFam:
@@ -400,7 +397,6 @@ class TestAge(unittest.TestCase):
     def testMulti_family_parent_Pass(self):
         for fam1 in goodFam:
             x = checkErr.check_multi_family_parent(fam1, 0, [], goodFam)
-            print(x)
             self.assertFalse(x)
     def testMulti_family_parent_Fail(self):
         res = []

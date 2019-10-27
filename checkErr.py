@@ -337,6 +337,7 @@ def siblingspaces(fam, count, errLog, individuals):
     children = fam.children
     sib_birthdays = []
     i = 0
+
     if len(children) > 1:
         for child in children:
             for ind in individuals:
@@ -345,7 +346,7 @@ def siblingspaces(fam, count, errLog, individuals):
         count1 = len(sib_birthdays)
         while i < count1 - 1:
             diff = rdelta.relativedelta(sib_birthdays[i + 1], sib_birthdays[i])
-            if diff.days > 2 and diff.years < 1 and (diff.days < 243 or diff.months < 8):
+            if diff.days > 2  or diff.months < 8:
                 errLine = "ERROR: FAMILY: US13: %s and %s have 2 children with birthdates less than 2 days apart (twins) birth or are more than more than 8 months apart of %s and %s *** families index %d"
                 print(errLine % (fam.husbandName, fam.wifeName, sib_birthdays[i + 1], sib_birthdays[i], count))
                 errLog.append(
@@ -355,6 +356,7 @@ def siblingspaces(fam, count, errLog, individuals):
                 error = True
             i += 1
         return error
+    return error
 
 ## US14 Checks Less Than or Equal to 5 Siblings with Same Birth Date (Christian)
 def checkMultipleBirths(fam, count, errLog, individuals):
@@ -598,4 +600,6 @@ def check_multi_family_parent(fam, count, errLog, families):
                 errLog.append("ERROR: FAMILY: US24: " + husband + " (" + husbandID + ") is also in family " + str(f.id) + " with the same marriage date (" + str(date) + " *** individuals index " + str(count))
                 error = True
                 return error
+
+    return error
 
