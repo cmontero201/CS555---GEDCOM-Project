@@ -423,27 +423,26 @@ def male_last_name(fam, count, errLog, individuals):
 ## US17 Parents should not marry any of their children (Tanmay)
 def checkNoMarrChild(fam, count, errLog, families):
     error = False
-    if married(fam.husband, fam.wife, families):
+    if fam.husband in fam.children:
+        errLine = "ERROR: FAMILY: US17: %s (%s) and %s (%s) are married but have a parent-child relation *** families index %d"
+        print(errLine % (fam.husbandName, fam.husband, fam.wifeName, fam.wife, count))
+        errLog.append(errLine)
+        error = True
+    elif fam.wife in fam.children:
         errLine = "ERROR: FAMILY: US17: %s (%s) and %s (%s) are married but have a parent-child relation *** families index %d"
         print(errLine % (fam.husbandName, fam.husband, fam.wifeName, fam.wife, count))
         errLog.append(errLine)
         error = True
     return error
-def parents(personID, families):
-    parents = []
-    for family in families:
-        if personID in family.children:
-            parents = [family.husband, family.wife]
-            return parents
-    return parents
-# def married(husbID, wifeID, families):
-#     husband = (husbID, families)
-#     wife = (wifeID, families)
-#     for comm1 in husband:
-#         for comm2 in wife:
-#             if comm1 == comm2:
-#                 return True
-#     return False
+
+def married(husbID, wifeID, families):
+     husband = (husbID, families)
+     wife = (wifeID, families)
+     for comm1 in husband:
+         for comm2 in wife:
+             if comm1 == comm2:
+                 return True
+     return False
 
 
 ## US18 Siblings should not marry one another (Tanmay)
