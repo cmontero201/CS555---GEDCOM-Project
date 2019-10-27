@@ -637,7 +637,7 @@ def check_multi_family_parent(fam, count, errLog, families):
                 return error
 
     return error
-=======
+
 # US17 Parents should not marry any of their children
 
 # US18 Siblings should not marry one another
