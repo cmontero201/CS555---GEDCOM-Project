@@ -254,6 +254,19 @@ class TestAge(unittest.TestCase):
             x=checkErr.male_last_name(fam2, 0, [], badInd)
             res.append(x)
         self.assertIn(True, res)
+
+    ## US17 Check No Marriage to child
+    def testNoMarrChild_Pass(self):
+        for fam1 in goodFam:
+            x=checkErr.checkNoMarrChild(fam1, 0, [], goodFam)
+            self.assertFalse(x)
+    def testNoMarrChild_Fail(self):
+        res=[]
+        for fam2 in badFam:
+            x=checkErr.checkNoMarrChild(fam2, 0, [], badFam)
+            res.append(x)
+        self.assertIn(True, res)
+
          
     ## US18 No Siblings marriage
     def testNoSiblingsMarry_Pass(self):
