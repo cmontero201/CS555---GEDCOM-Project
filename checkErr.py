@@ -409,8 +409,10 @@ def male_last_name(fam, count, errLog, individuals):
 def checkCousinsMarried(fam, count, errLog, families):
     error = False
     if areCousins(fam.husband, fam.wife, families):
+        errLine = "ERROR: FAMILY: US19: %s and %s are cousins and married *** families index %d"
+        print(errLine % (fam.husbandName, fam.wifeName, count))
         errLog.append(
-            "ERROR: FAMILY: US19: " + str(fam.husbandName) + " and " + str(fam.wifeName) + ' are cousins ' + " *** families index " + str(count))
+            "ERROR: FAMILY: US19: " + str(fam.husbandName) + " and " + str(fam.wifeName) + " are cousins and married *** families index " + str(count))
         error = True
 
     return error
@@ -447,21 +449,27 @@ def areCousins(husbandID, wifeID, families):
 def checkMarriedtoAuntUncle(fam, count, errLog, families):
     error = False
     if isAuntOrUncle(fam.husband, fam.wife, families):
+        errLine = "ERROR: FAMILY: US20: %s is married to his aunt %s *** families index %d"
+        print(errLine % (fam.husbandName, fam.wifeName, count))
         errLog.append(
-            "ERROR: FAMILY: US20: " + str(fam.husbandName) + " is married to his aunt  " + str(fam.wifeName) + "*** families index " + str(count))
+            "ERROR: FAMILY: US20: " + str(fam.husbandName) + " is married to his aunt " + str(fam.wifeName) + "*** families index " + str(count))
         error = True
     elif isAuntOrUncle(fam.wife, fam.husband, families):
+        errLine = "ERROR: FAMILY: US20: %s is married to her uncle %s *** families index %d"
+        print(errLine % (fam.wifeName, fam.husbandName, count))
         errLog.append(
-            "ERROR: FAMILY: US20: " + str(fam.wifeName) + " is married to her uncle  " + str(fam.wifeName) + "*** families index " + str(count))
+            "ERROR: FAMILY: US20: " + str(fam.wifeName) + " is married to her uncle  " + str(fam.husbandName) + "*** families index " + str(count))
         error = True
 
     return error
 
 def isAuntOrUncle(person1ID, person2ID, families):
     person1Parents = getParents(person1ID, families)
+    print(person1ID, person1Parents)
     person1Grandparents = []
     if person1Parents != []:
         person1Grandparents = getParents(person1Parents[0], families) + getParents(person1Parents[1], families)
+    print(person1ID, person1Parents[0], getParents(person1Parents[0], families), getParents(person1Parents[1], families))
 
     person2Parents = getParents(person2ID, families)
 
