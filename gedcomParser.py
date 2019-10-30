@@ -59,7 +59,7 @@ class Family():
 
 def getIndividual(personID, individuals):
     for i in individuals:
-        if personID is i.id:
+        if personID == i.id:
             return i
     return False
 
@@ -228,12 +228,6 @@ def isOrphan(person, individuals, families):
         else:
             return False
 
-    return False
-
-def getIndividual(personID, individuals):
-    for i in individuals:
-        if personID == i.id:
-            return i
     return False
 
 ## Populates then Prints Indivduals & Families Tables
