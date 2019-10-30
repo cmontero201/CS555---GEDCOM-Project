@@ -57,6 +57,12 @@ class Family():
         yield self.wifeName
         yield self.children
 
+def getIndividual(personID, individuals):
+    for i in individuals:
+        if personID is i.id:
+            return i
+    return False
+
 ## Parse gedcom File - Returns two arrays: Indivduals & Families
 def parseFile(data):
     ## Contains Valid Tag and Level Tokens
@@ -201,6 +207,34 @@ def parseFile(data):
             currFam = Family()
 
     return [individuals, families]
+
+## US 33 - Print orphans
+def printOrphans(individuals, families):
+    orphanTable = PrettyTable()
+    orphanTable.field_names = ["ID", "Name", "Age"]
+    for i in individuals:
+        if isOrphan(i, individuals, families):
+            orphanTable.add_row([i.id, i.name, i.age])
+
+    print("Orphans\n", orphanTable, "\n\n")
+
+def isOrphan(person, individuals, families):
+    if person.age < 18:
+        parents = checkErr.getParents(person.id, families)
+        if len(parents) > 0:
+            parent1, parent2 = parents[0], parents[1]
+            if (getIndividual(parent1, individuals).death != "NA") and (getIndividual(parent2, individuals).death != "NA"):
+                return True
+        else:
+            return False
+
+    return False
+
+def getIndividual(personID, individuals):
+    for i in individuals:
+        if personID == i.id:
+            return i
+    return False
 
 ## Populates then Prints Indivduals & Families Tables
 def createTables(individuals, families):
@@ -406,6 +440,12 @@ def run():
 
         individuals, families = parseFile(data)
         ind_table, fam_table = createTables(individuals, families)
+
+        try:
+            printOrphans(individuals, families)
+        except:
+            print("printOrphans failed")
+
         log = checkErrors(individuals, families)
 
         f = open('Test_Results.txt', 'w')
