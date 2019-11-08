@@ -208,16 +208,6 @@ def parseFile(data):
 
     return [individuals, families]
 
-## US 33 - Print orphans
-def printOrphans(individuals, families):
-    orphanTable = PrettyTable()
-    orphanTable.field_names = ["ID", "Name", "Age"]
-    for i in individuals:
-        if isOrphan(i, individuals, families):
-            orphanTable.add_row([i.id, i.name, i.age])
-
-    print("Orphans\n", orphanTable, "\n\n")
-
 def isOrphan(person, individuals, families):
     if person.age < 18:
         parents = checkErr.getParents(person.id, families)
@@ -234,8 +224,10 @@ def isOrphan(person, individuals, families):
 def createTables(individuals, families):
     indTable = PrettyTable()
     famTable = PrettyTable()
+    orphanTable = PrettyTable()
     indTable.field_names = ["ID", "NAME", "GENDER", "BIRTHDAY", "AGE", "ALIVE", "DEATH", "CHILD", "SPOUSE"]
     famTable.field_names = ["ID", "MARRIED", "DIVORCED", "HUSBAND ID", "HUSBAND NAME", "WIFE ID", "WIFE NAME", "CHILDREN"]
+    orphanTable.field_names = ["ID", "NAME", "AGE"]
 
     indHold = []
     famHold = []
@@ -268,7 +260,14 @@ def createTables(individuals, families):
         famTable.add_row(eachh)
     print("Families\n", famTable, "\n\n")
 
-    return (indTable, famTable)
+    ## Orphan Table 
+    ## US 33 - Print orphans
+    for i in individuals:
+        if isOrphan(i, individuals, families):
+            orphanTable.add_row([i.id, i.name, i.age])
+    print("Orphans\n", orphanTable, "\n\n")
+
+    return (indTable, famTable, orphanTable)
 
 ## Check Errors - Acceptance Tests
 def checkErrors(individuals, families):
@@ -418,6 +417,12 @@ def checkErrors(individuals, families):
             checkErr.check_multi_family_parent(fam, count, errLog, families)
         except:
             print("check_multi_family_parent failed")
+        
+        ## US25 - Check Unique Names & DOB in Families
+        try:
+            checkErr.check_unique_family_names_dob(fam, count, errLog, individuals)
+        except:
+            print("check_unique_family_names_dob failed")
 
     return errLog
 
@@ -433,12 +438,7 @@ def run():
         data = open("fail.ged", 'r')
 
         individuals, families = parseFile(data)
-        ind_table, fam_table = createTables(individuals, families)
-
-        try:
-            printOrphans(individuals, families)
-        except:
-            print("printOrphans failed")
+        ind_table, fam_table, orph_table = createTables(individuals, families)
 
         log = checkErrors(individuals, families)
 
@@ -447,10 +447,13 @@ def run():
         f.write("\n\n")
         f.write(fam_table.get_string())
         f.write("\n\n")
+        f.write(orph_table.get_string())
+        f.write("\n\n")
         for each in log:
             f.write('%s\n' % each)
         f.close()
         
+
     except:
         print('Unable to open the file...')
         exit()

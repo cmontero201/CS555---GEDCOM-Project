@@ -429,6 +429,20 @@ class TestAge(unittest.TestCase):
             x = checkErr.check_multi_family_parent(fam2, 0, [], badFam)
             res.append(x)
         self.assertIn(True, res)
+    
+    ## US35 - Unique Child Names & Birthdays Within Family
+    def testUnique_family_names_dob_Pass(self):
+        for fam1 in goodFam:
+            x = checkErr.check_unique_family_names_dob(fam1, 0, [], goodInd)
+            self.assertFalse(x)
+    def testUnique_family_names_dob_Fail(self):
+        res = []
+        for fam2 in badFam:
+            x = checkErr.check_unique_family_names_dob(fam2, 0, [], badInd)
+            res.append(x)
+        self.assertIn(True, res)
+
+
 
 
 ## Run Unit Tests

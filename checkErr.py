@@ -631,24 +631,32 @@ def check_multi_family_parent(fam, count, errLog, families):
             if refHus > 1:
                 errLine = "ERROR: FAMILY: US24: %s (%s) is also in family %s with the same marriage date (%s) *** families index %d"
                 print(errLine % (husband, husbandID, f.id, date, count))
-                errLog.append("ERROR: FAMILY: US24: " + husband + " (" + husbandID + ") is also in family " + str(f.id) + " with the same marriage date (" + str(date) + " *** individuals index " + str(count))
+                errLog.append("ERROR: FAMILY: US24: " + husband + " (" + husbandID + ") is also in family " + str(f.id) + " with the same marriage date (" + str(date) + ") *** individuals index " + str(count))
                 error = True
                 return error
 
     return error
 
-# US17 Parents should not marry any of their children
+# US25 - Unique First Names & DOB in Families
+def check_unique_family_names_dob(fam, count, errLog, individuals):
+    error = False
+    children = fam.children
+    names = {}
+        
+    for child in children:
+        if child == 'NA':
+            continue
+        else:
+            for ind in individuals:
+                if (child == ind.id) and (ind.name not in names):
+                    names[ind.name] = str(ind.birthday)
+                elif (child == ind.id) and (ind.name in names) and (names[ind.name] == str(ind.birthday)):
+                    errLine = "ERROR: FAMILY: US25: %s (%s) has one or more siblings with the same name and birthdate (%s) *** families index %d"
+                    print(errLine % (ind.name, ind.id, ind.birthday, count))
+                    errLog.append("ERROR: FAMILY: US25: " + ind.name + " (" + ind.id + ") has one or more siblings with the same name and birthdate (" + str(ind.birthday) + ") *** families index " + str(count))
+                    error = True
+                    return error
+                    
+                
+        
 
-# US18 Siblings should not marry one another
-
-# US19 First cousins should not marry one another
-
-# US20 Aunts and uncles should not marry their nieces or nephews
-
-# US21 Husband in family should be male and wife in family should be female
-
-# US22 All individual IDs should be unique and all family IDs should be unique
-
-# US23 No more than one individual with the same name and birth date should appear in a GEDCOM file
-
-# US24 No more than one family with the same spouses by name and the same marriage date should appear in a GEDCOM file
