@@ -208,6 +208,7 @@ def parseFile(data):
 
     return [individuals, families]
 
+## Finds Children with Deceased Parents
 def isOrphan(person, individuals, families):
     if person.age < 18:
         parents = checkErr.getParents(person.id, families)
@@ -220,14 +221,33 @@ def isOrphan(person, individuals, families):
 
     return False
 
+## Finds Individuals with Birthdays in the next 30 Days
+def getUpcomingBirthdays(individuals):
+    curr_date = date.today()
+    month_window = curr_date + datetime.timedelta(days=30)
+    upcoming = []
+
+    for ind in individuals:
+        birthday = ind.birthday
+        comp = datetime.date(curr_date.year, birthday.month, birthday.day)
+        delta = (comp - curr_date).days
+
+        if (delta > 0) and (delta <= 30) and (ind.alive == "True"):
+            upcoming.append(ind)
+    
+    return upcoming
+        
+
 ## Populates then Prints Indivduals & Families Tables
 def createTables(individuals, families):
     indTable = PrettyTable()
     famTable = PrettyTable()
     orphanTable = PrettyTable()
+    birthdayTable = PrettyTable()
     indTable.field_names = ["ID", "NAME", "GENDER", "BIRTHDAY", "AGE", "ALIVE", "DEATH", "CHILD", "SPOUSE"]
     famTable.field_names = ["ID", "MARRIED", "DIVORCED", "HUSBAND ID", "HUSBAND NAME", "WIFE ID", "WIFE NAME", "CHILDREN"]
     orphanTable.field_names = ["ID", "NAME", "AGE"]
+    birthdayTable.field_names = ["ID", "NAME", "BIRTHDAY", "AGE"]
 
     indHold = []
     famHold = []
@@ -238,12 +258,9 @@ def createTables(individuals, families):
         for each in i[1]:
             indHolder.append(each)
         indHold.append(indHolder)
-
-
     ## Populate Individuals Table
     for each in indHold:
         indTable.add_row(each)
-
     print("Individuals\n", indTable, "\n\n")
 
     ## Families Table - Place all info into Nested Array
@@ -254,7 +271,6 @@ def createTables(individuals, families):
                 eachFam = "NA"
             famHolder.append(eachFam)
         famHold.append(famHolder)
-    
     ## Populate Families Table
     for eachh in famHold:
         famTable.add_row(eachh)
@@ -267,7 +283,14 @@ def createTables(individuals, families):
             orphanTable.add_row([i.id, i.name, i.age])
     print("Orphans\n", orphanTable, "\n\n")
 
-    return (indTable, famTable, orphanTable)
+    ## US 38 - Upcoming Birthdays Table
+    bdays = getUpcomingBirthdays(individuals)
+    for i in bdays:
+        birthdayTable.add_row([i.id, i.name, i.birthday, i.age])
+    print("\U0001F382  Upcoming Birthdays \U0001F382\n", birthdayTable, "\n\n")
+
+
+    return (indTable, famTable, orphanTable, birthdayTable)
 
 ## Check Errors - Acceptance Tests
 def checkErrors(individuals, families):
@@ -438,22 +461,25 @@ def run():
         data = open("fail.ged", 'r')
 
         individuals, families = parseFile(data)
-        ind_table, fam_table, orph_table = createTables(individuals, families)
+        ind_table, fam_table, orph_table, birthday_table = createTables(individuals, families)
 
         log = checkErrors(individuals, families)
 
         f = open('Test_Results.txt', 'w')
+        f.write("Individuals\n")
         f.write(ind_table.get_string())
-        f.write("\n\n")
+        f.write("\n\nFamilies\n")
         f.write(fam_table.get_string())
-        f.write("\n\n")
+        f.write("\n\n\U0001F382 Upcoming Birthdays \U0001F382\n")
+        f.write(birthday_table.get_string())
+        f.write("\n\n Children with Deceased Parents\n")
         f.write(orph_table.get_string())
         f.write("\n\n")
         for each in log:
             f.write('%s\n' % each)
         f.close()
-        
 
+        return (individuals, families, log)
     except:
         print('Unable to open the file...')
         exit()

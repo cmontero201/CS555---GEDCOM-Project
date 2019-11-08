@@ -443,11 +443,8 @@ class TestAge(unittest.TestCase):
         self.assertIn(True, res)
 
 
-
-
 ## Run Unit Tests
 if __name__ == '__main__':
-
     suite = unittest.TestLoader().loadTestsFromTestCase(TestAge)
     unittest.TextTestRunner(verbosity = 2).run(suite)
     
