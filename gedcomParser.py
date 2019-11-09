@@ -57,7 +57,7 @@ class Family():
         yield self.wifeName
         yield self.children
 
-def getIndividual(personID, individuals):
+def getIndividual(personID: object, individuals: object) -> object:
     for i in individuals:
         if personID == i.id:
             return i
@@ -206,9 +206,25 @@ def parseFile(data):
             families.append(currFam)
             currFam = Family()
 
+    #for f in families:
+    #    f.children = sortByAge(f.children, individuals)
+   #    print(sortByAge(f.children, individuals))
+
     return [individuals, families]
 
-## Finds Children with Deceased Parents
+## US28 Sorts a list of IDs by age
+def sortByAge(indList, individuals):
+    children = {}
+    for i in indList:
+        child = getIndividual(i, individuals)
+        if child.age is not None:
+            children[i] = child.age
+        else:
+            children[i] = -1
+
+    return sorted(children.keys(), key =lambda kv:(kv[1], kv[0]))
+
+## US33 Finds Children with Deceased Parents
 def isOrphan(person, individuals, families):
     if person.age < 18:
         parents = checkErr.getParents(person.id, families)
