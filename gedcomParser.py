@@ -243,7 +243,15 @@ def livingInd(individuals, families):
 
             if (ind_id != husband) and (ind_id != wife) and (ind.age >= 30) and (ind.alive == "True"):
                 people.append(ind)
-                
+            else:
+                continue
+    
+    x = people
+    people = []
+
+    for each in x:
+        if each not in people:
+            people.append(each)
     return people
 
 ## US33 Finds Children under 18 with Deceased Parents
@@ -347,7 +355,7 @@ def createTables(individuals, families):
                     [fam.id, fam.husbandName, fam.wifeName, fam.married, husband_alive, wife_alive])
     print("Married and Living \n", married_livingTable, "\n\n")
 
-    ## US31 - Print living individuals
+    ## US31 - Print living individuals over 30 and unmarried
     living_individuals = livingInd(individuals, families)
     for i in living_individuals:
         livingindTable.add_row([i.id, i.name, i.gender, i.age])
@@ -359,7 +367,7 @@ def createTables(individuals, families):
         birthdayTable.add_row([i.id, i.name, i.birthday, i.age])
     print("\U0001F382  Upcoming Birthdays \U0001F382\n", birthdayTable, "\n\n")
 
-    return (indTable, famTable, orphanTable, birthdayTable, married_livingTable, deceasedTable)
+    return (indTable, famTable, orphanTable, birthdayTable, married_livingTable, deceasedTable, livingindTable)
 
 
 
@@ -533,7 +541,7 @@ def run():
 
         individuals, families = parseFile(data)
 
-        ind_table, fam_table, orph_table, birthday_table, married_livingTable, deceasedTable = createTables(individuals, families)
+        ind_table, fam_table, orph_table, birthday_table, married_livingTable, deceasedTable, living_ind_table = createTables(individuals, families)
 
         log = checkErrors(individuals, families)
 
@@ -546,12 +554,12 @@ def run():
         f.write(birthday_table.get_string())
         f.write("\n\nMarried and Living\n")
         f.write(married_livingTable.get_string())
+        f.write("\n\n Living Individuals over 30 & unmarried \n")
+        f.write(living_ind_table.get_string())
         f.write("\n\nDeceased Individuals\n")
         f.write(deceasedTable.get_string())
         f.write("\n\nChildren with Deceased Parents\n")
         f.write(orph_table.get_string())
-        f.write("\n\n Living Individuals over 30 & unmarried \n")
-        f.write(living_ind_table.get_string())
         f.write("\n\n************************************************* \n\t\t\t\tERROR LOG\n*************************************************\n")
         for each in log:
             f.write('%s\n' % each)

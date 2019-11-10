@@ -76,6 +76,19 @@ Married and Living
 |  F11   | Fifteen /Tnox/ |   Sixteen /Knox/  |  2019-08-24  |      True     |    True    |
 +--------+----------------+-------------------+--------------+---------------+------------+
 
+ Living Individuals over 30 & unmarried 
++-----+-------------------+--------+-----+
+|  ID |        NAME       | GENDER | AGE |
++-----+-------------------+--------+-----+
+|  I1 |    Sam /Baker/    |   M    |  71 |
+|  I2 |   Jason /Baker/   |   M    |  55 |
+|  I3 | Janice /McCarthy/ |   F    |  56 |
+|  I5 |   Erin /Carter/   |   F    | 205 |
+|  I9 |   Carry /Brown/   |   F    |  36 |
+| I13 |    Billy /Knox/   |   M    |  30 |
+| I33 |    Linda /Knox/   |   F    |  46 |
++-----+-------------------+--------+-----+
+
 Deceased Individuals
 +-----+----------------------+-----+------------+
 |  ID |         NAME         | AGE | DEATH DATE |
@@ -93,4 +106,67 @@ Children with Deceased Parents
 | I32 | Bianca /Baker/ |  16 |
 +-----+----------------+-----+
 
- Living Individuals over 30 & unmarried 
+************************************************* 
+				ERROR LOG
+*************************************************
+ERROR: FAMILY: US22: Family IDF6is not unique *** families index 7
+ERROR: INDIVIDUAL: US22: Individual IDI6is not unique *** Individual index 7
+ERROR: INDIVIDUAL: US07: Age of Erin /Carter/(I5) is greater than or equal to 150 years *** individuals index 5
+ERROR: INDIVIDUAL: US07: Age of Bill /Baker/(I6) is greater than or equal to 150 years *** individuals index 6
+ERROR: INDIVIDUAL: US03: Jeremy /Costa/(I8) death (1930-07-06is prior to their birth (2001-09-03) *** individuals index 8
+ERROR: FAMILY: US23: There are more than one individuals with name Two /Knox/ and birthdate 2002-07-06 *** individuals index 14
+ERROR: FAMILY: US23: There are more than one individuals with name Two /Knox/ and birthdate 2002-07-06 *** individuals index 15
+ERROR: FAMILY: US23: There are more than one individuals with name Sixteen /Knox/ and birthdate 2009-08-09 *** individuals index 30
+ERROR: FAMILY: US23: There are more than one individuals with name Sixteen /Knox/ and birthdate 2009-08-09 *** individuals index 31
+ERROR: FAMILY: US06: Divorce Date (2002-08-08) of Bill /Baker/ (I6) was greater than or equal to date of death (1998-09-05) *** families index 1
+ERROR: FAMILY: US11: Carry /Brown/(I9) re-marriage (2001-05-06) is before her divorce date (2002-08-08) *** families index 1
+ERROR: FAMILY: US08: Fourteen /Knox/(I28) birthday (1997-11-09) is after their parents marriage date (2001-05-06) *** families index 2
+ERROR: FAMILY: US13: Billy /Knox/ and Carry /Brown/ have 2 children with birthdates less than 2 days apart (twins) birth date of2002-07-06(1997-11-09 children) *** families index 2
+ERROR: FAMILY: US13: Billy /Knox/ and Carry /Brown/ have 2 children with birthdates less than 2 days apart (twins) birth date of2002-07-06(2002-07-06 children) *** families index 2
+ERROR: FAMILY: US13: Billy /Knox/ and Carry /Brown/ have 2 children with birthdates less than 2 days apart (twins) birth date of2002-07-06(2002-07-06 children) *** families index 2
+ERROR: FAMILY: US13: Billy /Knox/ and Carry /Brown/ have 2 children with birthdates less than 2 days apart (twins) birth date of2002-07-06(2002-07-06 children) *** families index 2
+ERROR: FAMILY: US13: Billy /Knox/ and Carry /Brown/ have 2 children with birthdates less than 2 days apart (twins) birth date of2002-07-06(2002-07-06 children) *** families index 2
+ERROR: FAMILY: US13: Billy /Knox/ and Carry /Brown/ have 2 children with birthdates less than 2 days apart (twins) birth date of2002-07-06(2002-07-06 children) *** families index 2
+ERROR: FAMILY: US13: Billy /Knox/ and Carry /Brown/ have 2 children with birthdates less than 2 days apart (twins) birth date of2003-07-06(2002-07-06 children) *** families index 2
+ERROR: FAMILY: US13: Billy /Knox/ and Carry /Brown/ have 2 children with birthdates less than 2 days apart (twins) birth date of2003-10-09(2003-07-06 children) *** families index 2
+ERROR: FAMILY: US13: Billy /Knox/ and Carry /Brown/ have 2 children with birthdates less than 2 days apart (twins) birth date of2003-09-09(2003-10-09 children) *** families index 2
+ERROR: FAMILY: US13: Billy /Knox/ and Carry /Brown/ have 2 children with birthdates less than 2 days apart (twins) birth date of2004-08-05(2003-09-09 children) *** families index 2
+ERROR: FAMILY: US13: Billy /Knox/ and Carry /Brown/ have 2 children with birthdates less than 2 days apart (twins) birth date of2004-10-08(2004-08-05 children) *** families index 2
+ERROR: FAMILY: US13: Billy /Knox/ and Carry /Brown/ have 2 children with birthdates less than 2 days apart (twins) birth date of2006-09-12(2005-09-10 children) *** families index 2
+ERROR: FAMILY: US13: Billy /Knox/ and Carry /Brown/ have 2 children with birthdates less than 2 days apart (twins) birth date of2006-11-12(2006-09-12 children) *** families index 2
+ERROR: FAMILY: US13: Billy /Knox/ and Carry /Brown/ have 2 children with birthdates less than 2 days apart (twins) birth date of2007-09-09(2006-11-12 children) *** families index 2
+ERROR: FAMILY: US14: Billy /Knox/ and Carry /Brown/ have more than 5 children with the same birth date of 2002-07-06(6 children) *** families index 2
+ERROR: FAMILY: US15: Billy /Knox/ and Carry /Brown/ have more than 15 children (17 children) *** families index 2
+ERROR: FAMILY: US16: Billy /Knox/ and Carry /Brown/have 1 Male in their family with different last names Fifteen /Tnox/and F *** families index 2
+ERROR: FAMILY: US25: Two /Knox/ (I15) has one or more siblings with the same name and birthdate (2002-07-06) *** families index 2
+ERROR: FAMILY: US02: Jason /Baker/(I2) birthday (1963-11-12) is after his marriage date (1950-05-06) *** families index 3
+ERROR: FAMILY: US08: Sam /Baker/(I1) birthday (1948-05-05) is after their parents marriage date (1950-05-06) *** families index 3
+ERROR: FAMILY: US13: Jason /Baker/ and Janice /McCarthy/ have 2 children with birthdates less than 2 days apart (twins) birth date of1993-08-04(1948-05-05 children) *** families index 3
+ERROR: FAMILY: US01: Divorce Date (2030-04-06 ) ofFuture /Baker/ (I6) is after the current date *** families index 4
+ERROR: FAMILY: US05: Marriage Date (2000-05-07) of Bill /Baker/ (I6) was greater than or equal to date of death (1998-09-05) *** families index 4
+ERROR: FAMILY: US06: Divorce Date (2030-04-06) of Bill /Baker/ (I6) was greater than or equal to date of death (1998-09-05) *** families index 4
+ERROR: FAMILY: US08: Jason /Baker/(I2) birthday (1963-11-12) is after their parents marriage date (2000-05-07) *** families index 4
+ERROR: FAMILY: US09: Manny /Baker/(I10) birthday (2002-06-06) is before their father's death date (1998-09-05) *** families index 4
+ERROR: FAMILY: US12: Future /Baker/ and Erin /Carter/Mother was birth date 1814-11-06and child birth date1963-11-12 has differenceNonemore than 60 year difference *** families index4
+ERROR: FAMILY: US12: Future /Baker/ and Erin /Carter/Mother was birth date 1814-11-06and child birth date2002-06-06 has differenceNonemore than 60 year difference *** families index4
+ERROR: FAMILY: US13: Future /Baker/ and Erin /Carter/ have 2 children with birthdates less than 2 days apart (twins) birth date of2002-06-06(1963-11-12 children) *** families index 4
+ERROR: FAMILY: US02: Jeremy /Costa/(I8) birthday (2001-09-03) is after his marriage date (1997-09-05) *** families index 5
+ERROR: FAMILY: US04: Divorce Date (1996-02-09) of Jeremy /Costa/ (I8) was before his date of marriage (1997-09-05) *** families index5)
+ERROR: FAMILY: US05: Marriage Date (1997-09-05) of Jeremy /Costa/ (I8) was greater than or equal to date of death (1930-07-06) *** families index 5
+ERROR: FAMILY: US06: Divorce Date (1996-02-09) of Jeremy /Costa/ (I8) was greater than or equal to date of death (1930-07-06) *** families index 5
+ERROR: FAMILY: US10: Jeremy /Costa/ (I8) is married on (1997-09-05) and his age (-71) is less than 14 years *** families index 5
+ERROR: FAMILY: US02: Manny /Baker/(I10) birthday (2002-06-06) is after his marriage date (1996-09-23) *** families index 6
+ERROR: FAMILY: US24: Manny /Baker/ (I10) is also in family F6 with the same marriage date (1996-09-23) *** individuals index 6
+ERROR: FAMILY: US02: Manny /Baker/(I10) birthday (2002-06-06) is after his marriage date (1996-09-23) *** families index 7
+ERROR: FAMILY: US10: Lisa /Carr/ (I12) is married on (1996-09-23) and his age (10) is less than 14 years *** families index 7
+ERROR: FAMILY: US24: Manny /Baker/ (I10) is also in family F6 with the same marriage date (1996-09-23) *** individuals index 7
+ERROR: FAMILY: US02: Two /Knox/(I14) birthday (2002-07-06) is after his marriage date (1995-03-03) *** families index 9
+ERROR: FAMILY: US08: Fourteen /Knox/(I28) birthday (1997-11-09) is after their parents marriage date (2019-08-08) *** families index 10
+ERROR: FAMILY: US17: Stevey /Knox/ (I34) and Fourteen /Knox/ (I28) are married but have a parent-child relation *** families index 10
+ERROR: FAMILY: US20: Stevey /Knox/ is married to his aunt Fourteen /Knox/*** families index 10
+ERROR: FAMILY: US21: Fourteen /Knox/ is wife marked Male Mas an individual*** families index 10
+ERROR: FAMILY: US08: Sixteen /Knox/(I30) birthday (2009-08-09) is after their parents marriage date (2019-08-24) *** families index 11
+ERROR: FAMILY: US10: Fifteen /Tnox/ (I29) is married on (2019-08-24) and his age (12) is less than 14 years *** families index 11
+ERROR: FAMILY: US10: Sixteen /Knox/ (I30) is married on (2019-08-24) and his age (10) is less than 14 years *** families index 11
+ERROR: FAMILY: US17: Fifteen /Tnox/ (I29) and Sixteen /Knox/ (I30) are married but have a parent-child relation *** families index 11
+ERROR: FAMILY: US18: Fifteen /Tnox/ and Sixteen /Knox/ are siblings and married *** families index 11
