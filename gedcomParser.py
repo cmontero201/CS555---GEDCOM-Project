@@ -233,18 +233,18 @@ def sortByAge(indList, individuals):
 ## US31 List all living people over 30 who have never been married 
 def livingInd(individuals, families):
     people = []
-    for fam in families:
-        husband = fam.husband
-        wife = fam.wife
 
-        for ind in individuals:
-            age = ind.age
-            ID = ind.id
+    for ind in individuals:
+        ind_id = ind.id
 
-            if age > 30 and ind.alive == "True":
+        for fam in families:
+            husband = fam.husband
+            wife = fam.wife
+
+            if (ind_id != husband) and (ind_id != wife) and (ind.age >= 30) and (ind.alive == "True"):
                 people.append(ind)
                 
-        return people
+    return people
 
 ## US33 Finds Children under 18 with Deceased Parents
 def isOrphan(person, individuals, families):
@@ -261,7 +261,7 @@ def isOrphan(person, individuals, families):
 
     return False
 
-## Finds Individuals with Birthdays in the next 30 Days
+## US38 Finds Individuals with Birthdays in the next 30 Days
 def getUpcomingBirthdays(individuals):
     curr_date = date.today()
     month_window = curr_date + datetime.timedelta(days=30)
