@@ -244,7 +244,7 @@ def livingInd(individuals, families):
             married.append(fam.wife)
     
     for ind in individuals:
-        if ind.id not in married:
+        if (ind.id not in married) and (ind.age >= 30):
             people.append(ind)
 
     return people
@@ -345,6 +345,13 @@ def createTables(individuals, families):
         famTable.add_row(eachh)
     print("Families\n", famTable, "\n\n")
 
+
+    ## US 38 - Upcoming Birthdays Table
+    bdays = getUpcomingBirthdays(individuals)
+    for i in bdays:
+        birthdayTable.add_row([i.id, i.name, i.birthday, i.age])
+    print("\U0001F382  Upcoming Birthdays \U0001F382\n", birthdayTable, "\n\n")
+
     # Multiple Births table
     # US 32 - Print multiple births
     for f in families:
@@ -353,20 +360,6 @@ def createTables(individuals, families):
             if len(listBirths[key]) >1:
                 multipleBirthTable.add_row([f.id, key, listBirths[key]])
     print("Multiple Births\n", multipleBirthTable, "\n\n")
-
-    ## Orphan Table 
-    ## US 33 - Print orphans
-    for i in individuals:
-        if isOrphan(i, individuals, families):
-            orphanTable.add_row([i.id, i.name, i.age])
-    print("Orphans\n", orphanTable, "\n\n")
-
-    ## Deceased Table
-    ## US29 - Print Deceased Individuals
-    for i in individuals:
-        if i.alive != 'True':
-            deceasedTable.add_row([i.id, i.name, i.age, i.death])
-    print("Deceased Individuals\n", deceasedTable, "\n\n")
 
     ## US30 Living and Married
     for fam in families:
@@ -383,13 +376,24 @@ def createTables(individuals, families):
         livingindTable.add_row([i.id, i.name, i.gender, i.age])
     print("Living Individuals Over 30 & Unmarried\n", livingindTable, "\n\n")
 
-    ## US 38 - Upcoming Birthdays Table
-    bdays = getUpcomingBirthdays(individuals)
-    for i in bdays:
-        birthdayTable.add_row([i.id, i.name, i.birthday, i.age])
-    print("\U0001F382  Upcoming Birthdays \U0001F382\n", birthdayTable, "\n\n")
 
-    return (indTable, famTable, orphanTable, birthdayTable, married_livingTable, deceasedTable, livingindTable)
+    ## Orphan Table 
+    ## US 33 - Print orphans
+    for i in individuals:
+        if isOrphan(i, individuals, families):
+            orphanTable.add_row([i.id, i.name, i.age])
+    print("Orphans\n", orphanTable, "\n\n")
+
+    ## Deceased Table
+    ## US29 - Print Deceased Individuals
+    for i in individuals:
+        if i.alive != 'True':
+            deceasedTable.add_row([i.id, i.name, i.age, i.death])
+    print("Deceased Individuals\n", deceasedTable, "\n\n")
+
+
+
+    return (indTable, famTable, orphanTable, birthdayTable, multipleBirthTable, married_livingTable, livingindTable, deceasedTable)
 
 
 
@@ -563,7 +567,7 @@ def run():
 
         individuals, families = parseFile(data)
 
-        ind_table, fam_table, orph_table, birthday_table, married_livingTable, deceasedTable, living_ind_table = createTables(individuals, families)
+        ind_table, fam_table, orph_table, birthday_table, multipleBirth_table, married_livingTable, deceasedTable, living_ind_table = createTables(individuals, families)
 
         log = checkErrors(individuals, families)
 
@@ -574,14 +578,16 @@ def run():
         f.write(fam_table.get_string())
         f.write("\n\n\U0001F382 Upcoming Birthdays \U0001F382\n")
         f.write(birthday_table.get_string())
+        f.write("\n\nMultiple Births\n")
+        f.write(multipleBirth_table.get_string())
         f.write("\n\nMarried and Living\n")
         f.write(married_livingTable.get_string())
-        f.write("\n\n Living Individuals over 30 & unmarried \n")
+        f.write("\n\nLiving Individuals over 30 & unmarried \n")
         f.write(living_ind_table.get_string())
+        f.write("\n\nOrphans\n")
+        f.write(orph_table.get_string())
         f.write("\n\nDeceased Individuals\n")
         f.write(deceasedTable.get_string())
-        f.write("\n\nChildren with Deceased Parents\n")
-        f.write(orph_table.get_string())
         f.write("\n\n************************************************* \n\t\t\t\tERROR LOG\n*************************************************\n")
         for each in log:
             f.write('%s\n' % each)
