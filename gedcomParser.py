@@ -230,6 +230,21 @@ def sortByAge(indList, individuals):
 
     return sortedChildren
 
+# US32 Check multiple births
+def getBirthCount(individuals, family):
+    birthcount = {}
+
+    for c in family.children:
+        birthday = getIndividual(c, individuals).birthday
+        #print(birthday)
+        if birthday in birthcount:
+            birthcount[birthday].append(c)
+        else:
+            birthcount[birthday] = [c]
+
+    return birthcount
+
+
 ## US31 List all living people over 30 who have never been married 
 def livingInd(individuals, families):
     people = []
@@ -295,6 +310,7 @@ def createTables(individuals, families):
     deceasedTable = PrettyTable()
     married_livingTable = PrettyTable()
     livingindTable = PrettyTable()
+    multipleBirthTable = PrettyTable()
     indTable.field_names = ["ID", "NAME", "GENDER", "BIRTHDAY", "AGE", "ALIVE", "DEATH", "CHILD", "SPOUSE"]
     famTable.field_names = ["ID", "MARRIED", "DIVORCED", "HUSBAND ID", "HUSBAND NAME", "WIFE ID", "WIFE NAME",
                             "CHILDREN"]
@@ -303,6 +319,7 @@ def createTables(individuals, families):
     deceasedTable.field_names = ["ID","NAME", "AGE", "DEATH DATE"]
     married_livingTable.field_names = ["FAM ID", "HUSBAND NAME", "WIFE NAME","MARIAGE DATE", "ALIVE HUSBAND", "ALIVE WIFE"]
     livingindTable.field_names = ["ID", "NAME", "GENDER", "AGE"]
+    multipleBirthTable.field_names = ["FAM ID", "BIRTHDATE", "CHILDREN"]
 
     indHold = []
     famHold = []
@@ -331,6 +348,14 @@ def createTables(individuals, families):
     for eachh in famHold:
         famTable.add_row(eachh)
     print("Families\n", famTable, "\n\n")
+
+    # Multiple Births table
+    # US 32 - Print multiple births
+    for f in families:
+        print(getBirthCount(individuals, f))
+        for b in getBirthCount(individuals, f):
+            multipleBirthTable.add_row([f.id, b[0], b[1]])
+    print("Multiple Births\n", multipleBirthTable, "\n\n")
 
     ## Orphan Table 
     ## US 33 - Print orphans
