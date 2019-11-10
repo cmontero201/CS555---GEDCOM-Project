@@ -1,7 +1,7 @@
 import unittest
 import datetime
 from datetime import date
-from gedcomParser import parseFile, Individual, Family, sortByAge, isOrphan
+from gedcomParser import parseFile, Individual, Family, sortByAge, isOrphan, getUpcomingBirthdays
 import checkErr
 
 dataGood = open("myFam.ged", 'r')
@@ -520,13 +520,18 @@ class TestAge(unittest.TestCase):
         for fam1 in goodFam:
             x = checkErr.check_unique_family_names_dob(fam1, 0, [], goodInd)
             self.assertFalse(x)
-
     def testUnique_family_names_dob_Fail(self):
         res = []
         for fam2 in badFam:
             x = checkErr.check_unique_family_names_dob(fam2, 0, [], badInd)
             res.append(x)
         self.assertIn(True, res)
+
+    ## US38 - Check Unique Name & Birthday In Family
+    def testUpcoming_birthdays_(self):
+        x = getUpcomingBirthdays(badInd)
+        print(len(x))
+        self.assertEqual(len(x), 2)
 
 
 ## Run Unit Tests
