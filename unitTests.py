@@ -1,7 +1,7 @@
 import unittest
 import datetime
 from datetime import date
-from gedcomParser import parseFile, Individual, Family, sortByAge
+from gedcomParser import parseFile, Individual, Family, sortByAge, isOrphan
 import checkErr
 
 dataGood = open("myFam.ged", 'r')
@@ -478,6 +478,42 @@ class TestAge(unittest.TestCase):
         testFam1.children.insert(0, "C4")
 
         self.assertEqual(sortByAge(testFam1.children, testIndividuals), ["C1", "C2", "C3", "C4"])
+
+    # US33 - List orphans
+    def testIsOrphan(self):
+        testIndividuals = []
+        testFam1 = Family()
+
+        testFam1.id = "F1"
+        testFam1.husband = "H1"
+        testFam1.wife = "W1"
+        testFam1.children = ["C1"]
+
+        h1 = Individual()
+        h1.id = "H1"
+        h1.death = "NA"
+        testIndividuals.append(h1)
+
+        w1 = Individual()
+        w1.id = "W1"
+        w1.death = "NA"
+        testIndividuals.append(w1)
+
+        c1 = Individual()
+        c1.id = "C1"
+        c1.age = 18
+        testIndividuals.append(c1)
+
+        self.assertFalse(isOrphan(c1, testIndividuals, [testFam1]))
+
+        c1.age = 17
+        self.assertFalse(isOrphan(c1, testIndividuals, [testFam1]))
+
+        h1.death = "2019-08-24"
+        self.assertFalse(isOrphan(c1, testIndividuals, [testFam1]))
+
+        w1.death = "2019-08-24"
+        self.assertTrue(isOrphan(c1, testIndividuals, [testFam1]))
 
     ## US35 - Unique Child Names & Birthdays Within Family
     def testUnique_family_names_dob_Pass(self):
