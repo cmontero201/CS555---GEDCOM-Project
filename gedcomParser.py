@@ -231,30 +231,23 @@ def sortByAge(indList, individuals):
     return sortedChildren
 
 
+
 ## US31 List all living people over 30 who have never been married 
 def livingInd(individuals, families):
+    married = []
     people = []
 
-    for ind in individuals:
-        ind_id = ind.id
-
-        for fam in families:
-            husband = fam.husband
-            wife = fam.wife
-
-            if (ind_id != husband) and (ind_id != wife) and (ind.age >= 30) and (ind.alive == "True"):
-                people.append(ind)
-            else:
-                continue
+    for fam in families:
+        if fam.husband not in married:
+            married.append(fam.husband)
+        elif fam.wife not in married:
+            married.append(fam.wife)
     
-    x = people
-    people = []
+    for ind in individuals:
+        if ind.id not in married:
+            people.append(ind)
 
-    for each in x:
-        if each not in people:
-            people.append(each)
     return people
-
 
 # US32 Check multiple births
 def getBirthCount(individuals, family):
