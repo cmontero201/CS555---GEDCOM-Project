@@ -238,13 +238,16 @@ def livingInd(individuals, families):
     people = []
 
     for fam in families:
-        if fam.husband not in married:
-            married.append(fam.husband)
-        elif fam.wife not in married:
-            married.append(fam.wife)
-    
+        if (fam.husbandName not in married) and fam.wifeName not in married:
+            married.append(fam.husbandName)
+            married.append(fam.wifeName)
+        elif (fam.wifeName not in married):
+            married.append(fam.wifeName)
+        elif (fam.husbandName not in married):
+            married.append(fam.husbandName)
+
     for ind in individuals:
-        if (ind.id not in married) and (ind.age >= 30):
+        if (ind.name not in married) and (ind.age >= 30) and(ind.alive == "True"):
             people.append(ind)
 
     return people
