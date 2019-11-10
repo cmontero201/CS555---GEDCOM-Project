@@ -246,6 +246,15 @@ def isOrphan(person, individuals, families):
 
     return False
 
+def check_isalive(husbandName, wifeName, individuals):
+    husbandAlive = None
+    wifeAlive = None
+    for ind in individuals:
+        if husbandName == ind.name and ind.alive == 'True':
+            husbandAlive = True
+        elif wifeName == ind.name and ind.alive == 'True':
+            wifeAlive = True
+    return  husbandAlive, wifeAlive
 
 ## Finds Individuals with Birthdays in the next 30 Days
 def getUpcomingBirthdays(individuals):
@@ -270,11 +279,16 @@ def createTables(individuals, families):
     famTable = PrettyTable()
     orphanTable = PrettyTable()
     birthdayTable = PrettyTable()
+    deceasedTable = PrettyTable()
+    married_livingTable = PrettyTable()
     indTable.field_names = ["ID", "NAME", "GENDER", "BIRTHDAY", "AGE", "ALIVE", "DEATH", "CHILD", "SPOUSE"]
     famTable.field_names = ["ID", "MARRIED", "DIVORCED", "HUSBAND ID", "HUSBAND NAME", "WIFE ID", "WIFE NAME",
                             "CHILDREN"]
     orphanTable.field_names = ["ID", "NAME", "AGE"]
     birthdayTable.field_names = ["ID", "NAME", "BIRTHDAY", "AGE"]
+    deceasedTable.field_names = ["ID","NAME", "AGE", "DEATH DATE"]
+    married_livingTable.field_names = ["FAM ID", "HUSBAND NAME", "WIFE NAME","MARIAGE DATE", "ALIVE HUSBAND", "ALIVE WIFE"]
+
 
     indHold = []
     famHold = []
@@ -311,6 +325,23 @@ def createTables(individuals, families):
             orphanTable.add_row([i.id, i.name, i.age])
     print("Orphans\n", orphanTable, "\n\n")
 
+    ## Deceased Table
+    ## US 29 - Print Deceased Individuals
+    for i in individuals:
+        if i.alive != 'True':
+            deceasedTable.add_row([i.id, i.name, i.age, i.death])
+    print("Deceased Individuals\n", deceasedTable, "\n\n")
+
+    ## US 30 Living and Married
+    for fam in families:
+        if fam.married is not None:
+            husband_alive, wife_alive= check_isalive(fam.husbandName, fam.wifeName, individuals)
+            if husband_alive == True and wife_alive == True:
+                married_livingTable.add_row(
+                    [fam.id, fam.husbandName, fam.wifeName, fam.married, husband_alive, wife_alive])
+    print("Married and Living \n", married_livingTable, "\n\n")
+
+
     ## US 38 - Upcoming Birthdays Table
     bdays = getUpcomingBirthdays(individuals)
     for i in bdays:
@@ -318,6 +349,7 @@ def createTables(individuals, families):
     print("\U0001F382  Upcoming Birthdays \U0001F382\n", birthdayTable, "\n\n")
 
     return (indTable, famTable, orphanTable, birthdayTable)
+
 
 
 ## Check Errors - Acceptance Tests
