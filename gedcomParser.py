@@ -11,6 +11,7 @@ import datetime
 import math
 import checkErr
 
+
 ## Individual Information Object
 class Individual():
     def __init__(self):
@@ -21,9 +22,9 @@ class Individual():
         self.age = None
         self.alive = None
         self.death = None
-        self.child = "NA"       # FAMC tag
-        self.spouse = "NA "     # FAMS tag
-    
+        self.child = "NA"  # FAMC tag
+        self.spouse = "NA "  # FAMS tag
+
     def __iter__(self):
         yield self.id
         yield self.name
@@ -34,6 +35,7 @@ class Individual():
         yield self.death
         yield self.child
         yield self.spouse
+
 
 ## Family Information Object
 class Family():
@@ -57,11 +59,13 @@ class Family():
         yield self.wifeName
         yield self.children
 
+
 def getIndividual(personID: object, individuals: object) -> object:
     for i in individuals:
         if personID == i.id:
             return i
     return False
+
 
 ## Parse gedcom File - Returns two arrays: Indivduals & Families
 def parseFile(data):
@@ -112,10 +116,10 @@ def parseFile(data):
                 continue
         ## Add Name
         if inf[1] == "NAME":
-            currInd.name = inf[2] + space + inf[3]     
-        ## Add Gender 
+            currInd.name = inf[2] + space + inf[3]
+            ## Add Gender
         if inf[1] == "SEX":
-            currInd.gender = inf[2]                
+            currInd.gender = inf[2]
         if inf[1] == "BIRT":
             birthDate = True
         if inf[1] == "DEAT":
@@ -129,11 +133,11 @@ def parseFile(data):
                 currInd.alive = "True"
                 birthDate = False
 
-                days_in_year = 365.2425    
+                days_in_year = 365.2425
                 age = int((date.today() - date).days / days_in_year)  # GeeksForGeeks.org
                 currInd.age = age
                 currInd.death = "NA"
-                
+
             ## Adss DOD, ifAlive, and Age at Death
             elif deathDate == True:
                 strDate = inf[2] + space + inf[3] + space + inf[4]
@@ -142,7 +146,7 @@ def parseFile(data):
                 currInd.alive = "False"
                 deathDate = False
                 currInd.age = date.year - currInd.birthday.year
-            
+
             ## Adds Marriage Date to Family
             elif marrDate == True:
                 strDate = inf[2] + space + inf[3] + space + inf[4]
@@ -150,7 +154,7 @@ def parseFile(data):
                 currFam.married = date
                 currFam.divorced = "NA"
                 marrDate = False
-            
+
             ## Adds Divorce Date to Family
             elif divDate == True:
                 strDate = inf[2] + space + inf[3] + space + inf[4]
@@ -206,36 +210,42 @@ def parseFile(data):
             families.append(currFam)
             currFam = Family()
 
-    #for f in families:
-    #    f.children = sortByAge(f.children, individuals)
-   #    print(sortByAge(f.children, individuals))
-
     return [individuals, families]
 
-## US28 Sorts a list of IDs by age
+
+# US28 Sorts a list of IDs by age from greatest to smallest
 def sortByAge(indList, individuals):
     children = {}
     for i in indList:
         child = getIndividual(i, individuals)
-        if child.age is not None:
-            children[i] = child.age
-        else:
-            children[i] = -1
+        if child is not False: #if child exists
+            if child.age is not None:
+                children[i] = child.age
+            else:
+                children[i] = -1
 
-    return sorted(children.keys(), key =lambda kv:(kv[1], kv[0]))
+    sortedChildren = []
+    for c in sorted(children.items(), key = lambda age: age[1], reverse = True):
+        sortedChildren.append(c[0])
 
-## US33 Finds Children with Deceased Parents
+    return sortedChildren
+
+
+## US33 Finds Children under 18 with Deceased Parents
 def isOrphan(person, individuals, families):
-    if person.age < 18:
-        parents = checkErr.getParents(person.id, families)
-        if len(parents) > 0:
-            parent1, parent2 = parents[0], parents[1]
-            if (getIndividual(parent1, individuals).death != "NA") and (getIndividual(parent2, individuals).death != "NA"):
-                return True
-        else:
-            return False
+    if person.age is not None:
+        if person.age < 18:
+            parents = checkErr.getParents(person.id, families)
+            if len(parents) > 0:
+                parent1, parent2 = parents[0], parents[1]
+                if (getIndividual(parent1, individuals).death != "NA") and (
+                        getIndividual(parent2, individuals).death != "NA"):
+                    return True
+            else:
+                return False
 
     return False
+
 
 ## Finds Individuals with Birthdays in the next 30 Days
 def getUpcomingBirthdays(individuals):
@@ -250,9 +260,9 @@ def getUpcomingBirthdays(individuals):
 
         if (delta > 0) and (delta <= 30) and (ind.alive == "True"):
             upcoming.append(ind)
-    
+
     return upcoming
-        
+
 
 ## Populates then Prints Indivduals & Families Tables
 def createTables(individuals, families):
@@ -261,7 +271,8 @@ def createTables(individuals, families):
     orphanTable = PrettyTable()
     birthdayTable = PrettyTable()
     indTable.field_names = ["ID", "NAME", "GENDER", "BIRTHDAY", "AGE", "ALIVE", "DEATH", "CHILD", "SPOUSE"]
-    famTable.field_names = ["ID", "MARRIED", "DIVORCED", "HUSBAND ID", "HUSBAND NAME", "WIFE ID", "WIFE NAME", "CHILDREN"]
+    famTable.field_names = ["ID", "MARRIED", "DIVORCED", "HUSBAND ID", "HUSBAND NAME", "WIFE ID", "WIFE NAME",
+                            "CHILDREN"]
     orphanTable.field_names = ["ID", "NAME", "AGE"]
     birthdayTable.field_names = ["ID", "NAME", "BIRTHDAY", "AGE"]
 
@@ -269,7 +280,7 @@ def createTables(individuals, families):
     famHold = []
 
     ## Individuals Table - Place all info into Nested Array
-    for i in enumerate(individuals): 
+    for i in enumerate(individuals):
         indHolder = []
         for each in i[1]:
             indHolder.append(each)
@@ -281,6 +292,7 @@ def createTables(individuals, families):
 
     ## Families Table - Place all info into Nested Array
     for j in enumerate(families):
+        j[1].children = sortByAge(j[1].children, individuals)
         famHolder = []
         for eachFam in j[1]:
             if eachFam == []:
@@ -305,8 +317,8 @@ def createTables(individuals, families):
         birthdayTable.add_row([i.id, i.name, i.birthday, i.age])
     print("\U0001F382  Upcoming Birthdays \U0001F382\n", birthdayTable, "\n\n")
 
-
     return (indTable, famTable, orphanTable, birthdayTable)
+
 
 ## Check Errors - Acceptance Tests
 def checkErrors(individuals, families):
@@ -317,13 +329,13 @@ def checkErrors(individuals, families):
         checkErr.unique_id_check(families, errLog, individuals)
     except:
         print("Unique ID failed")
-    
+
     # Iterate individuals for errors
     count = 0
     for ind in individuals:
         count += 1
 
-         ## US01 - Check All Individuals Dates Before Current Date
+        ## US01 - Check All Individuals Dates Before Current Date
         try:
             checkErr.checkCurrDate([], count, errLog, ind)
         except:
@@ -343,18 +355,18 @@ def checkErrors(individuals, families):
             checkErr.check_duplicate_names_birthdays(ind, individuals, count, errLog)
         except:
             print("check_duplicate_names_birthdays failed")
-        
+
     # Iterate families for errors
     count = 0
     for fam in families:
         count += 1
-        
+
         ## US01 - Check All Families Dates Before Current Date
         try:
             checkErr.checkCurrDate(fam, count, errLog, [])
         except:
             print("checkCurrDate failed2")
-        
+
         ## US02 - Check Birth Before Marriage
         try:
             checkErr.checkBirth_marriage(fam, count, errLog, individuals)
@@ -366,13 +378,13 @@ def checkErrors(individuals, families):
             checkErr.checkMarrBeforeDiv(fam, count, errLog)
         except:
             print("checkMarrBeforeDiv failed")
-  
+
         ## US05 - Check Marriage 
         try:
             checkErr.checkMarriage(fam, count, errLog, individuals)
         except:
             print("checkMarriage Failed")
-       
+
         ## US06 - Check Divorce
         try:
             checkErr.checkDivorce(fam, count, errLog, individuals)
@@ -397,7 +409,7 @@ def checkErrors(individuals, families):
         try:
             checkErr.checkDivorcebeforeRemarriage(fam, count, errLog, families)
         except:
-            print ("checkDivorcebeforeRemarriage failed")
+            print("checkDivorcebeforeRemarriage failed")
         ## US12 - Marriage Age
         try:
             checkErr.marriage_age(fam, count, errLog, individuals)
@@ -423,12 +435,12 @@ def checkErrors(individuals, families):
             checkErr.male_last_name(fam, count, errLog, individuals)
         except Exception as ex:
             print("Sibling Spaces failed")
-         ## US17 - Parents should not marry their children
+        ## US17 - Parents should not marry their children
         try:
             checkErr.checkNoMarrChild(fam, count, errLog, families)
         except:
-            print("checkNoMarrChild failed")    
-        ## US18 - Siblings should not marry
+            print("checkNoMarrChild failed")
+            ## US18 - Siblings should not marry
         try:
             checkErr.checkNoSiblingsMarry(fam, count, errLog, families)
         except:
@@ -443,8 +455,7 @@ def checkErrors(individuals, families):
             checkErr.checkMarriedtoAuntUncle(fam, count, errLog, families)
         except:
             print("checkMarriedtoAuntUncle failed")
-        
-        
+
         ## US21 - Correct gender for role
         try:
             checkErr.gender_role_check(fam, count, errLog, individuals)
@@ -456,7 +467,7 @@ def checkErrors(individuals, families):
             checkErr.check_multi_family_parent(fam, count, errLog, families)
         except:
             print("check_multi_family_parent failed")
-        
+
         ## US25 - Check Unique Names & DOB in Families
         try:
             checkErr.check_unique_family_names_dob(fam, count, errLog, individuals)
@@ -464,6 +475,7 @@ def checkErrors(individuals, families):
             print("check_unique_family_names_dob failed")
 
     return errLog
+
 
 ## Run Program
 def run():
@@ -477,6 +489,7 @@ def run():
         data = open("fail.ged", 'r')
 
         individuals, families = parseFile(data)
+
         ind_table, fam_table, orph_table, birthday_table = createTables(individuals, families)
 
         log = checkErrors(individuals, families)
