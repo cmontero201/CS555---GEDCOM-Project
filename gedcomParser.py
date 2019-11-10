@@ -230,6 +230,21 @@ def sortByAge(indList, individuals):
 
     return sortedChildren
 
+## US31 List all living people over 30 who have never been married 
+def livingInd(individuals, families):
+    people = []
+    for fam in families:
+        husband = fam.husband
+        wife = fam.wife
+
+        for ind in individuals:
+            age = ind.age
+            ID = ind.id
+
+            if age > 30 and ind.alive == "True":
+                people.append(ind)
+                
+        return people
 
 ## US33 Finds Children under 18 with Deceased Parents
 def isOrphan(person, individuals, families):
@@ -271,6 +286,7 @@ def createTables(individuals, families):
     birthdayTable = PrettyTable()
     deceasedTable = PrettyTable()
     married_livingTable = PrettyTable()
+    livingindTable = PrettyTable()
     indTable.field_names = ["ID", "NAME", "GENDER", "BIRTHDAY", "AGE", "ALIVE", "DEATH", "CHILD", "SPOUSE"]
     famTable.field_names = ["ID", "MARRIED", "DIVORCED", "HUSBAND ID", "HUSBAND NAME", "WIFE ID", "WIFE NAME",
                             "CHILDREN"]
@@ -278,7 +294,7 @@ def createTables(individuals, families):
     birthdayTable.field_names = ["ID", "NAME", "BIRTHDAY", "AGE"]
     deceasedTable.field_names = ["ID","NAME", "AGE", "DEATH DATE"]
     married_livingTable.field_names = ["FAM ID", "HUSBAND NAME", "WIFE NAME","MARIAGE DATE", "ALIVE HUSBAND", "ALIVE WIFE"]
-
+    livingindTable.field_names = ["ID", "NAME", "GENDER", "AGE"]
 
     indHold = []
     famHold = []
@@ -331,6 +347,11 @@ def createTables(individuals, families):
                     [fam.id, fam.husbandName, fam.wifeName, fam.married, husband_alive, wife_alive])
     print("Married and Living \n", married_livingTable, "\n\n")
 
+    ## US31 - Print living individuals
+    living_individuals = livingInd(individuals, families)
+    for i in living_individuals:
+        livingindTable.add_row([i.id, i.name, i.gender, i.age])
+    print("Living Individuals Over 30 & Unmarried\n", livingindTable, "\n\n")
 
     ## US 38 - Upcoming Birthdays Table
     bdays = getUpcomingBirthdays(individuals)
@@ -529,6 +550,8 @@ def run():
         f.write(deceasedTable.get_string())
         f.write("\n\nChildren with Deceased Parents\n")
         f.write(orph_table.get_string())
+        f.write("\n\n Living Individuals over 30 & unmarried \n")
+        f.write(living_ind_table.get_string())
         f.write("\n\n************************************************* \n\t\t\t\tERROR LOG\n*************************************************\n")
         for each in log:
             f.write('%s\n' % each)
