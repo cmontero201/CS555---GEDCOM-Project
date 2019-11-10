@@ -230,20 +230,6 @@ def sortByAge(indList, individuals):
 
     return sortedChildren
 
-# US32 Check multiple births
-def getBirthCount(individuals, family):
-    birthcount = {}
-
-    for c in family.children:
-        birthday = getIndividual(c, individuals).birthday
-        #print(birthday)
-        if birthday in birthcount:
-            birthcount[birthday].append(c)
-        else:
-            birthcount[birthday] = [c]
-
-    return birthcount
-
 
 ## US31 List all living people over 30 who have never been married 
 def livingInd(individuals, families):
@@ -268,6 +254,23 @@ def livingInd(individuals, families):
         if each not in people:
             people.append(each)
     return people
+
+
+# US32 Check multiple births
+def getBirthCount(individuals, family):
+    birthcount = {}
+
+    for c in family.children:
+        child = getIndividual(c, individuals)
+        if child is not False:
+            if child.age is not None:
+                birthday = child.birthday
+                if birthday in birthcount:
+                    birthcount[birthday].append(c)
+                else:
+                    birthcount[birthday] = [c]
+
+    return birthcount
 
 ## US33 Finds Children under 18 with Deceased Parents
 def isOrphan(person, individuals, families):
@@ -352,9 +355,10 @@ def createTables(individuals, families):
     # Multiple Births table
     # US 32 - Print multiple births
     for f in families:
-        print(getBirthCount(individuals, f))
-        for b in getBirthCount(individuals, f):
-            multipleBirthTable.add_row([f.id, b[0], b[1]])
+        listBirths = getBirthCount(individuals, f)
+        for key in listBirths:
+            if len(listBirths[key]) >1:
+                multipleBirthTable.add_row([f.id, key, listBirths[key]])
     print("Multiple Births\n", multipleBirthTable, "\n\n")
 
     ## Orphan Table 
