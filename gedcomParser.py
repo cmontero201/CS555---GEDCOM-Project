@@ -316,13 +316,13 @@ def createTables(individuals, families):
     print("Orphans\n", orphanTable, "\n\n")
 
     ## Deceased Table
-    ## US 29 - Print Deceased Individuals
+    ## US29 - Print Deceased Individuals
     for i in individuals:
         if i.alive != 'True':
             deceasedTable.add_row([i.id, i.name, i.age, i.death])
     print("Deceased Individuals\n", deceasedTable, "\n\n")
 
-    ## US 30 Living and Married
+    ## US30 Living and Married
     for fam in families:
         if fam.married is not None:
             husband_alive, wife_alive= checkErr.check_isalive(fam.husbandName, fam.wifeName, individuals)
@@ -338,7 +338,7 @@ def createTables(individuals, families):
         birthdayTable.add_row([i.id, i.name, i.birthday, i.age])
     print("\U0001F382  Upcoming Birthdays \U0001F382\n", birthdayTable, "\n\n")
 
-    return (indTable, famTable, orphanTable, birthdayTable)
+    return (indTable, famTable, orphanTable, birthdayTable, married_livingTable, deceasedTable)
 
 
 
@@ -512,7 +512,7 @@ def run():
 
         individuals, families = parseFile(data)
 
-        ind_table, fam_table, orph_table, birthday_table = createTables(individuals, families)
+        ind_table, fam_table, orph_table, birthday_table, married_livingTable, deceasedTable = createTables(individuals, families)
 
         log = checkErrors(individuals, families)
 
@@ -523,9 +523,13 @@ def run():
         f.write(fam_table.get_string())
         f.write("\n\n\U0001F382 Upcoming Birthdays \U0001F382\n")
         f.write(birthday_table.get_string())
-        f.write("\n\n Children with Deceased Parents\n")
+        f.write("\n\nMarried and Living\n")
+        f.write(married_livingTable.get_string())
+        f.write("\n\nDeceased Individuals\n")
+        f.write(deceasedTable.get_string())
+        f.write("\n\nChildren with Deceased Parents\n")
         f.write(orph_table.get_string())
-        f.write("\n\n")
+        f.write("\n\n************************************************* \n\t\t\t\tERROR LOG\n*************************************************\n")
         for each in log:
             f.write('%s\n' % each)
         f.close()
