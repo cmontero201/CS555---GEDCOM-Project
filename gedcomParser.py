@@ -246,16 +246,6 @@ def isOrphan(person, individuals, families):
 
     return False
 
-def check_isalive(husbandName, wifeName, individuals):
-    husbandAlive = None
-    wifeAlive = None
-    for ind in individuals:
-        if husbandName == ind.name and ind.alive == 'True':
-            husbandAlive = True
-        elif wifeName == ind.name and ind.alive == 'True':
-            wifeAlive = True
-    return  husbandAlive, wifeAlive
-
 ## Finds Individuals with Birthdays in the next 30 Days
 def getUpcomingBirthdays(individuals):
     curr_date = date.today()
@@ -335,7 +325,7 @@ def createTables(individuals, families):
     ## US 30 Living and Married
     for fam in families:
         if fam.married is not None:
-            husband_alive, wife_alive= check_isalive(fam.husbandName, fam.wifeName, individuals)
+            husband_alive, wife_alive= checkErr.check_isalive(fam.husbandName, fam.wifeName, individuals)
             if husband_alive == True and wife_alive == True:
                 married_livingTable.add_row(
                     [fam.id, fam.husbandName, fam.wifeName, fam.married, husband_alive, wife_alive])

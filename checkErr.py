@@ -642,6 +642,17 @@ def check_multi_family_parent(fam, count, errLog, families):
 ############################### SPRINT 4 ###############################
 ########################################################################
 
+# US 30 Check Married People Alive
+def check_isalive(husbandName, wifeName, individuals):
+    husbandAlive = None
+    wifeAlive = None
+    for ind in individuals:
+        if husbandName == ind.name and ind.alive == 'True':
+            husbandAlive = True
+        elif wifeName == ind.name and ind.alive == 'True':
+            wifeAlive = True
+    return  husbandAlive, wifeAlive
+
 # US25 - Unique First Names & DOB in Families
 def check_unique_family_names_dob(fam, count, errLog, individuals):
     error = False
